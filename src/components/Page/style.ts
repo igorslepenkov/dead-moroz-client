@@ -1,7 +1,19 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const StyledPage = styled.main`
+interface IPageProps {
+  backgroundImage?: string;
+}
+
+export const StyledPage = styled.main<IPageProps>`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  ${({ backgroundImage }) => {
+    if (backgroundImage) {
+      return css`
+        background-image: url(${backgroundImage});
+        background-size: 100% 100%;
+      `;
+    }
+  }}
 `;
