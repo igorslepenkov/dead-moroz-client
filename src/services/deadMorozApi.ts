@@ -5,7 +5,6 @@ import {
   IDeadMorozApiSignUpSignOutResponse,
   IUser,
   SignInSignUpFields,
-  USER_ROLES,
 } from "../types";
 import { getTokenFromHeaders } from "../utils";
 
@@ -28,7 +27,7 @@ class DeadMorozApi {
   signUpUser = async (signUpData: SignInSignUpFields): Promise<string> => {
     const { data } = await this.API.post<IDeadMorozApiSignUpSignOutResponse>(
       Endpoint.SignUp,
-      signUpData
+      { user: signUpData }
     );
     return data.message;
   };
@@ -36,7 +35,7 @@ class DeadMorozApi {
   signInUser = async (signInData: SignInSignUpFields): Promise<IUser> => {
     const { headers, data } = await this.API.post<IDeadMorozApiSignInResponse>(
       Endpoint.SignIn,
-      signInData
+      { user: signInData }
     );
     const token = getTokenFromHeaders(headers) as string;
     const {

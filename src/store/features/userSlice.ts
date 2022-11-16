@@ -1,8 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from "@reduxjs/toolkit";
 
-import { IUser, SignInSignUpFields } from "../../../types";
-import { deadMorozApi } from "../../../services";
+import { IUser, SignInSignUpFields } from "../../types";
+import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
 
 interface IUserInitialState {
@@ -19,7 +24,7 @@ const initialState: IUserInitialState = {
   isLoggedIn: false,
 };
 
-const signIn = createAsyncThunk<
+const signInUser = createAsyncThunk<
   IUser,
   SignInSignUpFields,
   { rejectValue: string }
@@ -39,7 +44,7 @@ const signIn = createAsyncThunk<
   }
 );
 
-const signOut = createAsyncThunk<
+const signOutUser = createAsyncThunk<
   string,
   undefined,
   { state: RootState; rejectValue: string }
@@ -66,6 +71,31 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
+  extraReducers(builder) {
+    builder.addCase(signInUser.fulfilled, (state, { payload }) => {
+      state.isLoggedIn = true;
+      state.user = payload;
+    });
+
+    builder.addCase(signOutUser.fulfilled, (state) => {
+      state.isLoggedIn = false;
+      state.user = null;
+    });
+
+    builder.addMatcher(isPending(), (state) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addMatcher(isFulfilled(), (state) => {
+      state.isLoading = false;
+    });
+
+    builder.addMatcher(isRejected(), (state) => {
+      state.isLoading = false;
+    });
+  },
 });
 
+export { signInUser, signOutUser };
 export default userSlice.reducer;
