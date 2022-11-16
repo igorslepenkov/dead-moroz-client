@@ -12,7 +12,7 @@ export const Header = () => {
       <Navbar>
         <Navlink to={ROUTES_URL.HOME}>Home</Navlink>
         <Navlink to={ROUTES_URL.HOME}>About Us</Navlink>
-        <Navlink to={ROUTES_URL.HOME}>Register / Sign In</Navlink>
+        <Navlink to={ROUTES_URL.AUTHENTICATION}>Register / Sign In</Navlink>
       </Navbar>
     </StyledHeader>
   );

@@ -1,4 +1,5 @@
 export type SignInSignUpFields = {
+  name: string;
   email: string;
   password: string;
 };
