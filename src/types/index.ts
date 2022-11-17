@@ -1,8 +1,9 @@
-export type SignInSignUpFields = {
-  name: string;
+export type SignInFields = {
   email: string;
   password: string;
 };
+
+export type SignUpFields = SignInFields & { name: string };
 
 export enum USER_ROLES {
   DeadMoroz = "dead_moroz",
@@ -23,6 +24,15 @@ interface IUserApi {
   created_at: string;
   updated_at: string;
   role: USER_ROLES;
+}
+
+export interface IDeadMorozApiSignUpResponse {
+  message: string;
+}
+
+export interface IDeadMorozApiSignUpFailedResponse {
+  message: string;
+  errors: [string];
 }
 
 export interface IDeadMorozApiSignUpSignOutResponse {

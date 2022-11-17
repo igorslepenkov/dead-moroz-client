@@ -8,10 +8,20 @@ import { FormInputLabel } from "../FormInputLabel";
 import { StyledSignUpForm, FormInputGroup } from "./style";
 
 import { emailRegex } from "../../regexp";
-import { signInUser } from "../../store";
-import { deadMorozApi } from "../../services";
 
-interface ISignUpFields {
+import { useToggle } from "../../hooks";
+
+import {
+  getUserError,
+  getUserIsLoading,
+  getUserServerMessage,
+  signUpUser,
+  useAppDispatch,
+  useAppSelector,
+} from "../../store";
+import { NotificationModal } from "../NotificationModal";
+
+interface ISignUpFormFields {
   email: string;
   password: string;
   confirm: string;
@@ -25,16 +35,24 @@ export const SignUpForm = () => {
     formState: { errors },
     setError,
     reset,
-  } = useForm<ISignUpFields>();
+  } = useForm<ISignUpFormFields>();
 
-  const onSubmit = ({ password, confirm, email, name }: ISignUpFields) => {
+  const [isModalOpen, toggleModal] = useToggle(false);
+
+  const userSignUpError = useAppSelector(getUserError);
+  const userServerMessage = useAppSelector(getUserServerMessage);
+  const userIsLoading = useAppSelector(getUserIsLoading);
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = ({ password, confirm, email, name }: ISignUpFormFields) => {
     if (password !== confirm) {
       setError("confirm", { message: "Confirmation does not match password" });
       return;
     }
 
-    deadMorozApi.signUpUser({ name, email, password });
-
+    dispatch(signUpUser({ name, email, password }));
+    toggleModal();
     reset();
   };
 
@@ -52,6 +70,10 @@ export const SignUpForm = () => {
             minLength: {
               value: 3,
               message: "Your name has to be at least 3 symbols length",
+            },
+            maxLength: {
+              value: 50,
+              message: "Your name has to be max 50 symbols length",
             },
           })}
         />
@@ -121,6 +143,18 @@ export const SignUpForm = () => {
         )}
       </FormInputGroup>
       <FormSubmitButton>Sign Up</FormSubmitButton>
+      {!userIsLoading && (
+        <NotificationModal
+          isOpen={isModalOpen}
+          status={userSignUpError ? "error" : "success"}
+          message={
+            userSignUpError
+              ? userSignUpError
+              : userServerMessage || "Oooooooooooooops"
+          }
+          handler={toggleModal}
+        />
+      )}
     </StyledSignUpForm>
   );
 };

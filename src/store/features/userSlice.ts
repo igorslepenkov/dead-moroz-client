@@ -6,7 +6,12 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 
-import { IUser, SignInSignUpFields } from "../../types";
+import {
+  IDeadMorozApiSignUpFailedResponse,
+  IUser,
+  SignInFields,
+  SignUpFields,
+} from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
 
@@ -15,6 +20,7 @@ interface IUserInitialState {
   error: string | null;
   isLoading: boolean;
   isLoggedIn: boolean;
+  message: string | null;
 }
 
 const initialState: IUserInitialState = {
@@ -22,27 +28,43 @@ const initialState: IUserInitialState = {
   error: null,
   isLoading: false,
   isLoggedIn: false,
+  message: null,
 };
+
+const signUpUser = createAsyncThunk<
+  string,
+  SignUpFields,
+  { rejectValue: IDeadMorozApiSignUpFailedResponse }
+>("user/signUp", async (signUpData: SignUpFields, { rejectWithValue }) => {
+  try {
+    return await deadMorozApi.signUpUser(signUpData);
+  } catch (err: any) {
+    if (err.response) {
+      return rejectWithValue({
+        message: err.response.data.message,
+        errors: err.response.data.errors,
+      });
+    }
+
+    return rejectWithValue(err.message);
+  }
+});
 
 const signInUser = createAsyncThunk<
   IUser,
-  SignInSignUpFields,
+  SignInFields,
   { rejectValue: string }
->(
-  "user/signIn",
-  async (signInData: SignInSignUpFields, { rejectWithValue }) => {
-    try {
-      const user = await deadMorozApi.signInUser(signInData);
-      return user;
-    } catch (err: any) {
-      if (err.response) {
-        return rejectWithValue(err.response.data.message);
-      }
-
-      return rejectWithValue(err.message);
+>("user/signIn", async (signInData: SignInFields, { rejectWithValue }) => {
+  try {
+    return await deadMorozApi.signInUser(signInData);
+  } catch (err: any) {
+    if (err.response) {
+      return rejectWithValue(err.response.data.message);
     }
+
+    return rejectWithValue(err.message);
   }
-);
+});
 
 const signOutUser = createAsyncThunk<
   string,
@@ -72,19 +94,44 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
+    builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
+      state.message = payload;
+    });
+
+    builder.addCase(signUpUser.rejected, (state, { payload }) => {
+      if (payload) {
+        state.message = payload.message;
+        state.error = payload.errors[0];
+      }
+    });
+
     builder.addCase(signInUser.fulfilled, (state, { payload }) => {
       state.isLoggedIn = true;
       state.user = payload;
     });
 
-    builder.addCase(signOutUser.fulfilled, (state) => {
+    builder.addCase(signInUser.rejected, (state, { payload }) => {
+      if (payload) {
+        state.error = payload;
+      }
+    });
+
+    builder.addCase(signOutUser.fulfilled, (state, { payload }) => {
       state.isLoggedIn = false;
       state.user = null;
+      state.message = payload;
+    });
+
+    builder.addCase(signOutUser.rejected, (state, { payload }) => {
+      if (payload) {
+        state.error = payload;
+      }
     });
 
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
+      state.message = null;
     });
 
     builder.addMatcher(isFulfilled(), (state) => {
@@ -97,5 +144,5 @@ const userSlice = createSlice({
   },
 });
 
-export { signInUser, signOutUser };
+export { signInUser, signOutUser, signUpUser };
 export default userSlice.reducer;
