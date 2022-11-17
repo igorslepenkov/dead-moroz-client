@@ -51,7 +51,7 @@ const signUpUser = createAsyncThunk<
 });
 
 const signInUser = createAsyncThunk<
-  IUser,
+  IUser & { message: string },
   SignInFields,
   { rejectValue: string }
 >("user/signIn", async (signInData: SignInFields, { rejectWithValue }) => {
@@ -105,10 +105,14 @@ const userSlice = createSlice({
       }
     });
 
-    builder.addCase(signInUser.fulfilled, (state, { payload }) => {
-      state.isLoggedIn = true;
-      state.user = payload;
-    });
+    builder.addCase(
+      signInUser.fulfilled,
+      (state, { payload: { id, name, email, token, role, message } }) => {
+        state.isLoggedIn = true;
+        state.user = { id, name, email, token, role };
+        state.message = message;
+      }
+    );
 
     builder.addCase(signInUser.rejected, (state, { payload }) => {
       if (payload) {

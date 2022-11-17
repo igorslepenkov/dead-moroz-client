@@ -42,11 +42,12 @@ class DeadMorozApi {
     );
     const token = getTokenFromHeaders(headers) as string;
     const {
-      user: { id, email, role },
+      user: { id, name, email, role },
       message,
     } = data;
     return {
       id,
+      name,
       email,
       token,
       role,

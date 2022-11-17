@@ -13,6 +13,7 @@ export enum USER_ROLES {
 
 export interface IUser {
   id: string;
+  name: string;
   email: string;
   token: string;
   role: USER_ROLES;
@@ -20,6 +21,7 @@ export interface IUser {
 
 interface IUserApi {
   id: string;
+  name: string;
   email: string;
   created_at: string;
   updated_at: string;

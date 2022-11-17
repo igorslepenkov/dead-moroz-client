@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Page, SignUpForm } from "../../components";
+import { Navigate } from "react-router-dom";
+
+import { Page, SignInForm, SignUpForm } from "../../components";
+
+import { getUserIsLoggedIn, useAppSelector } from "../../store";
+
+import { ROUTES_URL } from "../../router";
+
 import { AuthFormWrapper, FormTab, AuthFormInnerWrapper } from "./style";
 
 export const AuthenticationPage = () => {
@@ -8,6 +15,12 @@ export const AuthenticationPage = () => {
     SignIn = "signIn",
   }
   const [activeTab, setActiveTab] = useState<FormTabType>(FormTabType.SignIn);
+
+  const userIsLoggedIn = useAppSelector(getUserIsLoggedIn);
+
+  if (userIsLoggedIn) {
+    return <Navigate to={ROUTES_URL.HOME} />;
+  }
 
   return (
     <Page>
@@ -25,7 +38,7 @@ export const AuthenticationPage = () => {
           Sign Up
         </FormTab>
         <AuthFormInnerWrapper>
-          <SignUpForm />
+          {activeTab === FormTabType.SignUp ? <SignUpForm /> : <SignInForm />}
         </AuthFormInnerWrapper>
       </AuthFormWrapper>
     </Page>

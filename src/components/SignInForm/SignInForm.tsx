@@ -1,88 +1,55 @@
 import { useForm } from "react-hook-form";
 
 import { Form } from "../Form";
-import { FormSubmitButton } from "../FormSubmitButton";
-import { FormNotification } from "../FormNotification";
 import { FormInput } from "../FormInput";
-import { FormInputLabel } from "../FormInputLabel";
 import { FormInputGroup } from "../FormInputGroup";
-
-import { emailRegex } from "../../regexp";
+import { FormInputLabel } from "../FormInputLabel";
+import { FormNotification } from "../FormNotification";
+import { FormSubmitButton } from "../FormSubmitButton";
+import { NotificationModal } from "../NotificationModal";
 
 import { useToggle } from "../../hooks";
+
+import { emailRegex } from "../../regexp";
 
 import {
   getUserError,
   getUserIsLoading,
   getUserServerMessage,
-  signUpUser,
+  signInUser,
   useAppDispatch,
   useAppSelector,
 } from "../../store";
-import { NotificationModal } from "../NotificationModal";
 
-interface ISignUpFormFields {
+interface ISignInFormFields {
   email: string;
   password: string;
-  confirm: string;
-  name: string;
 }
 
-export const SignUpForm = () => {
+export const SignInForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
     reset,
-  } = useForm<ISignUpFormFields>();
+  } = useForm<ISignInFormFields>();
 
   const [isModalOpen, toggleModal] = useToggle(false);
 
-  const userSignUpError = useAppSelector(getUserError);
+  const userSignInError = useAppSelector(getUserError);
   const userServerMessage = useAppSelector(getUserServerMessage);
   const userIsLoading = useAppSelector(getUserIsLoading);
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = ({ password, confirm, email, name }: ISignUpFormFields) => {
-    if (password !== confirm) {
-      setError("confirm", { message: "Confirmation does not match password" });
-      return;
-    }
-
-    dispatch(signUpUser({ name, email, password }));
+  const onSubmit = ({ password, email }: ISignInFormFields) => {
+    dispatch(signInUser({ email, password }));
     toggleModal();
     reset();
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormInputGroup>
-        <FormInputLabel htmlFor="name">Name</FormInputLabel>
-        <FormInput
-          id="name"
-          placeholder="Enter your name"
-          type="text"
-          error={!!errors.name}
-          {...register("name", {
-            required: "Please provide your name",
-            minLength: {
-              value: 3,
-              message: "Your name has to be at least 3 symbols length",
-            },
-            maxLength: {
-              value: 50,
-              message: "Your name has to be max 50 symbols length",
-            },
-          })}
-        />
-        {errors.name && (
-          <FormNotification type="error">
-            {errors.name.message}
-          </FormNotification>
-        )}
-      </FormInputGroup>
       <FormInputGroup>
         <FormInputLabel htmlFor="email">Email</FormInputLabel>
         <FormInput
@@ -125,31 +92,14 @@ export const SignUpForm = () => {
           </FormNotification>
         )}
       </FormInputGroup>
-      <FormInputGroup>
-        <FormInputLabel htmlFor="confirm">Confrim password</FormInputLabel>
-        <FormInput
-          id="confirm"
-          placeholder="Confirm your password"
-          type="password"
-          error={!!errors.confirm}
-          {...register("confirm", {
-            required: "Please confirm your password",
-          })}
-        />
-        {errors.confirm && (
-          <FormNotification type="error">
-            {errors.confirm.message}
-          </FormNotification>
-        )}
-      </FormInputGroup>
       <FormSubmitButton>Sign Up</FormSubmitButton>
       {!userIsLoading && (
         <NotificationModal
           isOpen={isModalOpen}
-          status={userSignUpError ? "error" : "success"}
+          status={userSignInError ? "error" : "success"}
           message={
-            userSignUpError
-              ? userSignUpError
+            userSignInError
+              ? userSignInError
               : userServerMessage || "Oooooooooooooops"
           }
           handler={toggleModal}

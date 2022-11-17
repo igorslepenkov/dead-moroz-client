@@ -56,3 +56,18 @@ export const Navlink = styled(Link)`
     color: ${Color.PrimaryFocused};
   }
 `;
+
+export const SignOutLink = styled.a`
+  ${fonts.h3}
+  text-decoration: none;
+  color: ${Color.White};
+  cursor: pointer;
+
+  &:hover {
+    color: ${Color.PrimaryBorder};
+  }
+
+  &:active {
+    color: ${Color.PrimaryFocused};
+  }
+`;
