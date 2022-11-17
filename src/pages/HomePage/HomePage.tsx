@@ -1,5 +1,5 @@
-import { StyledHomePage } from "./style";
+import { Page } from "../../components/Page";
 
 export const HomePage = () => {
-  return <StyledHomePage>This is Homepage</StyledHomePage>;
+  return <Page>Homepage</Page>;
 };
