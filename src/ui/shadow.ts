@@ -1,19 +1,19 @@
 import { css } from "styled-components";
 
-const shadow2 = css`
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
+const shadow2 = (shadowColor = "rgba(0, 0, 0, 0.12)") => css`
+  box-shadow: 0px 2px 4px ${shadowColor};
 `;
 
-const shadow4 = css`
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+const shadow4 = (shadowColor = "rgba(0, 0, 0, 0.1)") => css`
+  box-shadow: 0px 4px 8px ${shadowColor};
 `;
 
-const shadow6 = css`
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+const shadow6 = (shadowColor = "rgba(0, 0, 0, 0.1)") => css`
+  box-shadow: 0px 6px 12px ${shadowColor};
 `;
 
-const shadow8 = css`
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
+const shadow8 = (shadowColor = "rgba(0, 0, 0, 0.08)") => css`
+  box-shadow: 0px 8px 16px ${shadowColor};
 `;
 
 export const shadows = { shadow2, shadow4, shadow6, shadow8 };
