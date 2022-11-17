@@ -4,9 +4,12 @@ import { Form } from "../Form";
 import { FormInput } from "../FormInput";
 import { FormInputGroup } from "../FormInputGroup";
 import { FormInputLabel } from "../FormInputLabel";
-import { FormNotification } from "../FormNotification";
+import { FormNotification, FormNotificationType } from "../FormNotification";
 import { FormSubmitButton } from "../FormSubmitButton";
-import { NotificationModal } from "../NotificationModal";
+import {
+  NotificationModalStatus,
+  NotificationModal,
+} from "../NotificationModal";
 
 import { useToggle } from "../../hooks";
 
@@ -56,7 +59,7 @@ export const SignInForm = () => {
           id="email"
           placeholder="Enter your email"
           type="email"
-          error={!!errors.email}
+          isError={!!errors.email}
           {...register("email", {
             required: "Please provide your email",
             pattern: {
@@ -66,7 +69,7 @@ export const SignInForm = () => {
           })}
         />
         {errors.email && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.email.message}
           </FormNotification>
         )}
@@ -77,7 +80,7 @@ export const SignInForm = () => {
           id="password"
           placeholder="Enter your password"
           type="password"
-          error={!!errors.password}
+          isError={!!errors.password}
           {...register("password", {
             required: "Please provide your password",
             minLength: {
@@ -87,7 +90,7 @@ export const SignInForm = () => {
           })}
         />
         {errors.password && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.password.message}
           </FormNotification>
         )}
@@ -96,7 +99,11 @@ export const SignInForm = () => {
       {!userIsLoading && (
         <NotificationModal
           isOpen={isModalOpen}
-          status={userSignInError ? "error" : "success"}
+          status={
+            userSignInError
+              ? NotificationModalStatus.Error
+              : NotificationModalStatus.Success
+          }
           message={
             userSignInError
               ? userSignInError

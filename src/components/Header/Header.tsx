@@ -10,7 +10,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../store";
-import { NotificationModal } from "../NotificationModal";
+import {
+  NotificationModalStatus,
+  NotificationModal,
+} from "../NotificationModal";
 import {
   StyledHeader,
   Logo,
@@ -52,7 +55,11 @@ export const Header = () => {
       {!userIsLoading && (
         <NotificationModal
           isOpen={isModalOpen}
-          status={userSignOutError ? "error" : "success"}
+          status={
+            userSignOutError
+              ? NotificationModalStatus.Error
+              : NotificationModalStatus.Success
+          }
           message={
             userSignOutError
               ? userSignOutError

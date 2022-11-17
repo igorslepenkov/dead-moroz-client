@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { Color, fonts } from "../../ui";
 
 interface InputStyleProps {
-  error: boolean;
+  isError: boolean;
 }
 
 export const StyledFormInput = styled.input<InputStyleProps>`
   height: 40px;
   border: 1px solid
-    ${({ error }) => {
-      if (!error) {
+    ${({ isError }) => {
+      if (!isError) {
         return Color.LightGray;
       }
       return Color.DangerMain;

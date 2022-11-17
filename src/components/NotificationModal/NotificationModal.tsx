@@ -10,11 +10,14 @@ import {
 
 import { AlertTriangle, SuccessMark } from "../../assets/icons";
 
-export type NotifiactionModalStatus = "success" | "error";
+export enum NotificationModalStatus {
+  Success = "success",
+  Error = "error",
+}
 
 interface IProps {
   isOpen: boolean;
-  status: NotifiactionModalStatus;
+  status: NotificationModalStatus;
   message: string;
   handler: () => void;
 }
@@ -30,7 +33,11 @@ export const NotificationModal = ({
       <StyledModal>
         <ModalNotificationWrapper>
           <MarkWrapper>
-            {status === "success" ? <SuccessMark /> : <AlertTriangle />}
+            {status === NotificationModalStatus.Success ? (
+              <SuccessMark />
+            ) : (
+              <AlertTriangle />
+            )}
           </MarkWrapper>
           <CloseButton status={status} type="button" onClick={handler}>
             Close

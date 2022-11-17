@@ -2,10 +2,14 @@ import { useForm } from "react-hook-form";
 
 import { Form } from "../Form";
 import { FormSubmitButton } from "../FormSubmitButton";
-import { FormNotification } from "../FormNotification";
+import { FormNotification, FormNotificationType } from "../FormNotification";
 import { FormInput } from "../FormInput";
 import { FormInputLabel } from "../FormInputLabel";
 import { FormInputGroup } from "../FormInputGroup";
+import {
+  NotificationModalStatus,
+  NotificationModal,
+} from "../NotificationModal";
 
 import { emailRegex } from "../../regexp";
 
@@ -19,7 +23,6 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../store";
-import { NotificationModal } from "../NotificationModal";
 
 interface ISignUpFormFields {
   email: string;
@@ -64,7 +67,7 @@ export const SignUpForm = () => {
           id="name"
           placeholder="Enter your name"
           type="text"
-          error={!!errors.name}
+          isError={!!errors.name}
           {...register("name", {
             required: "Please provide your name",
             minLength: {
@@ -78,7 +81,7 @@ export const SignUpForm = () => {
           })}
         />
         {errors.name && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.name.message}
           </FormNotification>
         )}
@@ -89,7 +92,7 @@ export const SignUpForm = () => {
           id="email"
           placeholder="Enter your email"
           type="email"
-          error={!!errors.email}
+          isError={!!errors.email}
           {...register("email", {
             required: "Please provide your email",
             pattern: {
@@ -99,7 +102,7 @@ export const SignUpForm = () => {
           })}
         />
         {errors.email && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.email.message}
           </FormNotification>
         )}
@@ -110,7 +113,7 @@ export const SignUpForm = () => {
           id="password"
           placeholder="Enter your password"
           type="password"
-          error={!!errors.password}
+          isError={!!errors.password}
           {...register("password", {
             required: "Please provide your password",
             minLength: {
@@ -120,7 +123,7 @@ export const SignUpForm = () => {
           })}
         />
         {errors.password && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.password.message}
           </FormNotification>
         )}
@@ -131,13 +134,13 @@ export const SignUpForm = () => {
           id="confirm"
           placeholder="Confirm your password"
           type="password"
-          error={!!errors.confirm}
+          isError={!!errors.confirm}
           {...register("confirm", {
             required: "Please confirm your password",
           })}
         />
         {errors.confirm && (
-          <FormNotification type="error">
+          <FormNotification type={FormNotificationType.Error}>
             {errors.confirm.message}
           </FormNotification>
         )}
@@ -146,7 +149,11 @@ export const SignUpForm = () => {
       {!userIsLoading && (
         <NotificationModal
           isOpen={isModalOpen}
-          status={userSignUpError ? "error" : "success"}
+          status={
+            userSignUpError
+              ? NotificationModalStatus.Error
+              : NotificationModalStatus.Success
+          }
           message={
             userSignUpError
               ? userSignUpError

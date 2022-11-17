@@ -1,8 +1,11 @@
 import styled from "styled-components";
+
 import { Color, fonts, shadows } from "../../ui";
 
+import { NotificationModalStatus } from "./NotificationModal";
+
 interface ModalStatusProps {
-  status: "success" | "error";
+  status: NotificationModalStatus;
 }
 
 export const StyledModal = styled.div`
@@ -47,7 +50,9 @@ export const ModalStatusHeading = styled.h2<ModalStatusProps>`
   grid-row: 1 / 2;
   ${fonts.h3}
   color: ${({ status }) =>
-    status === "success" ? Color.SuccessMain : Color.DangerMain};
+    status === NotificationModalStatus.Success
+      ? Color.SuccessMain
+      : Color.DangerMain};
 `;
 
 export const ModalNotification = styled.p`
@@ -65,13 +70,17 @@ export const CloseButton = styled.button<ModalStatusProps>`
   ${fonts.bodyTextLarge}
   color: ${Color.White};
   background-color: ${({ status }) =>
-    status === "success" ? Color.SuccessMain : Color.DangerMain};
+    status === NotificationModalStatus.Success
+      ? Color.SuccessMain
+      : Color.DangerMain};
   border: none;
   border-radius: 4px;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ status }) =>
-      status === "success" ? Color.SuccessHover : Color.DangerHover};
+      status === NotificationModalStatus.Success
+        ? Color.SuccessHover
+        : Color.DangerHover};
   }
 `;

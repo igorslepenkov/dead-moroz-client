@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Color, fonts } from "../../ui";
+import { FormNotificationType } from "./FormNotification";
 
 interface INotificationProps {
-  type: "success" | "error";
+  type: FormNotificationType;
 }
 
 export const StyledFormNotification = styled.p<INotificationProps>`
   ${fonts.bodyTextSmall}
   color: ${({ type }) =>
-    type === "error" ? Color.DangerMain : Color.SuccessMain};
+    type === FormNotificationType.Error ? Color.DangerMain : Color.SuccessMain};
 `;

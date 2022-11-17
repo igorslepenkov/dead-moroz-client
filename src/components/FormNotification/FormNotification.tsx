@@ -1,9 +1,14 @@
 import { ReactNode } from "react";
 import { StyledFormNotification } from "./style";
 
+export enum FormNotificationType {
+  Success = "success",
+  Error = "error",
+}
+
 interface IProps {
   children: ReactNode;
-  type: "success" | "error";
+  type: FormNotificationType;
 }
 
 export const FormNotification = ({ children, type }: IProps) => {

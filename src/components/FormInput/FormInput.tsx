@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { StyledFormInput } from "./style";
 
 interface IInputStyleProps {
-  error: boolean;
+  isError: boolean;
 }
 
 type InputProps = React.DetailedHTMLProps<

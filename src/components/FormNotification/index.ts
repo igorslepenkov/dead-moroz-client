@@ -1,2 +1,2 @@
-import { FormNotification } from "./FormNotification";
-export { FormNotification };
+import { FormNotification, FormNotificationType } from "./FormNotification";
+export { FormNotification, FormNotificationType };
