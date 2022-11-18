@@ -1,5 +1,5 @@
-import { homepageBackgroundImage } from "./images";
+import { homepageBackgroundImage, backgroundImageWinter } from "./images";
 
 import { DeadMorozLogo } from "./icons";
 
-export { homepageBackgroundImage, DeadMorozLogo };
+export { homepageBackgroundImage, DeadMorozLogo, backgroundImageWinter };

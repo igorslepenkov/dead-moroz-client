@@ -1,30 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { HomepageBody } from "./style";
 
 import {
-  HomepageBody,
-  SignInButton,
-  HomepageTitle,
-  HomepageBodyText,
-} from "./style";
-
-import { NotificationModal, Page } from "../../components";
+  NotificationModal,
+  NotificationModalStatus,
+  Page,
+} from "../../components";
 
 import { homepageBackgroundImage } from "../../assets";
 
-import { ROUTES_URL } from "../../router";
-
 import { ConfrimationStatus, useConfirmationParams } from "../../hooks";
 
-import { NotificationModalStatus } from "../../components/NotificationModal";
+import { HomePageContent } from "./HomePageContent";
 
 export const HomePage = () => {
-  const navigate = useNavigate();
-  const onSignInClick = () => {
-    navigate(ROUTES_URL.AUTHENTICATION);
-  };
-
   const { confirmation, error } = useConfirmationParams();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
@@ -42,9 +32,7 @@ export const HomePage = () => {
   return (
     <Page backgroundImage={homepageBackgroundImage}>
       <HomepageBody>
-        <HomepageTitle>Welcome to Dead Moroz App!</HomepageTitle>
-        <HomepageBodyText>Please sign in to continue</HomepageBodyText>
-        <SignInButton onClick={onSignInClick}>Sign In !</SignInButton>
+        <HomePageContent />
       </HomepageBody>
       {confirmation && (
         <NotificationModal
