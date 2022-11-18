@@ -10,6 +10,7 @@ import { NotificationModal } from "./NotificationModal";
 import { Form } from "./Form";
 import { FormInputGroup } from "./FormInputGroup";
 import { SignInForm } from "./SignInForm";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   Form,
   FormInputGroup,
   SignInForm,
+  ProtectedRoute,
 };

@@ -1,2 +1,6 @@
 import { useToggle } from "./useToggle";
-export { useToggle };
+import {
+  useConfirmationParams,
+  ConfrimationStatus,
+} from "./useConfirmationParams";
+export { useToggle, useConfirmationParams, ConfrimationStatus };

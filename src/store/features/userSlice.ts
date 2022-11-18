@@ -14,6 +14,7 @@ import {
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
+import { AxiosError } from "axios";
 
 interface IUserInitialState {
   user: IUser | null;
@@ -58,8 +59,8 @@ const signInUser = createAsyncThunk<
   try {
     return await deadMorozApi.signInUser(signInData);
   } catch (err: any) {
-    if (err.response) {
-      return rejectWithValue(err.response.data.message);
+    if (err instanceof AxiosError && err.response) {
+      return rejectWithValue(err.response.data.error);
     }
 
     return rejectWithValue(err.message);
