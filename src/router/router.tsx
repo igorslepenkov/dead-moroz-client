@@ -7,7 +7,7 @@ import {
 import { ROUTES_URL } from "./routes";
 
 import { App } from "../App";
-import { AuthenticationPage, ChildProfile, HomePage } from "../pages";
+import { AuthenticationPage, ChildProfilePage, HomePage } from "../pages";
 import { ProtectedRoute } from "../components";
 import { USER_ROLES } from "../types";
 
@@ -20,7 +20,7 @@ export const router = createBrowserRouter(
         element={<AuthenticationPage />}
       />
       <Route element={<ProtectedRoute roleToAccess={USER_ROLES.Child} />}>
-        <Route path={ROUTES_URL.CHILD_PROFILE} element={<ChildProfile />} />
+        <Route path={ROUTES_URL.CHILD_PROFILE} element={<ChildProfilePage />} />
       </Route>
     </Route>
   )

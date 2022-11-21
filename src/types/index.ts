@@ -11,12 +11,22 @@ export enum USER_ROLES {
   Child = "child",
 }
 
+export interface IChildProfile {
+  country: string;
+  city: string;
+  hobbies: string;
+  birthdate: string;
+  pastYearDescription: string;
+  goodDeeds: string;
+}
+
 export interface IUser {
   id: string;
   name: string;
   email: string;
   token: string;
   role: USER_ROLES;
+  childProfile?: IChildProfile;
 }
 
 interface IUserApi {

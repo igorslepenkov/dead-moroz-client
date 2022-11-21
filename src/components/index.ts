@@ -14,6 +14,7 @@ import { Form } from "./Form";
 import { FormInputGroup } from "./FormInputGroup";
 import { SignInForm } from "./SignInForm";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { ChildProfile } from "./ChildProfile";
 
 export {
   Header,
@@ -30,4 +31,5 @@ export {
   SignInForm,
   ProtectedRoute,
   NotificationModalStatus,
+  ChildProfile,
 };

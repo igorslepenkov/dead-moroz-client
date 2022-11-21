@@ -1,5 +1,5 @@
 import { HomePage } from "./HomePage";
 import { AuthenticationPage } from "./AuthenticationPage";
-import { ChildProfile } from "./ChildProfile";
+import { ChildProfilePage } from "./ChildProfilePage";
 
-export { HomePage, AuthenticationPage, ChildProfile };
+export { HomePage, AuthenticationPage, ChildProfilePage };
