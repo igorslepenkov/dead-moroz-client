@@ -1,2 +1,7 @@
-import userSlice, { signInUser, signOutUser, signUpUser } from "./userSlice";
-export { signInUser, signOutUser, userSlice, signUpUser };
+import userSlice, {
+  signInUser,
+  signOutUser,
+  signUpUser,
+  createChildProfile,
+} from "./userSlice";
+export { signInUser, signOutUser, userSlice, signUpUser, createChildProfile };

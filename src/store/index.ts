@@ -2,7 +2,12 @@ import { store, RootState, AppDispatch } from "./store";
 
 import { useAppDispatch, useAppSelector } from "./hooks";
 
-import { signInUser, signOutUser, signUpUser } from "./features";
+import {
+  signInUser,
+  signOutUser,
+  signUpUser,
+  createChildProfile,
+} from "./features";
 
 import {
   getUser,
@@ -24,5 +29,6 @@ export {
   getUserIsLoggedIn,
   getUserServerMessage,
   signUpUser,
+  createChildProfile,
 };
 export type { RootState, AppDispatch };

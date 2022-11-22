@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState, FunctionComponent } from "react";
 import { useForm } from "react-hook-form";
+import { createChildProfile, useAppDispatch } from "../../store";
 import { IChildProfile } from "../../types";
 
 import { questions, IQuestionProps } from "./Questions";
@@ -10,7 +11,7 @@ interface IProps {
 
 export type QuestionObject = {
   title: keyof IChildProfile;
-  element: React.FunctionComponent<IQuestionProps>;
+  element: FunctionComponent<IQuestionProps>;
 };
 
 export const Questionnaire = ({ closeQuestionnaire }: IProps) => {
@@ -21,8 +22,11 @@ export const Questionnaire = ({ closeQuestionnaire }: IProps) => {
     formState: { errors },
   } = useForm<IChildProfile>({ mode: "onBlur" });
 
+  const dispatch = useAppDispatch();
+
   const onSubmit = (data: IChildProfile) => {
-    console.log(data);
+    data.birthdate = new Date(data.birthdate).toString();
+    dispatch(createChildProfile(data));
   };
 
   const [enabledQuestion, setEnabledQuestion] =

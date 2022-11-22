@@ -1,4 +1,9 @@
-import { FieldError, UseFormRegister } from "react-hook-form";
+import {
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+  UseFormRegister,
+} from "react-hook-form";
 
 import { IChildProfile } from "../../../types";
 import { QuestionObject } from "../Questionnaire";
@@ -15,7 +20,10 @@ export interface IQuestionProps {
   isEnabled: boolean;
   buttonClickHandler: () => void;
   register: UseFormRegister<IChildProfile>;
-  errors: FieldError | null;
+  errors:
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<{ url: string }>>
+    | null;
 }
 
 const Question1 = ({

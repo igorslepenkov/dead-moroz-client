@@ -51,14 +51,20 @@ export const ChildProfilePage = () => {
   }
 
   if (currentSurveyStatus === SurveyStatus.Success && user.childProfile) {
-    return <ChildProfile childProfile={user.childProfile} />;
+    return (
+      <Page>
+        <ChildProfile childProfile={user.childProfile} />
+      </Page>
+    );
   }
 
   return (
     <Page backgroundImage={backgroundImageWinter}>
       <ChildProfilePageBody>
         {currentSurveyStatus === SurveyStatus.InProcess ? (
-          <Questionnaire closeQuestionnaire={toggleCurrentStatus} />
+          <>
+            <Questionnaire closeQuestionnaire={toggleCurrentStatus} />
+          </>
         ) : (
           <>
             <ChildProfileTitle>

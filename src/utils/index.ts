@@ -1,2 +1,3 @@
 import { getTokenFromHeaders } from "./getTokenFromHeaders";
-export { getTokenFromHeaders };
+import { createDinamicUrlString } from "./createDinamicUrlString";
+export { getTokenFromHeaders, createDinamicUrlString };
