@@ -5,12 +5,18 @@ import {
   IDeadMorozApiCreateChildProfileResponse,
   IDeadMorozApiSignInResponse,
   IDeadMorozApiSignUpSignOutResponse,
+  IDeadMorozApiUpdateChildProfileResponse,
   IUser,
   SignInFields,
   SignUpFields,
+  UpdateChildProfile,
 } from "../types";
 
-import { createDinamicUrlString, getTokenFromHeaders } from "../utils";
+import {
+  createDinamicUrlString,
+  getTokenFromHeaders,
+  transformApiUserToUser,
+} from "../utils";
 
 enum Endpoint {
   SignUp = "users",
@@ -97,7 +103,7 @@ class DeadMorozApi {
       id: userId,
     });
 
-    const { data } =
+    const { data: userData } =
       await this.API.post<IDeadMorozApiCreateChildProfileResponse>(
         url,
         {
@@ -118,28 +124,31 @@ class DeadMorozApi {
         }
       );
 
-    const { id, name, email, role, child_profile } = data;
+    return transformApiUserToUser(userData);
+  };
 
-    let dataToReturn: Omit<IUser, "token"> = {
-      id,
-      name,
-      email,
-      role,
-      childProfile: null,
-    };
+  updateChildProfile = async (
+    userToken: string,
+    userId: string,
+    updateData: UpdateChildProfile
+  ): Promise<Promise<Omit<IUser, "token">>> => {
+    const url = createDinamicUrlString(Endpoint.ChildProfile, { id: userId });
+    const { data: userData } =
+      await this.API.patch<IDeadMorozApiUpdateChildProfileResponse>(
+        url,
+        { update_child_profile: updateData },
+        {
+          headers: {
+            // prettier-ignore
+            "Authorization": `Bearer ${userToken}`,
+            "Content-Type": updateData.avatar
+              ? "multipart/form-data"
+              : "application/json",
+          },
+        }
+      );
 
-    child_profile &&
-      (dataToReturn.childProfile = {
-        country: child_profile.country,
-        city: child_profile.city,
-        birthdate: child_profile.birthdate,
-        hobbies: child_profile.hobbies,
-        pastYearDescription: child_profile.past_year_description,
-        goodDeeds: child_profile.good_deeds,
-        avatar: child_profile.avatar,
-      });
-
-    return dataToReturn;
+    return transformApiUserToUser(userData);
   };
 }
 

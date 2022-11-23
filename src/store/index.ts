@@ -7,6 +7,7 @@ import {
   signOutUser,
   signUpUser,
   createChildProfile,
+  addAvatarToChildProfile,
 } from "./features";
 
 import {
@@ -30,5 +31,6 @@ export {
   getUserServerMessage,
   signUpUser,
   createChildProfile,
+  addAvatarToChildProfile,
 };
 export type { RootState, AppDispatch };

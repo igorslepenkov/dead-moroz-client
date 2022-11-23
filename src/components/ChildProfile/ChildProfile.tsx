@@ -1,5 +1,9 @@
+import { useToggle } from "../../hooks";
 import { IChildProfile } from "../../types";
+import { AddAvatarForm } from "../AddAvatarForm";
 import {
+  AddAvatarButton,
+  AvatarWrapper,
   ChildProfileField,
   ChildProfileFieldBody,
   ChildProfileFieldTitle,
@@ -13,6 +17,8 @@ interface IProps {
 }
 
 export const ChildProfile = ({ childProfile }: IProps) => {
+  const [isAddAvatarFormOpen, toggleAddAvatarForm] = useToggle();
+
   const childProfileEntries = Object.entries(childProfile);
   return (
     <StyledChildProfile>
@@ -39,7 +45,26 @@ export const ChildProfile = ({ childProfile }: IProps) => {
               {(() => {
                 switch (title) {
                   case "avatar":
-                    return <ProfileAvatar src={body.url} />;
+                    if (isAddAvatarFormOpen) {
+                      return <AddAvatarForm toggleForm={toggleAddAvatarForm} />;
+                    }
+
+                    if (body.url) {
+                      return (
+                        <AvatarWrapper>
+                          <ProfileAvatar src={body.url} />
+                          <AddAvatarButton onClick={toggleAddAvatarForm}>
+                            Change avatar
+                          </AddAvatarButton>
+                        </AvatarWrapper>
+                      );
+                    }
+
+                    return (
+                      <AddAvatarButton onClick={toggleAddAvatarForm}>
+                        Add Avatar
+                      </AddAvatarButton>
+                    );
                   case "birthdate":
                     return new Date(body).toDateString();
                   default:

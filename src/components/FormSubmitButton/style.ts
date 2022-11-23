@@ -8,6 +8,7 @@ export const StyledFormSubmitButton = styled.button`
   border-radius: 4px;
   ${fonts.bodyTextLarge};
   color: ${Color.White};
+  cursor: pointer;
 
   &:hover {
     background-color: ${Color.PrimaryHover};

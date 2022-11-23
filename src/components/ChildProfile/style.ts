@@ -25,7 +25,8 @@ export const ChildProfileFieldTitle = styled.h3`
   text-transform: uppercase;
 `;
 
-export const ChildProfileFieldBody = styled.p`
+export const ChildProfileFieldBody = styled.div`
+  margin-top: 10px;
   ${fonts.bodyTextLarge}
   color: ${Color.PrimaryMain};
 `;
@@ -36,6 +37,36 @@ export const ProfileTitle = styled.h2`
   text-transform: uppercase;
 `;
 
+export const AvatarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 200px;
+  height: 200px;
+`;
+
 export const ProfileAvatar = styled.img`
   border-radius: 10px;
+`;
+
+export const AddAvatarButton = styled.button`
+  padding: 8px 16px;
+  background-color: ${Color.InfoMain};
+  border: 3px solid transparent;
+  border-radius: 4px;
+  ${fonts.bodyTextLarge};
+  color: ${Color.White};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${Color.InfoHover};
+  }
+
+  &:active {
+    background-color: ${Color.InfoPressed};
+  }
+
+  &:focus {
+    border: 3px solid ${Color.InfoFocus};
+  }
 `;

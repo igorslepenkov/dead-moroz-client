@@ -39,6 +39,10 @@ interface IChildProfileApi {
   updated_at: string;
 }
 
+export type UpdateChildProfile = Partial<
+  Omit<IChildProfile, "avatar"> & { avatar: File }
+>;
+
 export interface IUser {
   id: string;
   name: string;
@@ -48,7 +52,7 @@ export interface IUser {
   childProfile: IChildProfile | null;
 }
 
-interface IUserApi {
+export interface IUserApi {
   id: string;
   name: string;
   email: string;
@@ -79,6 +83,12 @@ export interface IDeadMorozApiSignInResponse {
 export type IDeadMorozApiCreateChildProfileResponse = Required<IUserApi>;
 
 export interface IDeadMorozApiCreateChildProfileFailedResponse {
+  message: string;
+  errors: [string];
+}
+
+export type IDeadMorozApiUpdateChildProfileResponse = Required<IUserApi>;
+export interface IDeadMorozApiUpdateChildProfileFailedResponse {
   message: string;
   errors: [string];
 }

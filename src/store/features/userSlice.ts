@@ -10,6 +10,7 @@ import {
   IChildProfile,
   IDeadMorozApiCreateChildProfileFailedResponse,
   IDeadMorozApiSignUpFailedResponse,
+  IDeadMorozApiUpdateChildProfileFailedResponse,
   IUser,
   SignInFields,
   SignUpFields,
@@ -128,6 +129,41 @@ const createChildProfile = createAsyncThunk<
   }
 );
 
+const addAvatarToChildProfile = createAsyncThunk<
+  Omit<IUser, "token">,
+  File,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiUpdateChildProfileFailedResponse | string;
+  }
+>(
+  "user/addAvatarToChildProfile",
+  async (avatarFile: File, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user) {
+        return deadMorozApi.updateChildProfile(user.token, user.id, {
+          avatar: avatarFile,
+        });
+      } else {
+        return rejectWithValue("User is not logged in");
+      }
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue({
+          message: err.response.data.message,
+          errors: err.response.data.errors,
+        });
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -190,6 +226,22 @@ const userSlice = createSlice({
       }
     });
 
+    builder.addCase(addAvatarToChildProfile.fulfilled, (state, { payload }) => {
+      if (state.user) {
+        state.user.childProfile = payload.childProfile;
+      }
+    });
+
+    builder.addCase(addAvatarToChildProfile.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -206,5 +258,11 @@ const userSlice = createSlice({
   },
 });
 
-export { signInUser, signOutUser, signUpUser, createChildProfile };
+export {
+  signInUser,
+  signOutUser,
+  signUpUser,
+  createChildProfile,
+  addAvatarToChildProfile,
+};
 export default userSlice.reducer;
