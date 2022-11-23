@@ -1,3 +1,4 @@
-import { Questionnaire } from "./Questionnaire";
+import { Questionnaire, QuestionObject } from "./Questionnaire";
 
 export { Questionnaire };
+export type { QuestionObject };

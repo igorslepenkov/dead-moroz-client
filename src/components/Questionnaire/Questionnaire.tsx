@@ -1,9 +1,12 @@
 import { useState, FunctionComponent } from "react";
+
 import { useForm } from "react-hook-form";
+
 import { createChildProfile, useAppDispatch } from "../../store";
+
 import { IChildProfile } from "../../types";
 
-import { questions, IQuestionProps } from "./Questions";
+import { IQuestionProps, Question } from "../Question";
 
 interface IProps {
   closeQuestionnaire: () => void;
@@ -13,6 +16,26 @@ export type QuestionObject = {
   title: keyof IChildProfile;
   element: FunctionComponent<IQuestionProps>;
 };
+
+type QuestionFields = Omit<IChildProfile, "avatar">;
+
+enum QuestionField {
+  Country = "country",
+  City = "city",
+  Birthdate = "birthdate",
+  Hobbies = "hobbies",
+  PastYearDescription = "pastYearDescription",
+  GoodDeeds = "goodDeeds",
+}
+
+const questions: Array<keyof QuestionFields> = [
+  QuestionField.Country,
+  QuestionField.City,
+  QuestionField.Birthdate,
+  QuestionField.Hobbies,
+  QuestionField.PastYearDescription,
+  QuestionField.GoodDeeds,
+];
 
 export const Questionnaire = ({ closeQuestionnaire }: IProps) => {
   const {
@@ -30,20 +53,20 @@ export const Questionnaire = ({ closeQuestionnaire }: IProps) => {
   };
 
   const [enabledQuestion, setEnabledQuestion] =
-    useState<keyof IChildProfile>("country");
+    useState<keyof QuestionFields>("country");
 
   const goToTheNextQuestionOrSubmit = () => {
     trigger();
 
-    if (enabledQuestion === questions[questions.length - 1].title) {
+    if (enabledQuestion === questions[questions.length - 1]) {
       handleSubmit(onSubmit)();
       closeQuestionnaire();
       return;
     }
 
     const currentQuestion = questions.find(
-      (question) => question.title === enabledQuestion
-    ) as QuestionObject;
+      (question) => question === enabledQuestion
+    ) as keyof QuestionFields;
 
     const currentQuestionIdx = questions.indexOf(currentQuestion);
 
@@ -51,20 +74,22 @@ export const Questionnaire = ({ closeQuestionnaire }: IProps) => {
       return;
     }
 
-    setEnabledQuestion(questions[currentQuestionIdx + 1].title);
+    setEnabledQuestion(questions[currentQuestionIdx + 1]);
   };
 
   return (
     <>
-      {questions.map(({ title, element: Question }) => (
-        <Question
-          key={title}
-          isEnabled={enabledQuestion === title}
-          buttonClickHandler={goToTheNextQuestionOrSubmit}
-          register={register}
-          errors={errors[title] || null}
-        />
-      ))}
+      {questions.map((questionTitle) => {
+        return (
+          <Question
+            fieldName={questionTitle}
+            isEnabled={enabledQuestion === questionTitle}
+            register={register}
+            buttonClickHandler={goToTheNextQuestionOrSubmit}
+            errors={errors[questionTitle] || null}
+          />
+        );
+      })}
     </>
   );
 };

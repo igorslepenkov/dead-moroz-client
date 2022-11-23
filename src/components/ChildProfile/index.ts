@@ -1,2 +1,2 @@
-import { ChildProfile } from "./ChildProfile";
-export { ChildProfile };
+import { ChildProfile, ChildProfileKey } from "./ChildProfile";
+export { ChildProfile, ChildProfileKey };

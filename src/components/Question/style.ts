@@ -5,7 +5,7 @@ interface IQuestionProps {
   isEnabled: boolean;
 }
 
-export const Question = styled.div<IQuestionProps>`
+export const StyledQuestion = styled.div<IQuestionProps>`
   display: ${({ isEnabled }) => (isEnabled ? "flex" : "none")};
   flex-direction: column;
   justify-content: center;
