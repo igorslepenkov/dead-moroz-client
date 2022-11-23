@@ -3,6 +3,13 @@ import {
   getUserError,
   getUserIsLoading,
   getUserIsLoggedIn,
+  getUserServerMessage,
 } from "./userSelectors";
 
-export { getUser, getUserError, getUserIsLoading, getUserIsLoggedIn };
+export {
+  getUser,
+  getUserError,
+  getUserIsLoading,
+  getUserIsLoggedIn,
+  getUserServerMessage,
+};

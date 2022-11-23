@@ -10,3 +10,6 @@ export const getUserIsLoading: Selector<RootState, boolean> = (state) =>
   state.user.isLoading;
 export const getUserIsLoggedIn: Selector<RootState, boolean> = (state) =>
   state.user.isLoggedIn;
+export const getUserServerMessage: Selector<RootState, string | null> = (
+  state
+) => state.user.message;
