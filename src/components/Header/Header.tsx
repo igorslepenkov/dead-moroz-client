@@ -50,12 +50,12 @@ export const Header = () => {
         <DeadMorozLogo />
         <LogoText>Dead Moroz App</LogoText>
       </Logo>
-      {widnowWidth < MediaBreakpoints.SM && (
+      {widnowWidth < MediaBreakpoints.MD && (
         <BurgerWrapper onClick={toggleMenu}>
           <BurgerButton isOpen={isMenuOpen} />
         </BurgerWrapper>
       )}
-      {widnowWidth < MediaBreakpoints.SM && (
+      {widnowWidth < MediaBreakpoints.MD && (
         <Menu isOpen={isMenuOpen} toggle={toggleMenu} />
       )}
       <Navbar>

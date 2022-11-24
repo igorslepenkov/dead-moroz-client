@@ -12,7 +12,7 @@ export const HomepageBody = styled.div`
   gap: 5px;
   max-width: 300px;
   margin: 40% auto;
-  padding: 10px;
+  padding: 20px;
   background-color: ${Color.White};
   border-radius: 30px;
   text-align: center;

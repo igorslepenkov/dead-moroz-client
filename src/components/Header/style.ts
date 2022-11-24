@@ -9,7 +9,7 @@ export const StyledHeader = styled.header`
   grid-template-rows: 2fr 1fr;
   align-items: center;
   justify-content: space-around;
-  height: 120px;
+  min-height: 120px;
   padding: 0 20px;
   background: linear-gradient(
     80.43deg,
@@ -19,10 +19,14 @@ export const StyledHeader = styled.header`
   );
   border-radius: 5px 5px 8px 8px;
 
-  ${Media.SM} {
+  ${Media.MD} {
     min-height: 80px;
-    grid-template-columns: 10fr 5fr;
+    grid-template-columns: 4fr 5fr;
     grid-template-rows: 1fr;
+  }
+
+  ${Media.LG} {
+    grid-template-columns: 7fr 5fr;
   }
 `;
 
@@ -45,7 +49,7 @@ export const Logo = styled(Link)`
     color: ${Color.PrimaryFocused};
   }
 
-  ${Media.SM} {
+  ${Media.MD} {
     justify-content: unset;
   }
 `;
@@ -54,7 +58,7 @@ export const Navbar = styled.nav`
   display: none;
   justify-content: space-between;
 
-  ${Media.SM} {
+  ${Media.MD} {
     display: flex;
   }
 `;
