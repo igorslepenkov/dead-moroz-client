@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { useToggle } from "../../hooks";
+import { getUser, useAppSelector } from "../../store";
 import { Entries, IChildProfile } from "../../types";
+import { generateRandomIdenticonAvatar } from "../../utils";
 import { AddAvatarForm } from "../AddAvatarForm";
 import {
   AddAvatarButton,
@@ -33,6 +35,8 @@ type ChildProfileValues = {
 
 export const ChildProfile = ({ childProfile }: IProps) => {
   const [isAddAvatarFormOpen, toggleAddAvatarForm] = useToggle();
+
+  const user = useAppSelector(getUser);
 
   const getHumanFriendlyTitle = (title: keyof IChildProfile): string => {
     switch (title) {
@@ -69,9 +73,18 @@ export const ChildProfile = ({ childProfile }: IProps) => {
         }
 
         return (
-          <AddAvatarButton onClick={toggleAddAvatarForm}>
-            Add Avatar
-          </AddAvatarButton>
+          <AvatarWrapper>
+            <ProfileAvatar
+              src={
+                user
+                  ? generateRandomIdenticonAvatar(user.email)
+                  : generateRandomIdenticonAvatar("anonimous")
+              }
+            />
+            <AddAvatarButton onClick={toggleAddAvatarForm}>
+              Add Avatar
+            </AddAvatarButton>
+          </AvatarWrapper>
         );
       case ChildProfileKey.Birthdate:
         if (typeof body === "string") {
