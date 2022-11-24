@@ -107,7 +107,7 @@ class DeadMorozApi {
       await this.API.post<IDeadMorozApiCreateChildProfileResponse>(
         url,
         {
-          create_child_profile: {
+          child_profile: {
             country: childProfileData.country,
             city: childProfileData.city,
             hobbies: childProfileData.hobbies,
@@ -136,7 +136,7 @@ class DeadMorozApi {
     const { data: userData } =
       await this.API.patch<IDeadMorozApiUpdateChildProfileResponse>(
         url,
-        { update_child_profile: updateData },
+        { child_profile: updateData },
         {
           headers: {
             // prettier-ignore
