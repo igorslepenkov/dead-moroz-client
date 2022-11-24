@@ -1,5 +1,5 @@
 import { DeadMorozLogo } from "../../assets";
-import { useToggle } from "../../hooks";
+import { useToggle, useWindowSize } from "../../hooks";
 import { ROUTES_URL } from "../../router";
 import {
   getUserError,
@@ -10,6 +10,9 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../store";
+import { MediaBreakpoints } from "../../ui";
+import { BurgerButton } from "../BurgerButton";
+import { Menu } from "../Menu";
 import {
   NotificationModalStatus,
   NotificationModal,
@@ -21,10 +24,14 @@ import {
   Navbar,
   Navlink,
   SignOutLink,
+  BurgerWrapper,
 } from "./style";
 
 export const Header = () => {
-  const [isModalOpen, toggleModal] = useToggle(false);
+  const [isModalOpen, toggleModal] = useToggle();
+  const [isMenuOpen, toggleMenu] = useToggle();
+
+  const { width: widnowWidth } = useWindowSize();
 
   const userSignOutError = useAppSelector(getUserError);
   const userServerMessage = useAppSelector(getUserServerMessage);
@@ -43,6 +50,14 @@ export const Header = () => {
         <DeadMorozLogo />
         <LogoText>Dead Moroz App</LogoText>
       </Logo>
+      {widnowWidth < MediaBreakpoints.SM && (
+        <BurgerWrapper onClick={toggleMenu}>
+          <BurgerButton isOpen={isMenuOpen} />
+        </BurgerWrapper>
+      )}
+      {widnowWidth < MediaBreakpoints.SM && (
+        <Menu isOpen={isMenuOpen} toggle={toggleMenu} />
+      )}
       <Navbar>
         <Navlink to={ROUTES_URL.HOME}>Home</Navlink>
         <Navlink to={ROUTES_URL.HOME}>About Us</Navlink>

@@ -16,4 +16,8 @@ const shadow8 = (shadowColor = "rgba(0, 0, 0, 0.08)") => css`
   box-shadow: 0px 8px 16px ${shadowColor};
 `;
 
-export const shadows = { shadow2, shadow4, shadow6, shadow8 };
+const shadow8Inset = (shadowColor = "rgba(0, 0, 0, 0.08)") => css`
+  box-shadow: inset 0px 8px 16px ${shadowColor};
+`;
+
+export const shadows = { shadow2, shadow4, shadow6, shadow8, shadow8Inset };
