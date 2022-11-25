@@ -7,13 +7,17 @@ import {
 } from "@reduxjs/toolkit";
 
 import {
+  IChildProfile,
+  IDeadMorozApiCreateChildProfileFailedResponse,
   IDeadMorozApiSignUpFailedResponse,
+  IDeadMorozApiUpdateChildProfileFailedResponse,
   IUser,
   SignInFields,
   SignUpFields,
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
+import { AxiosError } from "axios";
 
 interface IUserInitialState {
   user: IUser | null;
@@ -58,8 +62,8 @@ const signInUser = createAsyncThunk<
   try {
     return await deadMorozApi.signInUser(signInData);
   } catch (err: any) {
-    if (err.response) {
-      return rejectWithValue(err.response.data.message);
+    if (err instanceof AxiosError && err.response) {
+      return rejectWithValue(err.response.data.error);
     }
 
     return rejectWithValue(err.message);
@@ -89,6 +93,77 @@ const signOutUser = createAsyncThunk<
   }
 });
 
+const createChildProfile = createAsyncThunk<
+  Omit<IUser, "token">,
+  IChildProfile,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiCreateChildProfileFailedResponse | string;
+  }
+>(
+  "user/createChildProfile",
+  async (childProfileData: IChildProfile, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+      if (user) {
+        return await deadMorozApi.createChildProfile(
+          user.token,
+          user.id,
+          childProfileData
+        );
+      } else {
+        return rejectWithValue("User is not logged in");
+      }
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue({
+          message: err.response.data.message,
+          errors: err.response.data.errors,
+        });
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const addAvatarToChildProfile = createAsyncThunk<
+  Omit<IUser, "token">,
+  File,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiUpdateChildProfileFailedResponse | string;
+  }
+>(
+  "user/addAvatarToChildProfile",
+  async (avatarFile: File, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user) {
+        return deadMorozApi.updateChildProfile(user.token, user.id, {
+          avatar: avatarFile,
+        });
+      } else {
+        return rejectWithValue("User is not logged in");
+      }
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue({
+          message: err.response.data.message,
+          errors: err.response.data.errors,
+        });
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -107,9 +182,12 @@ const userSlice = createSlice({
 
     builder.addCase(
       signInUser.fulfilled,
-      (state, { payload: { id, name, email, token, role, message } }) => {
+      (
+        state,
+        { payload: { id, name, email, token, role, childProfile, message } }
+      ) => {
         state.isLoggedIn = true;
-        state.user = { id, name, email, token, role };
+        state.user = { id, name, email, token, role, childProfile };
         state.message = message;
       }
     );
@@ -132,6 +210,38 @@ const userSlice = createSlice({
       }
     });
 
+    builder.addCase(createChildProfile.fulfilled, (state, { payload }) => {
+      if (state.user) {
+        state.user.childProfile = payload.childProfile;
+      }
+    });
+
+    builder.addCase(createChildProfile.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
+    builder.addCase(addAvatarToChildProfile.fulfilled, (state, { payload }) => {
+      if (state.user) {
+        state.user.childProfile = payload.childProfile;
+      }
+    });
+
+    builder.addCase(addAvatarToChildProfile.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -148,5 +258,11 @@ const userSlice = createSlice({
   },
 });
 
-export { signInUser, signOutUser, signUpUser };
+export {
+  signInUser,
+  signOutUser,
+  signUpUser,
+  createChildProfile,
+  addAvatarToChildProfile,
+};
 export default userSlice.reducer;

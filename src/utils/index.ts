@@ -1,2 +1,10 @@
 import { getTokenFromHeaders } from "./getTokenFromHeaders";
-export { getTokenFromHeaders };
+import { createDinamicUrlString } from "./createDinamicUrlString";
+import { transformApiUserToUser } from "./transformApiUserToUser";
+import { generateRandomIdenticonAvatar } from "./generateRandomAvatar";
+export {
+  getTokenFromHeaders,
+  createDinamicUrlString,
+  transformApiUserToUser,
+  generateRandomIdenticonAvatar,
+};

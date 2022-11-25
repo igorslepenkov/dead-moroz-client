@@ -7,7 +7,9 @@ import {
 import { ROUTES_URL } from "./routes";
 
 import { App } from "../App";
-import { AuthenticationPage, HomePage } from "../pages";
+import { AuthenticationPage, ChildProfilePage, HomePage } from "../pages";
+import { ProtectedRoute } from "../components";
+import { USER_ROLES } from "../types";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +19,9 @@ export const router = createBrowserRouter(
         path={ROUTES_URL.AUTHENTICATION}
         element={<AuthenticationPage />}
       />
+      <Route element={<ProtectedRoute roleToAccess={USER_ROLES.Child} />}>
+        <Route path={ROUTES_URL.CHILD_PROFILE} element={<ChildProfilePage />} />
+      </Route>
     </Route>
   )
 );

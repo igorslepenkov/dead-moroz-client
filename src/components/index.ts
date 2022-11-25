@@ -6,10 +6,15 @@ import { FormInputLabel } from "./FormInputLabel";
 import { FormNotification } from "./FormNotification";
 import { FormSubmitButton } from "./FormSubmitButton";
 import { Portal } from "./Portal";
-import { NotificationModal } from "./NotificationModal";
+import {
+  NotificationModal,
+  NotificationModalStatus,
+} from "./NotificationModal";
 import { Form } from "./Form";
 import { FormInputGroup } from "./FormInputGroup";
 import { SignInForm } from "./SignInForm";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { ChildProfile } from "./ChildProfile";
 
 export {
   Header,
@@ -24,4 +29,7 @@ export {
   Form,
   FormInputGroup,
   SignInForm,
+  ProtectedRoute,
+  NotificationModalStatus,
+  ChildProfile,
 };
