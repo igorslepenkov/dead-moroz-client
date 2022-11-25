@@ -72,7 +72,7 @@ export interface IDeadMorozApiSignUpResponse {
 
 export interface IDeadMorozApiSignUpFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
 }
 
 export interface IDeadMorozApiSignUpSignOutResponse {
@@ -88,11 +88,11 @@ export type IDeadMorozApiCreateChildProfileResponse = Required<IUserApi>;
 
 export interface IDeadMorozApiCreateChildProfileFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
 }
 
 export type IDeadMorozApiUpdateChildProfileResponse = Required<IUserApi>;
 export interface IDeadMorozApiUpdateChildProfileFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
 }
