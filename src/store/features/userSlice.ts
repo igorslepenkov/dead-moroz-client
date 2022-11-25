@@ -7,10 +7,13 @@ import {
 } from "@reduxjs/toolkit";
 
 import {
+  CreateChildPresent,
   IChildProfile,
+  IDeadMorozApiAddChildPresentFailedResponse,
   IDeadMorozApiCreateChildProfileFailedResponse,
   IDeadMorozApiSignUpFailedResponse,
   IDeadMorozApiUpdateChildProfileFailedResponse,
+  IPresent,
   IUser,
   SignInFields,
   SignUpFields,
@@ -164,6 +167,36 @@ const addAvatarToChildProfile = createAsyncThunk<
   }
 );
 
+const addChildPresentToWishlist = createAsyncThunk<
+  IPresent[],
+  CreateChildPresent,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;
+  }
+>(
+  "user/addChildPresentToWishlist",
+  async (present, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user) {
+        return deadMorozApi.addPresentToWishlist(user.token, user.id, present);
+      }
+
+      return rejectWithValue("User is not logged in");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -184,10 +217,29 @@ const userSlice = createSlice({
       signInUser.fulfilled,
       (
         state,
-        { payload: { id, name, email, token, role, childProfile, message } }
+        {
+          payload: {
+            id,
+            name,
+            email,
+            token,
+            role,
+            childProfile,
+            childPresents,
+            message,
+          },
+        }
       ) => {
         state.isLoggedIn = true;
-        state.user = { id, name, email, token, role, childProfile };
+        state.user = {
+          id,
+          name,
+          email,
+          token,
+          role,
+          childProfile,
+          childPresents,
+        };
         state.message = message;
       }
     );
@@ -242,6 +294,28 @@ const userSlice = createSlice({
       }
     });
 
+    builder.addCase(
+      addChildPresentToWishlist.fulfilled,
+      (state, { payload }) => {
+        if (state.user) {
+          state.user.childPresents = payload;
+        }
+      }
+    );
+
+    builder.addCase(
+      addChildPresentToWishlist.rejected,
+      (state, { payload }) => {
+        if (payload && typeof payload === "string") {
+          state.error = payload;
+        }
+
+        if (payload && typeof payload === "object" && "message" in payload) {
+          state.error = payload.message;
+        }
+      }
+    );
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -264,5 +338,6 @@ export {
   signUpUser,
   createChildProfile,
   addAvatarToChildProfile,
+  addChildPresentToWishlist,
 };
 export default userSlice.reducer;

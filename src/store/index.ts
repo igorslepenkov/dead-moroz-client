@@ -8,6 +8,7 @@ import {
   signUpUser,
   createChildProfile,
   addAvatarToChildProfile,
+  addChildPresentToWishlist,
 } from "./features";
 
 import {
@@ -32,5 +33,6 @@ export {
   signUpUser,
   createChildProfile,
   addAvatarToChildProfile,
+  addChildPresentToWishlist,
 };
 export type { RootState, AppDispatch };

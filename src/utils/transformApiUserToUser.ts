@@ -3,7 +3,7 @@ import { IUser, IUserApi } from "../types";
 export const transformApiUserToUser = (
   userData: Required<IUserApi>
 ): Omit<IUser, "token"> => {
-  const { id, name, email, role, child_profile } = userData;
+  const { id, name, email, role, child_profile, child_presents } = userData;
 
   let dataToReturn: Omit<IUser, "token"> = {
     id,
@@ -11,6 +11,7 @@ export const transformApiUserToUser = (
     email,
     role,
     childProfile: null,
+    childPresents: null,
   };
 
   child_profile &&
@@ -23,6 +24,8 @@ export const transformApiUserToUser = (
       goodDeeds: child_profile.good_deeds,
       avatar: child_profile.avatar,
     });
+
+  child_presents && (dataToReturn.childPresents = child_presents);
 
   return dataToReturn;
 };

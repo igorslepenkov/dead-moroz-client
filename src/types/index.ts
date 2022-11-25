@@ -43,6 +43,18 @@ interface IChildProfileApi {
   updated_at: string;
 }
 
+export interface IPresent {
+  name: string;
+  image: {
+    url: string | null;
+  };
+}
+
+export type CreateChildPresent = {
+  name: string;
+  image?: File;
+};
+
 export type UpdateChildProfile = Partial<
   Omit<IChildProfile, "avatar"> & { avatar: File }
 >;
@@ -54,6 +66,7 @@ export interface IUser {
   token: string;
   role: USER_ROLES;
   childProfile: IChildProfile | null;
+  childPresents: IPresent[] | null;
 }
 
 export interface IUserApi {
@@ -64,6 +77,7 @@ export interface IUserApi {
   updated_at: string;
   role: USER_ROLES;
   child_profile: IChildProfileApi | null;
+  child_presents: IPresent[] | null;
 }
 
 export interface IDeadMorozApiSignUpResponse {
@@ -72,7 +86,7 @@ export interface IDeadMorozApiSignUpResponse {
 
 export interface IDeadMorozApiSignUpFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
 }
 
 export interface IDeadMorozApiSignUpSignOutResponse {
@@ -88,11 +102,16 @@ export type IDeadMorozApiCreateChildProfileResponse = Required<IUserApi>;
 
 export interface IDeadMorozApiCreateChildProfileFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
 }
 
 export type IDeadMorozApiUpdateChildProfileResponse = Required<IUserApi>;
 export interface IDeadMorozApiUpdateChildProfileFailedResponse {
   message: string;
-  errors: [string];
+  errors: string[];
+}
+
+export interface IDeadMorozApiAddChildPresentFailedResponse {
+  message: string;
+  errors: string[];
 }

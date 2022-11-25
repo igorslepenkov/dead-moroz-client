@@ -61,6 +61,16 @@ export const MenuLink = styled(Link)`
   }
 `;
 
+export const SignOutMenuLink = styled.a`
+  ${fonts.h2}
+  text-decoration: none;
+  color: ${Color.PrimaryMain};
+
+  &:hover {
+    color: ${Color.PrimaryHover};
+  }
+`;
+
 export const CloseMenuButton = styled.button`
   position: absolute;
   top: 3%;

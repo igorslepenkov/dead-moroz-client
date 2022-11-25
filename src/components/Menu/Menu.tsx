@@ -1,8 +1,19 @@
+import { useNavigate } from "react-router-dom";
+
 import { ROUTES_URL } from "../../router";
 
-import { getUser, useAppSelector } from "../../store";
+import {
+  getUser,
+  signOutUser,
+  useAppDispatch,
+  useAppSelector,
+} from "../../store";
+
+import { USER_ROLES } from "../../types";
 
 import { DeadMorozLogo } from "../../assets";
+
+import { Portal, PortalTarget } from "../Portal";
 
 import {
   MenuContent,
@@ -12,9 +23,8 @@ import {
   StyledMenu,
   CloseMenuButton,
   MenuTopText,
+  SignOutMenuLink,
 } from "./style";
-import { USER_ROLES } from "../../types";
-import { Portal, PortalTarget } from "../Portal";
 
 interface IProps {
   isOpen: boolean;
@@ -23,6 +33,15 @@ interface IProps {
 
 export const Menu = ({ isOpen, toggle }: IProps) => {
   const user = useAppSelector(getUser);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const signOut = () => {
+    dispatch(signOutUser());
+    navigate(ROUTES_URL.HOME);
+    toggle();
+  };
 
   const variant = isOpen ? "opened" : "closed";
   const menuVariants = {
@@ -34,7 +53,7 @@ export const Menu = ({ isOpen, toggle }: IProps) => {
     },
   };
 
-  const transition = { x: { duration: 1 }, type: "spring", stiffness: 100 };
+  const transition = { x: { duration: 0.9 }, type: "spring", stiffness: 100 };
   return (
     <Portal target={PortalTarget.MENU}>
       <MenuWrapper
@@ -53,14 +72,23 @@ export const Menu = ({ isOpen, toggle }: IProps) => {
               Home
             </MenuLink>
 
-            <MenuLink to={ROUTES_URL.AUTHENTICATION} onClick={toggle}>
-              Sign In / Register
-            </MenuLink>
+            {user ? (
+              <SignOutMenuLink onClick={signOut}>Sign Out</SignOutMenuLink>
+            ) : (
+              <MenuLink to={ROUTES_URL.AUTHENTICATION} onClick={toggle}>
+                Sign In / Register
+              </MenuLink>
+            )}
 
             {user && user.role === USER_ROLES.Child && (
-              <MenuLink to={ROUTES_URL.CHILD_PROFILE} onClick={toggle}>
-                Profile
-              </MenuLink>
+              <>
+                <MenuLink to={ROUTES_URL.CHILD_PROFILE} onClick={toggle}>
+                  Profile
+                </MenuLink>
+                <MenuLink to={ROUTES_URL.CHILD_WISHLIST} onClick={toggle}>
+                  Whishlist
+                </MenuLink>
+              </>
             )}
           </MenuContent>
         </StyledMenu>
