@@ -72,14 +72,6 @@ export const Menu = ({ isOpen, toggle }: IProps) => {
               Home
             </MenuLink>
 
-            {user ? (
-              <SignOutMenuLink onClick={signOut}>Sign Out</SignOutMenuLink>
-            ) : (
-              <MenuLink to={ROUTES_URL.AUTHENTICATION} onClick={toggle}>
-                Sign In / Register
-              </MenuLink>
-            )}
-
             {user && user.role === USER_ROLES.Child && (
               <>
                 <MenuLink to={ROUTES_URL.CHILD_PROFILE} onClick={toggle}>
@@ -89,6 +81,22 @@ export const Menu = ({ isOpen, toggle }: IProps) => {
                   Whishlist
                 </MenuLink>
               </>
+            )}
+
+            {user && user.role === USER_ROLES.Elf && (
+              <>
+                <MenuLink to={ROUTES_URL.ElfDashboard} onClick={toggle}>
+                  Dashboard
+                </MenuLink>
+              </>
+            )}
+
+            {user ? (
+              <SignOutMenuLink onClick={signOut}>Sign Out</SignOutMenuLink>
+            ) : (
+              <MenuLink to={ROUTES_URL.AUTHENTICATION} onClick={toggle}>
+                Sign In / Register
+              </MenuLink>
             )}
           </MenuContent>
         </StyledMenu>
