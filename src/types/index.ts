@@ -44,6 +44,7 @@ interface IChildProfileApi {
 }
 
 export interface IPresent {
+  id: string;
   name: string;
   image: {
     url: string | null;
@@ -114,4 +115,13 @@ export interface IDeadMorozApiUpdateChildProfileFailedResponse {
 export interface IDeadMorozApiAddChildPresentFailedResponse {
   message: string;
   errors: string[];
+}
+
+export interface IDeadMorozApiDeleteChildPresentResponse {
+  message: string;
+  child_presents: IPresent[];
+}
+
+export interface IDeadMorozApiDeleteChildFailedResponse {
+  message: string;
 }

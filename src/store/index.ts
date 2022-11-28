@@ -9,6 +9,7 @@ import {
   createChildProfile,
   addAvatarToChildProfile,
   addChildPresentToWishlist,
+  deleteChildPresent,
 } from "./features";
 
 import {
@@ -34,5 +35,6 @@ export {
   createChildProfile,
   addAvatarToChildProfile,
   addChildPresentToWishlist,
+  deleteChildPresent,
 };
 export type { RootState, AppDispatch };

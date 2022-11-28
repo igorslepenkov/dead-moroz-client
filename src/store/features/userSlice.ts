@@ -6,11 +6,15 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 
+import { AxiosError } from "axios";
+
 import {
   CreateChildPresent,
   IChildProfile,
   IDeadMorozApiAddChildPresentFailedResponse,
   IDeadMorozApiCreateChildProfileFailedResponse,
+  IDeadMorozApiDeleteChildFailedResponse,
+  IDeadMorozApiDeleteChildPresentResponse,
   IDeadMorozApiSignUpFailedResponse,
   IDeadMorozApiUpdateChildProfileFailedResponse,
   IPresent,
@@ -20,7 +24,6 @@ import {
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
-import { AxiosError } from "axios";
 
 interface IUserInitialState {
   user: IUser | null;
@@ -197,6 +200,41 @@ const addChildPresentToWishlist = createAsyncThunk<
   }
 );
 
+const deleteChildPresent = createAsyncThunk<
+  IDeadMorozApiDeleteChildPresentResponse,
+  string,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiDeleteChildFailedResponse | string;
+  }
+>(
+  "user/deleteChildPresent",
+  async (presentId, { rejectWithValue, getState }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user) {
+        const data = await deadMorozApi.deleteChildPresent(
+          user.token,
+          user.id,
+          presentId
+        );
+        return data;
+      }
+
+      return rejectWithValue("User is not logged in");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data.message);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -316,6 +354,23 @@ const userSlice = createSlice({
       }
     );
 
+    builder.addCase(deleteChildPresent.fulfilled, (state, { payload }) => {
+      state.message = payload.message;
+      if (state.user) {
+        state.user.childPresents = payload.child_presents;
+      }
+    });
+
+    builder.addCase(deleteChildPresent.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -339,5 +394,6 @@ export {
   createChildProfile,
   addAvatarToChildProfile,
   addChildPresentToWishlist,
+  deleteChildPresent,
 };
 export default userSlice.reducer;

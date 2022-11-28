@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { DeleteIcon } from "../../assets";
 import { Color, fonts } from "../../ui";
 
 export const StyledChildPresentsTable = styled.table`
@@ -14,15 +15,20 @@ export const TableHeading = styled.th`
   color: ${Color.PrimaryMain};
 
   &:nth-child(1) {
-    width: 10%;
+    min-width: 10%;
+    width: 50px;
   }
 
   &:nth-child(2) {
-    width: 60%;
+    min-width: 35%;
   }
 
   &:nth-child(3) {
-    width: 30%;
+    min-width: 40%;
+  }
+
+  &:nth-child(4) {
+    min-width: 10%;
   }
 `;
 
@@ -58,5 +64,21 @@ export const AddPresentButton = styled.button`
 
   &:focus {
     border: 3px solid ${Color.PrimaryFocused};
+  }
+`;
+
+export const DeletePresentIcon = styled(DeleteIcon)`
+  cursor: pointer;
+
+  path {
+    stroke: ${Color.DangerMain};
+  }
+
+  &:hover path {
+    stroke: ${Color.DangerHover};
+  }
+
+  &:active path {
+    stroke: ${Color.DangerPressed};
   }
 `;

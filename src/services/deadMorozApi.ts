@@ -4,6 +4,7 @@ import {
   CreateChildPresent,
   IChildProfile,
   IDeadMorozApiCreateChildProfileResponse,
+  IDeadMorozApiDeleteChildPresentResponse,
   IDeadMorozApiSignInResponse,
   IDeadMorozApiSignUpSignOutResponse,
   IDeadMorozApiUpdateChildProfileResponse,
@@ -26,6 +27,7 @@ enum Endpoint {
   SignOut = "users/sign_out",
   ChildProfile = "users/:id/child_profile",
   ChildPresents = "users/:id/child_presents",
+  DeleteChildPresent = "users/:id/child_presents/:present_id",
 }
 
 class DeadMorozApi {
@@ -174,6 +176,27 @@ class DeadMorozApi {
         },
       }
     );
+
+    return data;
+  };
+
+  deleteChildPresent = async (
+    userToken: string,
+    userId: string,
+    presentId: string
+  ) => {
+    const url = createDinamicUrlString(Endpoint.DeleteChildPresent, {
+      id: userId,
+      present_id: presentId,
+    });
+
+    const { data } =
+      await this.API.delete<IDeadMorozApiDeleteChildPresentResponse>(url, {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      });
 
     return data;
   };
