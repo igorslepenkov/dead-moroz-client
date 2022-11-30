@@ -2,6 +2,8 @@ import axios, { AxiosInstance } from "axios";
 
 import {
   CreateChildPresent,
+  IDeadMorozApiGetChildProfilesReponse,
+  GetChildrenOptions,
   IChildProfile,
   IDeadMorozApiCreateChildProfileResponse,
   IDeadMorozApiDeleteChildPresentResponse,
@@ -16,6 +18,7 @@ import {
 } from "../types";
 
 import {
+  addOptionalQueryParametersToUrl,
   createDinamicUrlString,
   getTokenFromHeaders,
   transformApiUserToUser,
@@ -28,6 +31,7 @@ enum Endpoint {
   ChildProfile = "users/:id/child_profile",
   ChildPresents = "users/:id/child_presents",
   DeleteChildPresent = "users/:id/child_presents/:present_id",
+  ChildProfiles = "users/child_profiles/:page",
 }
 
 class DeadMorozApi {
@@ -197,6 +201,29 @@ class DeadMorozApi {
           'Authorization': `Bearer ${userToken}`,
         },
       });
+
+    return data;
+  };
+
+  getChildren = async (
+    userToken: string,
+    page: number,
+    options: GetChildrenOptions
+  ) => {
+    const url = addOptionalQueryParametersToUrl(
+      createDinamicUrlString(Endpoint.ChildProfiles, { page: page.toString() }),
+      options
+    );
+
+    const { data } = await this.API.get<IDeadMorozApiGetChildProfilesReponse>(
+      url,
+      {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      }
+    );
 
     return data;
   };

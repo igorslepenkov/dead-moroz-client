@@ -17,6 +17,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { ChildProfile } from "./ChildProfile";
 import { BurgerButton } from "./BurgerButton";
 import { ChildPresentsTable } from "./ChildPresentsTable/ChildPresentsTable";
+import { ChildrenListingTable } from "./ChildrenListingTable";
 
 export {
   Header,
@@ -36,4 +37,5 @@ export {
   ChildProfile,
   BurgerButton,
   ChildPresentsTable,
+  ChildrenListingTable,
 };

@@ -125,3 +125,23 @@ export interface IDeadMorozApiDeleteChildPresentResponse {
 export interface IDeadMorozApiDeleteChildFailedResponse {
   message: string;
 }
+
+export type GetChildrenOptions = {
+  sort_type: "name" | "score" | null;
+  filter_type: "scored" | "not_scored" | null;
+  sort_order: "ASC" | "DESC" | null;
+  limit: number | null;
+};
+
+export type IApiChild = Pick<
+  IUserApi,
+  "id" | "name" | "email" | "created_at" | "updated_at"
+>;
+
+export interface IDeadMorozApiGetChildProfilesReponse {
+  children: IApiChild[];
+  page: number;
+  total_pages: number;
+  total_records: number;
+  limit: number;
+}
