@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { DeleteIcon } from "../../assets";
-import { Color, fonts } from "../../ui";
+import { Color, fonts, Media } from "../../ui";
 
 export const StyledChildPresentsTable = styled.table`
-  width: 80%;
+  width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+
+  ${Media.SM} {
+    width: 80%;
+  }
 `;
 
 export const TableHeading = styled.th`

@@ -10,6 +10,7 @@ export const useGetChildrenResponse = () => {
   const user = useAppSelector(getUser);
 
   const [page, setPage] = useState<number>(1);
+
   const [childrenQueryOptions, setChildrenQueryOptions] =
     useState<GetChildrenOptions>({
       sort_type: null,
@@ -69,6 +70,9 @@ export const useGetChildrenResponse = () => {
 
   return {
     children: response ? response.children : [],
+    total_pages: response ? response.total_pages : 0,
+    total_records: response ? response.total_records : 0,
+    limit: response ? response.limit : 0,
     page,
     incrementPage,
     decrementPage,

@@ -48,7 +48,7 @@ export const ElfDashboardSortingPannel = styled.aside`
     grid-row: 1 / 3;
     flex-direction: column;
     justify-content: center;
-    gap: 15%;
+    gap: 10%;
   }
 `;
 
@@ -85,4 +85,11 @@ export const ElfDashboardContent = styled.section`
     grid-row: 2 / 3;
     padding: 10px;
   }
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
 `;

@@ -18,6 +18,7 @@ import { ChildProfile } from "./ChildProfile";
 import { BurgerButton } from "./BurgerButton";
 import { ChildPresentsTable } from "./ChildPresentsTable/ChildPresentsTable";
 import { ChildrenListingTable } from "./ChildrenListingTable";
+import { ElfDashboard } from "./ElfDashboard";
 
 export {
   Header,
@@ -38,4 +39,5 @@ export {
   BurgerButton,
   ChildPresentsTable,
   ChildrenListingTable,
+  ElfDashboard,
 };

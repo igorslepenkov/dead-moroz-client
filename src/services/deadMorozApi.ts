@@ -15,6 +15,7 @@ import {
   SignInFields,
   SignUpFields,
   UpdateChildProfile,
+  IFullChildInfoApi,
 } from "../types";
 
 import {
@@ -32,6 +33,7 @@ enum Endpoint {
   ChildPresents = "users/:id/child_presents",
   DeleteChildPresent = "users/:id/child_presents/:present_id",
   ChildProfiles = "users/child_profiles/:page",
+  ChildInfo = "users/:id",
 }
 
 class DeadMorozApi {
@@ -224,6 +226,18 @@ class DeadMorozApi {
         },
       }
     );
+
+    return data;
+  };
+
+  getFullChildInfoById = async (userToken: string, id: string) => {
+    const url = createDinamicUrlString(Endpoint.ChildInfo, { id });
+    const { data } = await this.API.get<IFullChildInfoApi>(url, {
+      headers: {
+        // prettier-ignore
+        'Authorization': `Bearer ${userToken}`,
+      },
+    });
 
     return data;
   };

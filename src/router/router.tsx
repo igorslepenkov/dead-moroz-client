@@ -9,6 +9,7 @@ import { ROUTES_URL } from "./routes";
 import { App } from "../App";
 import {
   AuthenticationPage,
+  ChildDetailedInfoPage,
   ChildProfilePage,
   ChildWishlistPage,
   ElfDashboardPage,
@@ -34,6 +35,10 @@ export const router = createBrowserRouter(
       </Route>
       <Route element={<ProtectedRoute roleToAccess={USER_ROLES.Elf} />}>
         <Route path={ROUTES_URL.ElfDashboard} element={<ElfDashboardPage />} />
+        <Route
+          path={ROUTES_URL.ChildDetailedInfo}
+          element={<ChildDetailedInfoPage />}
+        />
       </Route>
     </Route>
   )

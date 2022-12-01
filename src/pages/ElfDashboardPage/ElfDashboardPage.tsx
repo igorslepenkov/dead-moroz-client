@@ -1,6 +1,4 @@
-import React from "react";
-import { Page } from "../../components";
-import { ElfDashboard } from "../../components/ElfDashboard";
+import { Page, ElfDashboard } from "../../components";
 
 export const ElfDashboardPage = () => {
   return (

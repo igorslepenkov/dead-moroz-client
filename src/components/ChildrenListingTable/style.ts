@@ -24,11 +24,7 @@ export const TableHeading = styled.th`
   }
 
   &:nth-child(4) {
-    width: 75px;
-  }
-
-  &:nth-child(5) {
-    width: 87px;
+    width: 95px;
   }
 
   ${Media.SM} {
@@ -36,10 +32,7 @@ export const TableHeading = styled.th`
       width: 50px;
     }
     &:nth-child(4) {
-      width: 90px;
-    }
-    &:nth-child(5) {
-      width: 105px;
+      width: 110px;
     }
   }
 
@@ -48,10 +41,7 @@ export const TableHeading = styled.th`
       width: 40px;
     }
     &:nth-child(4) {
-      width: 100px;
-    }
-    &:nth-child(5) {
-      width: 120px;
+      width: 130px;
     }
   }
 `;

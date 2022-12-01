@@ -1,3 +1,4 @@
+import { Pagination, Slider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useGetChildrenResponse } from "../../hooks";
 import { GetChildrenOptions } from "../../types";
@@ -11,24 +12,26 @@ import {
   ElfDashboardFilter,
   ElfDashboardFilterWrapper,
   ElfDashboardFilterNotificator,
+  PaginationWrapper,
 } from "./style";
 
 export const ElfDashboard = () => {
-  const {
-    children,
-    page,
-    incrementPage,
-    decrementPage,
-    setPage,
-    queryParams,
-    setQueryParams,
-  } = useGetChildrenResponse();
+  const { children, total_pages, setPage, queryParams, setQueryParams } =
+    useGetChildrenResponse();
 
   const [sortByName, setSortByName] = useState<"ASC" | "DESC">("ASC");
   const [sortByScore, setSortByScore] = useState<"ASC" | "DESC" | null>(null);
   const [filterByScore, setFilterByScore] = useState<
     "scored" | "not_scored" | null
   >(null);
+
+  const [limitValue, setLimitValue] = useState<number>(5);
+
+  const updateLimitValue = (value: number | number[]) => {
+    if (typeof value === "number") {
+      setLimitValue(value);
+    }
+  };
 
   const toggleSortByNameOnClick = () => {
     if (sortByName === "ASC") {
@@ -91,10 +94,18 @@ export const ElfDashboard = () => {
           options.filter_type = filterByScore;
         }
 
+        options.limit = limitValue;
+
         return options;
       })()
     );
-  }, [sortByName, sortByScore, filterByScore]);
+  }, [sortByName, sortByScore, filterByScore, limitValue]);
+
+  useEffect(() => {
+    if (sortByName) {
+      setSortByScore(null);
+    }
+  }, [sortByName]);
 
   return (
     <StyledElfDashboard>
@@ -136,9 +147,30 @@ export const ElfDashboard = () => {
             </ElfDashboardFilterNotificator>
           )}
         </ElfDashboardFilterWrapper>
+        <ElfDashboardFilterWrapper>
+          <ElfDashboardFilter>Set limit of records</ElfDashboardFilter>
+          <Slider
+            color="secondary"
+            defaultValue={5}
+            step={1}
+            min={1}
+            max={50}
+            valueLabelDisplay="auto"
+            onChangeCommitted={(_, value) => updateLimitValue(value)}
+          />
+        </ElfDashboardFilterWrapper>
       </ElfDashboardSortingPannel>
       <ElfDashboardContent>
         <ChildrenListingTable children={children} />
+        <PaginationWrapper>
+          <Pagination
+            boundaryCount={3}
+            count={total_pages}
+            defaultPage={1}
+            onChange={(_, page) => setPage(page)}
+            color="primary"
+          />
+        </PaginationWrapper>
       </ElfDashboardContent>
     </StyledElfDashboard>
   );

@@ -78,7 +78,7 @@ export interface IUserApi {
   updated_at: string;
   role: USER_ROLES;
   child_profile: IChildProfileApi | null;
-  child_presents: IPresent[] | null;
+  child_presents: IPresent[] | [];
 }
 
 export interface IDeadMorozApiSignUpResponse {
@@ -144,4 +144,45 @@ export interface IDeadMorozApiGetChildProfilesReponse {
   total_pages: number;
   total_records: number;
   limit: number;
+}
+
+export interface IChildReview {
+  id: string;
+  score: number;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+  child_profile_id: string;
+}
+
+export interface IFullChildInfoApi {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+  role: USER_ROLES;
+  child_profile: IChildProfileApi & { child_reviews: IChildReview[] | [] };
+  child_presents: IPresent[] | [];
+}
+
+export interface IFullChild {
+  id: string;
+  email: string;
+  name: string;
+  country: string;
+  city: string;
+  birthdate: string;
+  hobbies: string;
+  goodDeeds: string;
+  pastYearDescription: string;
+  avatar: {
+    url: string | null;
+  };
+}
+
+export interface IFullChildInfo {
+  child: IFullChild | null;
+  presents: IPresent[] | [];
+  reviews: IChildReview[] | [];
 }

@@ -68,7 +68,15 @@ const signInUser = createAsyncThunk<
   try {
     return await deadMorozApi.signInUser(signInData);
   } catch (err: any) {
-    if (err instanceof AxiosError && err.response) {
+    if (
+      err instanceof AxiosError &&
+      err.response &&
+      err.response.data.message
+    ) {
+      return rejectWithValue(err.response.data.message);
+    }
+
+    if (err instanceof AxiosError && err.response && err.response.data.error) {
       return rejectWithValue(err.response.data.error);
     }
 
