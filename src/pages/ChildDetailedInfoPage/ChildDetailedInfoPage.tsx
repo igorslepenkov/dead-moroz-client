@@ -2,7 +2,6 @@ import { Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 import { ChildPresentsTable, Page } from "../../components";
-import { useGetChildDetailedInfo } from "../../hooks";
 import { generateRandomIdenticonAvatar } from "../../utils";
 
 import { Entries, IFullChild } from "../../types";
@@ -21,6 +20,13 @@ import {
   ReviewsWrapper,
   NoReviews,
 } from "./style";
+import {
+  getChildInfo,
+  useAppDispatch,
+  useAppSelector,
+  fetchChildInfo,
+} from "../../store";
+import { useEffect } from "react";
 
 type ChildDetailsParams = {
   id: string;
@@ -42,11 +48,23 @@ export enum ChildDetailsKey {
 export const ChildDetailedInfoPage = () => {
   const { id } = useParams<keyof ChildDetailsParams>() as ChildDetailsParams;
 
-  const { child, presents, reviews } = useGetChildDetailedInfo(id);
+  const dispatch = useAppDispatch();
 
-  console.log(presents, reviews);
+  const childInfo = useAppSelector(getChildInfo);
 
-  if (child) {
+  useEffect(() => {
+    if (id) {
+      const fetchChildInfoEffect = async () => {
+        dispatch(fetchChildInfo(id));
+      };
+
+      fetchChildInfoEffect();
+    }
+  }, [id, dispatch]);
+
+  if (childInfo) {
+    const { child, presents, reviews } = childInfo;
+
     const getHumanFriendlyTitle = (title: keyof typeof child): string => {
       switch (title) {
         case ChildDetailsKey.Birthdate:
@@ -127,7 +145,7 @@ export const ChildDetailedInfoPage = () => {
                 );
               })
             ) : (
-              <NoReviews>There is no reviews at the moment</NoReviews>
+              <NoReviews>There are no reviews at the moment</NoReviews>
             )}
           </ReviewsWrapper>
         </ChildDetailedInfo>

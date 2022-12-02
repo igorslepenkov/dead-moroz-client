@@ -10,6 +10,7 @@ import {
   addAvatarToChildProfile,
   addChildPresentToWishlist,
   deleteChildPresent,
+  fetchChildInfo,
 } from "./features";
 
 import {
@@ -18,6 +19,10 @@ import {
   getUserIsLoading,
   getUserIsLoggedIn,
   getUserServerMessage,
+  getChildInfo,
+  getChildInfoIsLoading,
+  getChildInfoError,
+  getChildInfoServerMessage,
 } from "./selectors";
 
 export {
@@ -36,5 +41,10 @@ export {
   addAvatarToChildProfile,
   addChildPresentToWishlist,
   deleteChildPresent,
+  getChildInfo,
+  getChildInfoIsLoading,
+  getChildInfoError,
+  getChildInfoServerMessage,
+  fetchChildInfo,
 };
 export type { RootState, AppDispatch };

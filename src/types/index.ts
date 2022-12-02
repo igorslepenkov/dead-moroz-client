@@ -16,20 +16,24 @@ export enum USER_ROLES {
 }
 
 export interface IChildProfile {
+  id: number;
+  userId: number;
   country: string;
   city: string;
-  hobbies: string;
   birthdate: string;
+  hobbies: string;
   pastYearDescription: string;
   goodDeeds: string;
   avatar: {
     url: string | null;
   };
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface IChildProfileApi {
-  id: string;
-  user_id: string;
+export interface IChildProfileApi {
+  id: number;
+  user_id: number;
   country: string;
   city: string;
   birthdate: string;
@@ -43,12 +47,28 @@ interface IChildProfileApi {
   updated_at: string;
 }
 
-export interface IPresent {
-  id: string;
+export interface IPresentApi {
+  id: number;
   name: string;
   image: {
     url: string | null;
   };
+  created_at: string;
+  updated_at: string;
+  child_review_id: number | null;
+  user_id: number;
+}
+
+export interface IPresent {
+  id: number;
+  name: string;
+  image: {
+    url: string | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+  childReviewId: number | null;
+  createdUserId: number;
 }
 
 export type CreateChildPresent = {
@@ -61,7 +81,7 @@ export type UpdateChildProfile = Partial<
 >;
 
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
   token: string;
@@ -71,14 +91,14 @@ export interface IUser {
 }
 
 export interface IUserApi {
-  id: string;
+  id: number;
   name: string;
   email: string;
   created_at: string;
   updated_at: string;
   role: USER_ROLES;
   child_profile: IChildProfileApi | null;
-  child_presents: IPresent[] | [];
+  child_presents: IPresentApi[] | [];
 }
 
 export interface IDeadMorozApiSignUpResponse {
@@ -146,28 +166,42 @@ export interface IDeadMorozApiGetChildProfilesReponse {
   limit: number;
 }
 
-export interface IChildReview {
-  id: string;
+export interface IDeadMorozApiGetFullChildInfoFailedResponse {
+  message: string;
+  errors: string[];
+}
+
+export interface IChildReviewApi {
+  id: number;
   score: number;
   comment: string;
   created_at: string;
   updated_at: string;
-  child_profile_id: string;
+  child_profile_id: number;
+}
+
+export interface IChildReview {
+  id: number;
+  score: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  childProfileId: number;
 }
 
 export interface IFullChildInfoApi {
-  id: string;
+  id: number;
   name: string;
   email: string;
   created_at: string;
   updated_at: string;
   role: USER_ROLES;
-  child_profile: IChildProfileApi & { child_reviews: IChildReview[] | [] };
-  child_presents: IPresent[] | [];
+  child_profile: IChildProfileApi & { child_reviews: IChildReviewApi[] | [] };
+  child_presents: IPresentApi[] | [];
 }
 
 export interface IFullChild {
-  id: string;
+  id: number;
   email: string;
   name: string;
   country: string;
@@ -179,10 +213,13 @@ export interface IFullChild {
   avatar: {
     url: string | null;
   };
+  createdAt: string;
+  updatedAt: string;
+  role: USER_ROLES;
 }
 
 export interface IFullChildInfo {
-  child: IFullChild | null;
+  child: IFullChild;
   presents: IPresent[] | [];
   reviews: IChildReview[] | [];
 }

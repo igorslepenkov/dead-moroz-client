@@ -7,6 +7,9 @@ import userSlice, {
   addChildPresentToWishlist,
   deleteChildPresent,
 } from "./userSlice";
+
+import childInfoSlice, { fetchChildInfo } from "./childInfoSlice";
+
 export {
   signInUser,
   signOutUser,
@@ -16,4 +19,6 @@ export {
   addAvatarToChildProfile,
   addChildPresentToWishlist,
   deleteChildPresent,
+  childInfoSlice,
+  fetchChildInfo,
 };

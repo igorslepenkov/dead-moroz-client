@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { userSlice } from "./features";
+import { userSlice, childInfoSlice } from "./features";
 
 const rootReducer = combineReducers({
   user: userSlice,
+  childInfo: childInfoSlice,
 });
 
 export const store = configureStore({
