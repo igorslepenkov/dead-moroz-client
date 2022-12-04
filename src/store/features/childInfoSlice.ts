@@ -6,6 +6,7 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 import { deadMorozApi } from "../../services";
+import { fullChildInfoMapper } from "../../services/mappers/fullChildInfoMapper";
 
 import {
   IDeadMorozApiGetFullChildInfoFailedResponse,
@@ -29,59 +30,26 @@ const initialState: InitialState = {
 
 const fetchChildInfo = createAsyncThunk<
   IFullChildInfo,
-  string,
+  number,
   {
     state: RootState;
     rejectValue: IDeadMorozApiGetFullChildInfoFailedResponse | string;
   }
 >(
   "childInfo/fetchChildInfo",
-  async (id: string, { getState, rejectWithValue }) => {
+  async (id: number, { getState, rejectWithValue }) => {
     try {
       const {
         user: { user },
       } = getState();
 
       if (user) {
-        const {
-          id: child_id,
-          email,
-          name,
-          created_at,
-          updated_at,
-          role,
-          child_profile: {
-            country,
-            city,
-            birthdate,
-            hobbies,
-            past_year_description,
-            good_deeds,
-            avatar,
-            child_reviews,
-          },
-          child_presents,
-        } = await deadMorozApi.getFullChildInfoById(user.token, id);
+        const childInfoApi = await deadMorozApi.getFullChildInfoById(
+          user.token,
+          id
+        );
 
-        return {
-          child: {
-            id: child_id,
-            email,
-            name,
-            createdAt: created_at,
-            updatedAt: updated_at,
-            role,
-            country,
-            city,
-            birthdate,
-            hobbies,
-            pastYearDescription: past_year_description,
-            goodDeeds: good_deeds,
-            avatar,
-          },
-          presents: child_presents,
-          reviews: child_reviews,
-        };
+        return fullChildInfoMapper(childInfoApi);
       }
 
       return rejectWithValue("User is not logged in");

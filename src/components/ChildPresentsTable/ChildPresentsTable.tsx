@@ -45,7 +45,7 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
       target.dataset.present_id
     ) {
       const { present_id } = target.dataset;
-      dispatch(deleteChildPresent(present_id));
+      dispatch(deleteChildPresent(Number(present_id)));
       toggleModal();
     }
   };

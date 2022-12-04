@@ -1,5 +1,5 @@
 type CreateDinamicUrlStringParams = {
-  [key: string]: string;
+  [key: string]: string | number;
 };
 
 export const createDinamicUrlString = (
@@ -9,6 +9,6 @@ export const createDinamicUrlString = (
   const paramsEntries = Object.entries(params);
   return paramsEntries.reduce((acc, [key, value]) => {
     const regexp = new RegExp(`:${key}`);
-    return acc.replace(regexp, value);
+    return acc.replace(regexp, value.toString());
   }, urlWithDinamicSegment);
 };

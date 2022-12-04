@@ -22,8 +22,12 @@ import {
   addOptionalQueryParametersToUrl,
   createDinamicUrlString,
   getTokenFromHeaders,
-  transformApiUserToUser,
 } from "../utils";
+import {
+  childPresentMapper,
+  childProfileMapper,
+  userApiMapper,
+} from "./mappers";
 
 enum Endpoint {
   SignUp = "users",
@@ -79,17 +83,12 @@ class DeadMorozApi {
     };
 
     child_profile &&
-      (userDataToReturn.childProfile = {
-        country: child_profile.country,
-        city: child_profile.city,
-        birthdate: child_profile.birthdate,
-        hobbies: child_profile.hobbies,
-        pastYearDescription: child_profile.past_year_description,
-        goodDeeds: child_profile.good_deeds,
-        avatar: child_profile.avatar,
-      });
+      (userDataToReturn.childProfile = childProfileMapper(child_profile));
 
-    child_presents && (userDataToReturn.childPresents = child_presents);
+    child_presents &&
+      (userDataToReturn.childPresents = child_presents.map((present) =>
+        childPresentMapper(present)
+      ));
 
     return userDataToReturn;
   };
@@ -110,7 +109,7 @@ class DeadMorozApi {
 
   createChildProfile = async (
     userToken: string,
-    userId: string,
+    userId: number,
     childProfileData: IChildProfile
   ): Promise<Omit<IUser, "token">> => {
     const url = createDinamicUrlString(Endpoint.ChildProfile, {
@@ -138,12 +137,12 @@ class DeadMorozApi {
         }
       );
 
-    return transformApiUserToUser(userData);
+    return userApiMapper(userData, userToken);
   };
 
   updateChildProfile = async (
     userToken: string,
-    userId: string,
+    userId: number,
     updateData: UpdateChildProfile
   ): Promise<Promise<Omit<IUser, "token">>> => {
     const url = createDinamicUrlString(Endpoint.ChildProfile, { id: userId });
@@ -162,12 +161,12 @@ class DeadMorozApi {
         }
       );
 
-    return transformApiUserToUser(userData);
+    return userApiMapper(userData, userToken);
   };
 
   addPresentToWishlist = async (
     userToken: string,
-    userId: string,
+    userId: number,
     present: CreateChildPresent
   ) => {
     const url = createDinamicUrlString(Endpoint.ChildPresents, { id: userId });
@@ -188,8 +187,8 @@ class DeadMorozApi {
 
   deleteChildPresent = async (
     userToken: string,
-    userId: string,
-    presentId: string
+    userId: number,
+    presentId: number
   ) => {
     const url = createDinamicUrlString(Endpoint.DeleteChildPresent, {
       id: userId,
@@ -230,7 +229,7 @@ class DeadMorozApi {
     return data;
   };
 
-  getFullChildInfoById = async (userToken: string, id: string) => {
+  getFullChildInfoById = async (userToken: string, id: number) => {
     const url = createDinamicUrlString(Endpoint.ChildInfo, { id });
     const { data } = await this.API.get<IFullChildInfoApi>(url, {
       headers: {

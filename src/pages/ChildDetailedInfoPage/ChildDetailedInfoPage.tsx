@@ -55,7 +55,7 @@ export const ChildDetailedInfoPage = () => {
   useEffect(() => {
     if (id) {
       const fetchChildInfoEffect = async () => {
-        dispatch(fetchChildInfo(id));
+        dispatch(fetchChildInfo(Number(id)));
       };
 
       fetchChildInfoEffect();
@@ -125,7 +125,7 @@ export const ChildDetailedInfoPage = () => {
           <ChildProfileDetails>
             <ProfileTitle>Profile</ProfileTitle>
             {childProfileEntries.map(([key, value]) => {
-              return getBody(key, value);
+              return getBody(key, value.toString());
             })}
           </ChildProfileDetails>
           <PresentsTableWrapper>
@@ -138,7 +138,7 @@ export const ChildDetailedInfoPage = () => {
               reviews.map((review) => {
                 return (
                   <Review>
-                    <p>Date: {new Date(review.created_at).toDateString()}</p>
+                    <p>Date: {new Date(review.createdAt).toDateString()}</p>
                     <p>Score: {review.score}</p>
                     <p>Comment: {review.comment}</p>
                   </Review>

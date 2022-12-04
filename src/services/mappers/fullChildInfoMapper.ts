@@ -1,4 +1,6 @@
 import { IFullChildInfo, IFullChildInfoApi } from "../../types";
+import { childPresentMapper } from "./childPresentMapper";
+import { childReviewMapper } from "./childReviewMapper";
 
 export const fullChildInfoMapper = (
   childInfo: IFullChildInfoApi
@@ -39,7 +41,7 @@ export const fullChildInfoMapper = (
       goodDeeds: good_deeds,
       avatar,
     },
-    presents:,
-    reviews: ,
-  }
+    presents: child_presents.map((present) => childPresentMapper(present)),
+    reviews: child_reviews.map((review) => childReviewMapper(review)),
+  };
 };

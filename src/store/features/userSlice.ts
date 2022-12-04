@@ -210,7 +210,7 @@ const addChildPresentToWishlist = createAsyncThunk<
 
 const deleteChildPresent = createAsyncThunk<
   IDeadMorozApiDeleteChildPresentResponse,
-  string,
+  number,
   {
     state: RootState;
     rejectValue: IDeadMorozApiDeleteChildFailedResponse | string;
