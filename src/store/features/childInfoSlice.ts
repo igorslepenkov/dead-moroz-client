@@ -49,6 +49,8 @@ const fetchChildInfo = createAsyncThunk<
           id
         );
 
+        console.log(childInfoApi);
+
         return fullChildInfoMapper(childInfoApi);
       }
 

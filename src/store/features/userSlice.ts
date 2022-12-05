@@ -263,18 +263,7 @@ const userSlice = createSlice({
       signInUser.fulfilled,
       (
         state,
-        {
-          payload: {
-            id,
-            name,
-            email,
-            token,
-            role,
-            childProfile,
-            childPresents,
-            message,
-          },
-        }
+        { payload: { id, name, email, token, role, childProfile, message } }
       ) => {
         state.isLoggedIn = true;
         state.user = {
@@ -284,7 +273,6 @@ const userSlice = createSlice({
           token,
           role,
           childProfile,
-          childPresents,
         };
         state.message = message;
       }
@@ -343,8 +331,8 @@ const userSlice = createSlice({
     builder.addCase(
       addChildPresentToWishlist.fulfilled,
       (state, { payload }) => {
-        if (state.user) {
-          state.user.childPresents = payload;
+        if (state.user && state.user.childProfile) {
+          state.user.childProfile.childPresents = payload;
         }
       }
     );
@@ -364,8 +352,8 @@ const userSlice = createSlice({
 
     builder.addCase(deleteChildPresent.fulfilled, (state, { payload }) => {
       state.message = payload.message;
-      if (state.user) {
-        state.user.childPresents = payload.child_presents;
+      if (state.user && state.user.childProfile) {
+        state.user.childProfile.childPresents = payload.child_presents;
       }
     });
 

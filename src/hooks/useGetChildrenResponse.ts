@@ -9,10 +9,9 @@ import {
 export const useGetChildrenResponse = () => {
   const user = useAppSelector(getUser);
 
-  const [page, setPage] = useState<number>(1);
-
   const [childrenQueryOptions, setChildrenQueryOptions] =
     useState<GetChildrenOptions>({
+      page: 1,
       sort_type: null,
       filter_type: null,
       sort_order: null,
@@ -21,28 +20,13 @@ export const useGetChildrenResponse = () => {
   const [response, setResponse] =
     useState<IDeadMorozApiGetChildProfilesReponse | null>(null);
 
-  const incrementPage = () => {
-    setPage((state) => {
-      if (response && state === response.total_pages) {
-        return state;
-      }
-
-      return (state += 1);
-    });
-  };
-
-  const decrementPage = () => {
-    setPage((state) => {
-      if (state === 1) {
-        return state;
-      }
-
-      return (state -= 1);
-    });
-  };
-
   const setPageValue = (page: number) => {
-    setPage(page);
+    setChildrenQueryOptions((state) => {
+      return {
+        ...state,
+        page,
+      };
+    });
   };
 
   const setChildrenQueryOptionsValue = (
@@ -60,22 +44,20 @@ export const useGetChildrenResponse = () => {
     if (user) {
       const fetchChildren = async () => {
         setResponse(
-          await deadMorozApi.getChildren(user.token, page, childrenQueryOptions)
+          await deadMorozApi.getChildren(user.token, childrenQueryOptions)
         );
       };
 
       fetchChildren();
     }
-  }, [user, page, childrenQueryOptions]);
+  }, [user, childrenQueryOptions]);
 
   return {
     children: response ? response.children : [],
     total_pages: response ? response.total_pages : 0,
     total_records: response ? response.total_records : 0,
     limit: response ? response.limit : 0,
-    page,
-    incrementPage,
-    decrementPage,
+    page: response ? response.page : 1,
     setPage: setPageValue,
     queryParams: childrenQueryOptions,
     setQueryParams: setChildrenQueryOptionsValue,

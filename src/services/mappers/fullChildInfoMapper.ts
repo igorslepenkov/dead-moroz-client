@@ -21,8 +21,8 @@ export const fullChildInfoMapper = (
       good_deeds,
       avatar,
       child_reviews,
+      child_presents,
     },
-    child_presents,
   } = childInfo;
 
   return {

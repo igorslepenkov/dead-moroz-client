@@ -1,4 +1,4 @@
-import { MouseEvent } from "react";
+import { MouseEventHandler } from "react";
 import { useToggle } from "../../hooks";
 import {
   deleteChildPresent,
@@ -21,6 +21,7 @@ import {
   TableData,
   TableHeading,
   DeletePresentIcon,
+  DeletePresentButton,
 } from "./style";
 
 interface IProps {
@@ -37,14 +38,12 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
 
   const dispatch = useAppDispatch();
 
-  const deleteChildPresentOnClick = (event: MouseEvent) => {
-    const { target } = event;
-    if (
-      target instanceof SVGSVGElement &&
-      target.dataset &&
-      target.dataset.present_id
-    ) {
-      const { present_id } = target.dataset;
+  const deleteChildPresentOnClick: MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    const { currentTarget } = event;
+    if (currentTarget.dataset && currentTarget.dataset.present_id) {
+      const { present_id } = currentTarget.dataset;
       dispatch(deleteChildPresent(Number(present_id)));
       toggleModal();
     }
@@ -76,10 +75,12 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
                     {image.url ? <PresentImage src={image.url} /> : "No image"}
                   </TableData>
                   <TableData>
-                    <DeletePresentIcon
+                    <DeletePresentButton
                       data-present_id={id}
                       onClick={deleteChildPresentOnClick}
-                    />
+                    >
+                      <DeletePresentIcon />
+                    </DeletePresentButton>
                   </TableData>
                 </tr>
               </>
@@ -87,12 +88,8 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
           })
         ) : (
           <tr>
-            <TableData colSpan={3}>
+            <TableData colSpan={4}>
               You still don't have any selected presents
-              <br />
-              <AddPresentButton onClick={toggleAddPresentForm}>
-                Add present
-              </AddPresentButton>
             </TableData>
           </tr>
         )}

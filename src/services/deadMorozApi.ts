@@ -23,21 +23,16 @@ import {
   createDinamicUrlString,
   getTokenFromHeaders,
 } from "../utils";
-import {
-  childPresentMapper,
-  childProfileMapper,
-  userApiMapper,
-} from "./mappers";
+import { childProfileMapper, userApiMapper } from "./mappers";
 
 enum Endpoint {
   SignUp = "users",
   SignIn = "users/sign_in",
   SignOut = "users/sign_out",
   ChildProfile = "users/:id/child_profile",
-  ChildPresents = "users/:id/child_presents",
-  DeleteChildPresent = "users/:id/child_presents/:present_id",
-  ChildProfiles = "users/child_profiles/:page",
-  ChildInfo = "users/:id",
+  ChildPresents = "users/:user_id/child_profile/child_presents",
+  DeleteChildPresent = "users/:user_id/child_profile/child_presents/:id",
+  ChildProfiles = "child_profiles",
 }
 
 class DeadMorozApi {
@@ -67,7 +62,7 @@ class DeadMorozApi {
     );
     const token = getTokenFromHeaders(headers) as string;
     const {
-      user: { id, name, email, role, child_profile, child_presents },
+      user: { id, name, email, role, child_profile },
       message,
     } = data;
 
@@ -79,16 +74,10 @@ class DeadMorozApi {
       role,
       message,
       childProfile: null,
-      childPresents: null,
     };
 
     child_profile &&
       (userDataToReturn.childProfile = childProfileMapper(child_profile));
-
-    child_presents &&
-      (userDataToReturn.childPresents = child_presents.map((present) =>
-        childPresentMapper(present)
-      ));
 
     return userDataToReturn;
   };
@@ -169,7 +158,9 @@ class DeadMorozApi {
     userId: number,
     present: CreateChildPresent
   ) => {
-    const url = createDinamicUrlString(Endpoint.ChildPresents, { id: userId });
+    const url = createDinamicUrlString(Endpoint.ChildPresents, {
+      user_id: userId,
+    });
     const { data } = await this.API.post<IPresent[]>(
       url,
       { child_present: [present] },
@@ -191,8 +182,8 @@ class DeadMorozApi {
     presentId: number
   ) => {
     const url = createDinamicUrlString(Endpoint.DeleteChildPresent, {
-      id: userId,
-      present_id: presentId,
+      user_id: userId,
+      id: presentId,
     });
 
     const { data } =
@@ -206,13 +197,9 @@ class DeadMorozApi {
     return data;
   };
 
-  getChildren = async (
-    userToken: string,
-    page: number,
-    options: GetChildrenOptions
-  ) => {
+  getChildren = async (userToken: string, options: GetChildrenOptions) => {
     const url = addOptionalQueryParametersToUrl(
-      createDinamicUrlString(Endpoint.ChildProfiles, { page: page.toString() }),
+      Endpoint.ChildProfiles,
       options
     );
 
@@ -230,7 +217,7 @@ class DeadMorozApi {
   };
 
   getFullChildInfoById = async (userToken: string, id: number) => {
-    const url = createDinamicUrlString(Endpoint.ChildInfo, { id });
+    const url = createDinamicUrlString(Endpoint.ChildProfile, { id });
     const { data } = await this.API.get<IFullChildInfoApi>(url, {
       headers: {
         // prettier-ignore

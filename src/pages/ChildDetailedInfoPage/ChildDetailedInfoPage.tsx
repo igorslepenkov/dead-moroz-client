@@ -45,6 +45,8 @@ export enum ChildDetailsKey {
   Avatar = "avatar",
 }
 
+type ChildFullInfoShow = Omit<IFullChild, "createdAt" | "updatedAt" | "role">;
+
 export const ChildDetailedInfoPage = () => {
   const { id } = useParams<keyof ChildDetailsParams>() as ChildDetailsParams;
 
@@ -79,7 +81,7 @@ export const ChildDetailedInfoPage = () => {
     };
 
     const getBody = (
-      key: keyof IFullChild,
+      key: keyof ChildFullInfoShow,
       value: string | { url: string | null }
     ) => {
       switch (key) {
@@ -117,7 +119,9 @@ export const ChildDetailedInfoPage = () => {
       }
     };
 
-    const childProfileEntries = Object.entries(child) as Entries<IFullChild>;
+    const childProfileEntries = Object.entries(child).filter(
+      ([key]) => key !== "createdAt" && key !== "updatedAt" && key !== "role"
+    ) as Entries<ChildFullInfoShow>;
 
     return (
       <Page>
@@ -137,7 +141,7 @@ export const ChildDetailedInfoPage = () => {
             {reviews.length > 0 ? (
               reviews.map((review) => {
                 return (
-                  <Review>
+                  <Review key={review.id}>
                     <p>Date: {new Date(review.createdAt).toDateString()}</p>
                     <p>Score: {review.score}</p>
                     <p>Comment: {review.comment}</p>

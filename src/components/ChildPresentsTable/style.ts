@@ -7,8 +7,8 @@ export const StyledChildPresentsTable = styled.table`
   table-layout: fixed;
   border-collapse: collapse;
 
-  ${Media.SM} {
-    width: 80%;
+  ${Media.MD} {
+    width: 90%;
   }
 `;
 
@@ -84,5 +84,22 @@ export const DeletePresentIcon = styled(DeleteIcon)`
 
   &:active path {
     stroke: ${Color.DangerPressed};
+  }
+`;
+
+export const DeletePresentButton = styled.button`
+  background-color: transparent;
+  border: 3px solid transparent;
+  border-radius: 4px;
+  ${fonts.bodyTextLarge};
+  color: ${Color.White};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${Color.LightGray};
+  }
+
+  &:active {
+    background-color: ${Color.IceGray};
   }
 `;
