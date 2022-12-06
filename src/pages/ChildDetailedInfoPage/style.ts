@@ -85,25 +85,3 @@ export const Title = styled.h3`
   text-align: center;
   margin: 5px;
 `;
-
-export const ReviewsWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  ${shadows.shadow8()}
-`;
-
-export const Review = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  border-bottom: 2px solid ${Color.InfoBorder};
-`;
-
-export const NoReviews = styled.p`
-  ${fonts.h3}
-  color: ${Color.PrimaryMain};
-  text-align: center;
-  margin: 5px;
-`;

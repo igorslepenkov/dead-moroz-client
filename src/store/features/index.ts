@@ -12,6 +12,8 @@ import childInfoSlice, {
   fetchChildInfo,
   addChildAlternativePresent,
   deleteChildAlternativePresent,
+  createChildReview,
+  deleteChildReview,
 } from "./childInfoSlice";
 
 export {
@@ -27,4 +29,6 @@ export {
   fetchChildInfo,
   addChildAlternativePresent,
   deleteChildAlternativePresent,
+  createChildReview,
+  deleteChildReview,
 };

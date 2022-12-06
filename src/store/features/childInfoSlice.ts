@@ -6,14 +6,17 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 import { deadMorozApi } from "../../services";
-import { childPresentMapper } from "../../services/mappers";
+import { childPresentMapper, childReviewMapper } from "../../services/mappers";
 import { fullChildInfoMapper } from "../../services/mappers/fullChildInfoMapper";
 
 import {
   CreateChildPresent,
+  IChildReview,
   IDeadMorozApiAddChildPresentFailedResponse,
+  IDeadMorozApiCreateReviewResponse,
   IDeadMorozApiDeleteChildFailedResponse,
   IDeadMorozApiDeleteChildPresentResponse,
+  IDeadMorozApiDeleteReviewResponse,
   IDeadMorozApiGetFullChildInfoFailedResponse,
   IFullChildInfo,
   IPresent,
@@ -142,6 +145,72 @@ const deleteChildAlternativePresent = createAsyncThunk<
   }
 );
 
+const createChildReview = createAsyncThunk<
+  IChildReview[],
+  { score: number; comment: string },
+  { state: RootState; rejectValue: IDeadMorozApiCreateReviewResponse | string }
+>(
+  "childInfo/createChildReview",
+  async ({ score, comment }, { rejectWithValue, getState }) => {
+    try {
+      const {
+        user: { user },
+        childInfo: { childInfo },
+      } = getState();
+
+      if (user && childInfo) {
+        const response = await deadMorozApi.createChildReview(
+          user.token,
+          childInfo.child.profileId,
+          { score, comment, user_id: user.id }
+        );
+        return response.map((review) => childReviewMapper(review));
+      }
+
+      return rejectWithValue("User is not logged in");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data.message);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const deleteChildReview = createAsyncThunk<
+  IChildReview[],
+  number,
+  { rejectValue: IDeadMorozApiDeleteReviewResponse | string; state: RootState }
+>(
+  "childInfo/deleteChildReview",
+  async (reviewId, { rejectWithValue, getState }) => {
+    try {
+      const {
+        user: { user },
+        childInfo: { childInfo },
+      } = getState();
+
+      if (user && childInfo) {
+        const response = await deadMorozApi.deleteChildReview(
+          user.token,
+          childInfo.child.profileId,
+          reviewId
+        );
+        return response.map((review) => childReviewMapper(review));
+      }
+
+      return rejectWithValue("User is not logged in");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data.message);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const childInfoSlice = createSlice({
   name: "childInfo",
   initialState,
@@ -210,6 +279,38 @@ const childInfoSlice = createSlice({
       }
     );
 
+    builder.addCase(createChildReview.fulfilled, (state, { payload }) => {
+      if (state.childInfo) {
+        state.childInfo.reviews = payload;
+      }
+    });
+
+    builder.addCase(createChildReview.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
+    builder.addCase(deleteChildReview.fulfilled, (state, { payload }) => {
+      if (state.childInfo) {
+        state.childInfo.reviews = payload;
+      }
+    });
+
+    builder.addCase(deleteChildReview.rejected, (state, { payload }) => {
+      if (payload && typeof payload === "string") {
+        state.error = payload;
+      }
+
+      if (payload && typeof payload === "object" && "message" in payload) {
+        state.error = payload.message;
+      }
+    });
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -231,4 +332,6 @@ export {
   fetchChildInfo,
   addChildAlternativePresent,
   deleteChildAlternativePresent,
+  createChildReview,
+  deleteChildReview,
 };

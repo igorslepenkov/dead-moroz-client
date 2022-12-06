@@ -3,8 +3,15 @@ import { IChildReview, IChildReviewApi } from "../../types";
 export const childReviewMapper = (
   childReview: IChildReviewApi
 ): IChildReview => {
-  const { id, score, comment, created_at, updated_at, child_profile_id } =
-    childReview;
+  const {
+    id,
+    score,
+    comment,
+    created_at,
+    updated_at,
+    child_profile_id,
+    user_id,
+  } = childReview;
 
   return {
     id,
@@ -13,5 +20,6 @@ export const childReviewMapper = (
     createdAt: created_at,
     updatedAt: updated_at,
     childProfileId: child_profile_id,
+    createdBy: user_id,
   };
 };

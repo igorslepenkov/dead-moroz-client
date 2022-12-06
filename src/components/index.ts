@@ -19,6 +19,8 @@ import { BurgerButton } from "./BurgerButton";
 import { ChildPresentsTable } from "./ChildPresentsTable/ChildPresentsTable";
 import { ChildrenListingTable } from "./ChildrenListingTable";
 import { ElfDashboard } from "./ElfDashboard";
+import { AddChildReviewForm } from "./AddChildReviewForm";
+import { ChildReviewList } from "./ChildReviewsList";
 
 export {
   Header,
@@ -40,4 +42,6 @@ export {
   ChildPresentsTable,
   ChildrenListingTable,
   ElfDashboard,
+  AddChildReviewForm,
+  ChildReviewList,
 };

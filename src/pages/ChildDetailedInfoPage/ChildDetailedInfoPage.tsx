@@ -1,7 +1,11 @@
-import { Avatar } from "@mui/material";
+import { useEffect } from "react";
+
 import { useParams } from "react-router-dom";
 
-import { ChildPresentsTable, Page } from "../../components";
+import { Avatar } from "@mui/material";
+
+import { ChildPresentsTable, ChildReviewList, Page } from "../../components";
+
 import { generateRandomIdenticonAvatar } from "../../utils";
 
 import { Entries, IFullChild } from "../../types";
@@ -16,9 +20,6 @@ import {
   Title,
   PresentsTableWrapper,
   ProfileTitle,
-  Review,
-  ReviewsWrapper,
-  NoReviews,
 } from "./style";
 import {
   getChildInfo,
@@ -26,7 +27,6 @@ import {
   useAppSelector,
   fetchChildInfo,
 } from "../../store";
-import { useEffect } from "react";
 
 type ChildDetailsParams = {
   id: string;
@@ -139,22 +139,7 @@ export const ChildDetailedInfoPage = () => {
             <Title>Wishlist</Title>
             <ChildPresentsTable presents={presents} />
           </PresentsTableWrapper>
-          <ReviewsWrapper>
-            <Title>Reviews</Title>
-            {reviews.length > 0 ? (
-              reviews.map((review) => {
-                return (
-                  <Review key={review.id}>
-                    <p>Date: {new Date(review.createdAt).toDateString()}</p>
-                    <p>Score: {review.score}</p>
-                    <p>Comment: {review.comment}</p>
-                  </Review>
-                );
-              })
-            ) : (
-              <NoReviews>There are no reviews at the moment</NoReviews>
-            )}
-          </ReviewsWrapper>
+          <ChildReviewList childReviews={reviews} />
         </ChildDetailedInfo>
       </Page>
     );

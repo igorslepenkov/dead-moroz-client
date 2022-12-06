@@ -13,6 +13,8 @@ import {
   fetchChildInfo,
   addChildAlternativePresent,
   deleteChildAlternativePresent,
+  createChildReview,
+  deleteChildReview,
 } from "./features";
 
 import {
@@ -50,5 +52,7 @@ export {
   fetchChildInfo,
   addChildAlternativePresent,
   deleteChildAlternativePresent,
+  createChildReview,
+  deleteChildReview,
 };
 export type { RootState, AppDispatch };

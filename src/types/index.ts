@@ -46,6 +46,7 @@ export interface IChildReviewApi {
   created_at: string;
   updated_at: string;
   child_profile_id: number;
+  user_id: number;
 }
 
 export interface IChildReview {
@@ -55,6 +56,7 @@ export interface IChildReview {
   createdAt: string;
   updatedAt: string;
   childProfileId: number;
+  createdBy: number;
 }
 
 export interface IChildProfile {
@@ -232,4 +234,20 @@ export interface IFullChildInfo {
   child: IFullChild;
   presents: IPresent[];
   reviews: IChildReview[];
+}
+
+export type CreateChildReview = {
+  score: number;
+  comment: string;
+  user_id: number;
+};
+
+export interface IDeadMorozApiCreateReviewResponse {
+  message: string;
+  errors: string[];
+}
+
+export interface IDeadMorozApiDeleteReviewResponse {
+  message: string;
+  errors: string[];
 }
