@@ -1,8 +1,8 @@
-import { GetChildrenOptions } from "../types";
+import { CreatePresentOptions, GetChildrenOptions } from "../types";
 
 export const addOptionalQueryParametersToUrl = (
   urlString: string,
-  options: GetChildrenOptions
+  options: GetChildrenOptions | CreatePresentOptions
 ) => {
   const newUrlString = urlString;
   const optionsEntries = Object.entries(options).filter(

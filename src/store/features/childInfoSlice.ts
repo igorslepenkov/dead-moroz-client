@@ -9,8 +9,11 @@ import { deadMorozApi } from "../../services";
 import { fullChildInfoMapper } from "../../services/mappers/fullChildInfoMapper";
 
 import {
+  CreateChildPresent,
+  IDeadMorozApiAddChildPresentFailedResponse,
   IDeadMorozApiGetFullChildInfoFailedResponse,
   IFullChildInfo,
+  IPresent,
 } from "../../types";
 import { RootState } from "../store";
 
@@ -65,6 +68,38 @@ const fetchChildInfo = createAsyncThunk<
   }
 );
 
+const addChildAlternativePresent = createAsyncThunk<
+  IPresent[],
+  CreateChildPresent,
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;
+  }
+>(
+  "user/addChildPresentToWishlist",
+  async (presentData, { getState, rejectWithValue }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user && presentData.childProfileId) {
+        return deadMorozApi.addPresentToWishlist(user.token, presentData, {
+          userId: user.id,
+        });
+      }
+
+      return rejectWithValue("Error while adding present");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const childInfoSlice = createSlice({
   name: "childInfo",
   initialState,
@@ -86,6 +121,30 @@ const childInfoSlice = createSlice({
       }
     });
 
+    builder.addCase(
+      addChildAlternativePresent.fulfilled,
+      (state, { payload }) => {
+        state.isLoading = false;
+        if (state.childInfo) {
+          state.childInfo.presents = payload;
+        }
+      }
+    );
+
+    builder.addCase(
+      addChildAlternativePresent.rejected,
+      (state, { payload }) => {
+        if (typeof payload === "string") {
+          state.error = payload;
+        }
+
+        if (typeof payload === "object") {
+          state.message = payload.message;
+          state.error = payload.errors[0];
+        }
+      }
+    );
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -103,4 +162,4 @@ const childInfoSlice = createSlice({
 });
 
 export default childInfoSlice.reducer;
-export { fetchChildInfo };
+export { fetchChildInfo, addChildAlternativePresent };

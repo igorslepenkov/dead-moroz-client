@@ -94,8 +94,11 @@ export interface IChildProfileApi {
 }
 
 export type CreateChildPresent = {
-  name: string;
-  image?: File;
+  present: {
+    name: string;
+    image?: File;
+  };
+  childProfileId: number;
 };
 
 export type UpdateChildProfile = Partial<
@@ -174,6 +177,10 @@ export type GetChildrenOptions = {
   limit: number | null;
 };
 
+export type CreatePresentOptions = {
+  child_profile_id: number;
+};
+
 export type IApiChild = Pick<
   IUserApi,
   "id" | "name" | "email" | "created_at" | "updated_at"
@@ -204,6 +211,7 @@ export interface IFullChildInfoApi {
 
 export interface IFullChild {
   id: number;
+  profileId: number;
   email: string;
   name: string;
   country: string;

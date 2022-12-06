@@ -11,6 +11,7 @@ import {
   addChildPresentToWishlist,
   deleteChildPresent,
   fetchChildInfo,
+  addChildAlternativePresent,
 } from "./features";
 
 import {
@@ -46,5 +47,6 @@ export {
   getChildInfoError,
   getChildInfoServerMessage,
   fetchChildInfo,
+  addChildAlternativePresent,
 };
 export type { RootState, AppDispatch };

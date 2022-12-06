@@ -30,9 +30,9 @@ enum Endpoint {
   SignIn = "users/sign_in",
   SignOut = "users/sign_out",
   ChildProfile = "users/:id/child_profile",
-  ChildPresents = "users/:user_id/child_profile/child_presents",
-  DeleteChildPresent = "users/:user_id/child_profile/child_presents/:id",
   ChildProfiles = "child_profiles",
+  ChildPresents = "child_profiles/:child_profile_id/child_presents",
+  DeleteChildPresent = "child_profiles/:child_profile_id/child_presents/:id",
 }
 
 class DeadMorozApi {
@@ -155,14 +155,19 @@ class DeadMorozApi {
 
   addPresentToWishlist = async (
     userToken: string,
-    userId: number,
-    present: CreateChildPresent
+    { present, childProfileId }: CreateChildPresent,
+    opts?: { userId: number }
   ) => {
     const url = createDinamicUrlString(Endpoint.ChildPresents, {
-      user_id: userId,
+      child_profile_id: childProfileId,
     });
+
     const { data } = await this.API.post<IPresent[]>(
-      url,
+      opts && opts.userId
+        ? addOptionalQueryParametersToUrl(url, {
+            child_profile_id: opts.userId,
+          })
+        : url,
       { child_present: [present] },
       {
         headers: {

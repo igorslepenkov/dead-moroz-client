@@ -9,7 +9,6 @@ import {
 import { AxiosError } from "axios";
 
 import {
-  CreateChildPresent,
   IChildProfile,
   IDeadMorozApiAddChildPresentFailedResponse,
   IDeadMorozApiCreateChildProfileFailedResponse,
@@ -21,6 +20,7 @@ import {
   IUser,
   SignInFields,
   SignUpFields,
+  USER_ROLES,
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
@@ -180,7 +180,7 @@ const addAvatarToChildProfile = createAsyncThunk<
 
 const addChildPresentToWishlist = createAsyncThunk<
   IPresent[],
-  CreateChildPresent,
+  { name: string; image?: File },
   {
     state: RootState;
     rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;
@@ -193,8 +193,11 @@ const addChildPresentToWishlist = createAsyncThunk<
         user: { user },
       } = getState();
 
-      if (user) {
-        return deadMorozApi.addPresentToWishlist(user.token, user.id, present);
+      if (user && user.childProfile && user.role === USER_ROLES.Child) {
+        return deadMorozApi.addPresentToWishlist(user.token, {
+          present,
+          childProfileId: user.childProfile.id,
+        });
       }
 
       return rejectWithValue("User is not logged in");

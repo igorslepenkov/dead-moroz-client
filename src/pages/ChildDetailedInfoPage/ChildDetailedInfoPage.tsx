@@ -34,6 +34,7 @@ type ChildDetailsParams = {
 
 export enum ChildDetailsKey {
   Id = "id",
+  ProfileId = "profileId",
   Email = "email",
   Name = "name",
   Country = "country",
@@ -75,6 +76,8 @@ export const ChildDetailedInfoPage = () => {
           return "Past Year Description";
         case ChildDetailsKey.GoodDeeds:
           return "Good Deeds";
+        case ChildDetailsKey.ProfileId:
+          return "Profile Id";
         default:
           return title;
       }

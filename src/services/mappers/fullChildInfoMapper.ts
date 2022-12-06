@@ -13,6 +13,7 @@ export const fullChildInfoMapper = (
     updated_at,
     role,
     child_profile: {
+      id: profile_id,
       country,
       city,
       birthdate,
@@ -28,6 +29,7 @@ export const fullChildInfoMapper = (
   return {
     child: {
       id,
+      profileId: profile_id,
       email,
       name,
       createdAt: created_at,

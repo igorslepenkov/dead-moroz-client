@@ -8,7 +8,10 @@ import userSlice, {
   deleteChildPresent,
 } from "./userSlice";
 
-import childInfoSlice, { fetchChildInfo } from "./childInfoSlice";
+import childInfoSlice, {
+  fetchChildInfo,
+  addChildAlternativePresent,
+} from "./childInfoSlice";
 
 export {
   signInUser,
@@ -21,4 +24,5 @@ export {
   deleteChildPresent,
   childInfoSlice,
   fetchChildInfo,
+  addChildAlternativePresent,
 };

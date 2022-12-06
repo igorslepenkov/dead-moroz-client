@@ -24,6 +24,7 @@ export const ChildProfileDetails = styled.section`
   grid-template-areas:
     "title avatar"
     "id id"
+    "profileId profileId"
     "name name"
     "email email"
     "country country"
