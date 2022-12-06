@@ -1,7 +1,7 @@
 import { IPresent, IPresentApi } from "../../types";
 
 export const childPresentMapper = (childPresent: IPresentApi): IPresent => {
-  const { id, name, image, created_at, updated_at, child_review_id, user_id } =
+  const { id, name, image, created_at, updated_at, child_profile_id, user_id } =
     childPresent;
   return {
     id,
@@ -9,7 +9,7 @@ export const childPresentMapper = (childPresent: IPresentApi): IPresent => {
     image,
     createdAt: created_at,
     updatedAt: updated_at,
-    childReviewId: child_review_id,
+    childProfileId: child_profile_id,
     createdUserId: user_id,
   };
 };

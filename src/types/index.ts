@@ -23,7 +23,7 @@ export interface IPresentApi {
   };
   created_at: string;
   updated_at: string;
-  child_review_id: number | null;
+  child_profile_id: number;
   user_id: number;
 }
 
@@ -35,7 +35,7 @@ export interface IPresent {
   };
   createdAt: string;
   updatedAt: string;
-  childReviewId: number | null;
+  childProfileId: number | null;
   createdUserId: number;
 }
 
@@ -178,7 +178,7 @@ export type GetChildrenOptions = {
 };
 
 export type CreatePresentOptions = {
-  child_profile_id: number;
+  user_id: number;
 };
 
 export type IApiChild = Pick<

@@ -11,6 +11,7 @@ import userSlice, {
 import childInfoSlice, {
   fetchChildInfo,
   addChildAlternativePresent,
+  deleteChildAlternativePresent,
 } from "./childInfoSlice";
 
 export {
@@ -25,4 +26,5 @@ export {
   childInfoSlice,
   fetchChildInfo,
   addChildAlternativePresent,
+  deleteChildAlternativePresent,
 };

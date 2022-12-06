@@ -24,6 +24,7 @@ import {
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
+import { childPresentMapper } from "../../services/mappers";
 
 interface IUserInitialState {
   user: IUser | null;
@@ -194,10 +195,11 @@ const addChildPresentToWishlist = createAsyncThunk<
       } = getState();
 
       if (user && user.childProfile && user.role === USER_ROLES.Child) {
-        return deadMorozApi.addPresentToWishlist(user.token, {
+        const response = await deadMorozApi.addPresentToWishlist(user.token, {
           present,
           childProfileId: user.childProfile.id,
         });
+        return response.map((present) => childPresentMapper(present));
       }
 
       return rejectWithValue("User is not logged in");
@@ -226,10 +228,10 @@ const deleteChildPresent = createAsyncThunk<
         user: { user },
       } = getState();
 
-      if (user) {
+      if (user && user.childProfile) {
         const data = await deadMorozApi.deleteChildPresent(
           user.token,
-          user.id,
+          user.childProfile.id,
           presentId
         );
         return data;

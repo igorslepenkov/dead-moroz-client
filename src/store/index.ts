@@ -12,6 +12,7 @@ import {
   deleteChildPresent,
   fetchChildInfo,
   addChildAlternativePresent,
+  deleteChildAlternativePresent,
 } from "./features";
 
 import {
@@ -48,5 +49,6 @@ export {
   getChildInfoServerMessage,
   fetchChildInfo,
   addChildAlternativePresent,
+  deleteChildAlternativePresent,
 };
 export type { RootState, AppDispatch };

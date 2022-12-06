@@ -6,11 +6,14 @@ import {
   isRejected,
 } from "@reduxjs/toolkit";
 import { deadMorozApi } from "../../services";
+import { childPresentMapper } from "../../services/mappers";
 import { fullChildInfoMapper } from "../../services/mappers/fullChildInfoMapper";
 
 import {
   CreateChildPresent,
   IDeadMorozApiAddChildPresentFailedResponse,
+  IDeadMorozApiDeleteChildFailedResponse,
+  IDeadMorozApiDeleteChildPresentResponse,
   IDeadMorozApiGetFullChildInfoFailedResponse,
   IFullChildInfo,
   IPresent,
@@ -52,8 +55,6 @@ const fetchChildInfo = createAsyncThunk<
           id
         );
 
-        console.log(childInfoApi);
-
         return fullChildInfoMapper(childInfoApi);
       }
 
@@ -76,7 +77,7 @@ const addChildAlternativePresent = createAsyncThunk<
     rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;
   }
 >(
-  "user/addChildPresentToWishlist",
+  "childInfo/addChildAlternativePresent",
   async (presentData, { getState, rejectWithValue }) => {
     try {
       const {
@@ -84,15 +85,56 @@ const addChildAlternativePresent = createAsyncThunk<
       } = getState();
 
       if (user && presentData.childProfileId) {
-        return deadMorozApi.addPresentToWishlist(user.token, presentData, {
-          userId: user.id,
-        });
+        const response = await deadMorozApi.addPresentToWishlist(
+          user.token,
+          presentData,
+          {
+            userId: user.id,
+          }
+        );
+
+        return response.map((present) => childPresentMapper(present));
       }
 
       return rejectWithValue("Error while adding present");
     } catch (err: any) {
       if (err.response) {
         return rejectWithValue(err.response.data);
+      }
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const deleteChildAlternativePresent = createAsyncThunk<
+  IDeadMorozApiDeleteChildPresentResponse,
+  { presentId: number; childProfileId: number },
+  {
+    state: RootState;
+    rejectValue: IDeadMorozApiDeleteChildFailedResponse | string;
+  }
+>(
+  "childInfo/deleteChildAlternativePresent",
+  async ({ presentId, childProfileId }, { rejectWithValue, getState }) => {
+    try {
+      const {
+        user: { user },
+      } = getState();
+
+      if (user) {
+        const data = await deadMorozApi.deleteChildPresent(
+          user.token,
+          childProfileId,
+          presentId
+        );
+        return data;
+      }
+
+      return rejectWithValue("User is not logged in");
+    } catch (err: any) {
+      if (err.response) {
+        return rejectWithValue(err.response.data.message);
       }
 
       return rejectWithValue(err.message);
@@ -145,6 +187,29 @@ const childInfoSlice = createSlice({
       }
     );
 
+    builder.addCase(
+      deleteChildAlternativePresent.fulfilled,
+      (state, { payload }) => {
+        state.message = payload.message;
+        if (state.childInfo) {
+          state.childInfo.presents = payload.child_presents;
+        }
+      }
+    );
+
+    builder.addCase(
+      deleteChildAlternativePresent.rejected,
+      (state, { payload }) => {
+        if (payload && typeof payload === "string") {
+          state.error = payload;
+        }
+
+        if (payload && typeof payload === "object" && "message" in payload) {
+          state.error = payload.message;
+        }
+      }
+    );
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -162,4 +227,8 @@ const childInfoSlice = createSlice({
 });
 
 export default childInfoSlice.reducer;
-export { fetchChildInfo, addChildAlternativePresent };
+export {
+  fetchChildInfo,
+  addChildAlternativePresent,
+  deleteChildAlternativePresent,
+};

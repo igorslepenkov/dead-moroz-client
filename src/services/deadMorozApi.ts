@@ -10,12 +10,12 @@ import {
   IDeadMorozApiSignInResponse,
   IDeadMorozApiSignUpSignOutResponse,
   IDeadMorozApiUpdateChildProfileResponse,
-  IPresent,
   IUser,
   SignInFields,
   SignUpFields,
   UpdateChildProfile,
   IFullChildInfoApi,
+  IPresentApi,
 } from "../types";
 
 import {
@@ -162,10 +162,10 @@ class DeadMorozApi {
       child_profile_id: childProfileId,
     });
 
-    const { data } = await this.API.post<IPresent[]>(
+    const { data } = await this.API.post<IPresentApi[]>(
       opts && opts.userId
         ? addOptionalQueryParametersToUrl(url, {
-            child_profile_id: opts.userId,
+            user_id: opts.userId,
           })
         : url,
       { child_present: [present] },
@@ -183,11 +183,11 @@ class DeadMorozApi {
 
   deleteChildPresent = async (
     userToken: string,
-    userId: number,
+    childProfileId: number,
     presentId: number
   ) => {
     const url = createDinamicUrlString(Endpoint.DeleteChildPresent, {
-      user_id: userId,
+      child_profile_id: childProfileId,
       id: presentId,
     });
 
