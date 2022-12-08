@@ -21,6 +21,10 @@ export const HomePageContent = () => {
     navigate(ROUTES_URL.CHILD_PROFILE);
   };
 
+  const navigateToWishList = () => {
+    navigate(ROUTES_URL.CHILD_WISHLIST);
+  };
+
   if (user && user.role === USER_ROLES.Child) {
     return (
       <>
@@ -29,7 +33,11 @@ export const HomePageContent = () => {
           Next, please fill in info about yourself to send it to Dead Moroz
         </HomepageBodyText>
         <SignInButton onClick={navigateToChildProfilePage}>
-          Fill Profile Info
+          Fill in Profile Info
+        </SignInButton>
+        or
+        <SignInButton onClick={navigateToWishList}>
+          Fill in WishList
         </SignInButton>
       </>
     );

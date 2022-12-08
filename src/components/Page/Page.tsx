@@ -2,10 +2,10 @@ import { ReactNode } from "react";
 import { StyledPage } from "./style";
 
 interface IProps {
-  backgroundImage?: string;
+  backgroundimage?: string;
   children: ReactNode;
 }
 
-export const Page = ({ children, backgroundImage }: IProps) => {
-  return <StyledPage backgroundImage={backgroundImage}>{children}</StyledPage>;
+export const Page = ({ children, backgroundimage }: IProps) => {
+  return <StyledPage backgroundimage={backgroundimage}>{children}</StyledPage>;
 };

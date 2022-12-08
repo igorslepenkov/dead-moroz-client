@@ -1,7 +1,8 @@
 import { DeadMorozLogo } from "../../assets";
-import { useToggle } from "../../hooks";
+import { useToggle, useWindowSize } from "../../hooks";
 import { ROUTES_URL } from "../../router";
 import {
+  getUser,
   getUserError,
   getUserIsLoading,
   getUserIsLoggedIn,
@@ -10,6 +11,10 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../store";
+import { USER_ROLES } from "../../types";
+import { MediaBreakpoints } from "../../ui";
+import { BurgerButton } from "../BurgerButton";
+import { Menu } from "../Menu";
 import {
   NotificationModalStatus,
   NotificationModal,
@@ -21,11 +26,16 @@ import {
   Navbar,
   Navlink,
   SignOutLink,
+  BurgerWrapper,
 } from "./style";
 
 export const Header = () => {
-  const [isModalOpen, toggleModal] = useToggle(false);
+  const [isModalOpen, toggleModal] = useToggle();
+  const [isMenuOpen, toggleMenu] = useToggle();
 
+  const { width: widnowWidth } = useWindowSize();
+
+  const user = useAppSelector(getUser);
   const userSignOutError = useAppSelector(getUserError);
   const userServerMessage = useAppSelector(getUserServerMessage);
   const userIsLoading = useAppSelector(getUserIsLoading);
@@ -43,9 +53,22 @@ export const Header = () => {
         <DeadMorozLogo />
         <LogoText>Dead Moroz App</LogoText>
       </Logo>
+      {widnowWidth < MediaBreakpoints.MD && (
+        <BurgerWrapper onClick={toggleMenu}>
+          <BurgerButton isOpen={isMenuOpen} />
+        </BurgerWrapper>
+      )}
+      {widnowWidth < MediaBreakpoints.MD && (
+        <Menu isOpen={isMenuOpen} toggle={toggleMenu} />
+      )}
       <Navbar>
         <Navlink to={ROUTES_URL.HOME}>Home</Navlink>
-        <Navlink to={ROUTES_URL.HOME}>About Us</Navlink>
+        {user && user.role === USER_ROLES.Child && (
+          <>
+            <Navlink to={ROUTES_URL.CHILD_PROFILE}>Profile</Navlink>
+            <Navlink to={ROUTES_URL.CHILD_WISHLIST}>Wishlist</Navlink>
+          </>
+        )}
         {isUserLoggedIn ? (
           <SignOutLink onClick={signOutOnClick}>Sign Out</SignOutLink>
         ) : (

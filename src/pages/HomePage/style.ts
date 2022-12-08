@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Color, fonts } from "../../ui";
+import { Color, fonts, Media } from "../../ui";
 
 export const HomepageTitle = styled.h1`
   ${fonts.h2}
@@ -9,13 +9,20 @@ export const HomepageTitle = styled.h1`
 export const HomepageBody = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 400px;
-  margin: 20% auto;
-  padding: 30px;
+  gap: 5px;
+  max-width: 300px;
+  margin: 40% auto;
+  padding: 20px;
   background-color: ${Color.White};
   border-radius: 30px;
   text-align: center;
+
+  ${Media.SM} {
+    gap: 15px;
+    max-width: 400px;
+    margin: 20% auto;
+    padding: 30px;
+  }
 `;
 
 export const HomepageBodyText = styled.p`

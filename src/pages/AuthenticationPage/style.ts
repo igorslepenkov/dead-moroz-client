@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { shadows, Color, fonts } from "../../ui";
+import { shadows, Color, fonts, Media } from "../../ui";
 
 interface ITabProps {
   active: boolean;
@@ -13,8 +13,12 @@ export const AuthFormWrapper = styled.div`
   row-gap: 10px;
   padding: 15px;
   margin: auto;
-  width: 400px;
+  width: 300px;
   ${shadows.shadow8()}
+
+  ${Media.SM} {
+    width: 400px;
+  }
 `;
 
 export const FormTab = styled.button<ITabProps>`

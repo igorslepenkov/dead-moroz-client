@@ -1,17 +1,17 @@
 import styled, { css } from "styled-components";
 
 interface IPageProps {
-  backgroundImage?: string;
+  backgroundimage?: string;
 }
 
 export const StyledPage = styled.main<IPageProps>`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  ${({ backgroundImage }) => {
-    if (backgroundImage) {
+  ${({ backgroundimage }) => {
+    if (backgroundimage) {
       return css`
-        background-image: url(${backgroundImage});
+        background-image: url(${backgroundimage});
         background-size: 100% 100%;
       `;
     }

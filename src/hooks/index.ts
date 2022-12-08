@@ -3,4 +3,5 @@ import {
   useConfirmationParams,
   ConfrimationStatus,
 } from "./useConfirmationParams";
-export { useToggle, useConfirmationParams, ConfrimationStatus };
+import { useWindowSize } from "./useWindowSize";
+export { useToggle, useConfirmationParams, ConfrimationStatus, useWindowSize };

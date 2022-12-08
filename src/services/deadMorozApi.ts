@@ -1,11 +1,14 @@
 import axios, { AxiosInstance } from "axios";
 
 import {
+  CreateChildPresent,
   IChildProfile,
   IDeadMorozApiCreateChildProfileResponse,
+  IDeadMorozApiDeleteChildPresentResponse,
   IDeadMorozApiSignInResponse,
   IDeadMorozApiSignUpSignOutResponse,
   IDeadMorozApiUpdateChildProfileResponse,
+  IPresent,
   IUser,
   SignInFields,
   SignUpFields,
@@ -23,6 +26,8 @@ enum Endpoint {
   SignIn = "users/sign_in",
   SignOut = "users/sign_out",
   ChildProfile = "users/:id/child_profile",
+  ChildPresents = "users/:id/child_presents",
+  DeleteChildPresent = "users/:id/child_presents/:present_id",
 }
 
 class DeadMorozApi {
@@ -52,7 +57,7 @@ class DeadMorozApi {
     );
     const token = getTokenFromHeaders(headers) as string;
     const {
-      user: { id, name, email, role, child_profile },
+      user: { id, name, email, role, child_profile, child_presents },
       message,
     } = data;
 
@@ -64,6 +69,7 @@ class DeadMorozApi {
       role,
       message,
       childProfile: null,
+      childPresents: null,
     };
 
     child_profile &&
@@ -76,6 +82,8 @@ class DeadMorozApi {
         goodDeeds: child_profile.good_deeds,
         avatar: child_profile.avatar,
       });
+
+    child_presents && (userDataToReturn.childPresents = child_presents);
 
     return userDataToReturn;
   };
@@ -149,6 +157,48 @@ class DeadMorozApi {
       );
 
     return transformApiUserToUser(userData);
+  };
+
+  addPresentToWishlist = async (
+    userToken: string,
+    userId: string,
+    present: CreateChildPresent
+  ) => {
+    const url = createDinamicUrlString(Endpoint.ChildPresents, { id: userId });
+    const { data } = await this.API.post<IPresent[]>(
+      url,
+      { child_present: [present] },
+      {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return data;
+  };
+
+  deleteChildPresent = async (
+    userToken: string,
+    userId: string,
+    presentId: string
+  ) => {
+    const url = createDinamicUrlString(Endpoint.DeleteChildPresent, {
+      id: userId,
+      present_id: presentId,
+    });
+
+    const { data } =
+      await this.API.delete<IDeadMorozApiDeleteChildPresentResponse>(url, {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      });
+
+    return data;
   };
 }
 

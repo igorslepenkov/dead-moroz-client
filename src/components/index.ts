@@ -15,6 +15,8 @@ import { FormInputGroup } from "./FormInputGroup";
 import { SignInForm } from "./SignInForm";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ChildProfile } from "./ChildProfile";
+import { BurgerButton } from "./BurgerButton";
+import { ChildPresentsTable } from "./ChildPresentsTable/ChildPresentsTable";
 
 export {
   Header,
@@ -32,4 +34,6 @@ export {
   ProtectedRoute,
   NotificationModalStatus,
   ChildProfile,
+  BurgerButton,
+  ChildPresentsTable,
 };

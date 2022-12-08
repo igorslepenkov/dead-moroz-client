@@ -4,6 +4,8 @@ import userSlice, {
   signUpUser,
   createChildProfile,
   addAvatarToChildProfile,
+  addChildPresentToWishlist,
+  deleteChildPresent,
 } from "./userSlice";
 export {
   signInUser,
@@ -12,4 +14,6 @@ export {
   signUpUser,
   createChildProfile,
   addAvatarToChildProfile,
+  addChildPresentToWishlist,
+  deleteChildPresent,
 };

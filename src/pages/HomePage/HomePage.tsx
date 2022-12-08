@@ -30,7 +30,7 @@ export const HomePage = () => {
   }, [confirmation]);
 
   return (
-    <Page backgroundImage={homepageBackgroundImage}>
+    <Page backgroundimage={homepageBackgroundImage}>
       <HomepageBody>
         <HomePageContent />
       </HomepageBody>

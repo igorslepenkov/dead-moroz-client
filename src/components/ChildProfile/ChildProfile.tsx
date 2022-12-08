@@ -101,7 +101,7 @@ export const ChildProfile = ({ childProfile }: IProps) => {
   ) as Entries<IChildProfile>;
   return (
     <StyledChildProfile>
-      <ProfileTitle>Your profile details :</ProfileTitle>
+      <ProfileTitle>Profile details :</ProfileTitle>
       {childProfileEntries.map(([title, body]) => {
         return (
           <ChildProfileField key={title}>
