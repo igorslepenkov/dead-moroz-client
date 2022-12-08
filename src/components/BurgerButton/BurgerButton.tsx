@@ -10,38 +10,38 @@ interface IProps {
 }
 
 enum BurgerButtonState {
-  Open = "open",
+  Opened = "opened",
   Closed = "closed",
 }
 
 export const BurgerButton = ({ isOpen, toggle }: IProps) => {
   const transition = { x: { duration: 2 }, type: "spring", stiffness: 100 };
-  const variant = isOpen ? BurgerButtonState.Open : BurgerButtonState.Closed;
+  const variant = isOpen ? BurgerButtonState.Opened : BurgerButtonState.Closed;
   const variants = {
     top: {
-      closed: {
+      [BurgerButtonState.Closed]: {
         rotate: 0,
         translateY: 0,
       },
-      opened: {
+      [BurgerButtonState.Opened]: {
         rotate: 45,
         translateY: 9,
       },
     },
     center: {
-      closed: {
+      [BurgerButtonState.Closed]: {
         opacity: 1,
       },
-      opened: {
+      [BurgerButtonState.Opened]: {
         opacity: 0,
       },
     },
     bottom: {
-      closed: {
+      [BurgerButtonState.Closed]: {
         rotate: 0,
         translateY: 0,
       },
-      opened: {
+      [BurgerButtonState.Opened]: {
         rotate: -45,
         translateY: -7,
       },
