@@ -101,14 +101,17 @@ export const ChildProfile = ({ childProfile }: IProps) => {
     }
   };
 
+  const filterKeys = [
+    "id",
+    "userId",
+    "createdAt",
+    "updatedAt",
+    "childReviews",
+    "childPresents",
+  ];
+
   const childProfileEntries = Object.entries(childProfile).filter(
-    ([key]) =>
-      key !== "id" &&
-      key !== "userId" &&
-      key !== "createdAt" &&
-      key !== "updatedAt" &&
-      key !== "childReviews" &&
-      key !== "childPresents"
+    ([key]) => !filterKeys.includes(key)
   ) as Entries<ChildProfileShow>;
 
   return (

@@ -9,9 +9,14 @@ interface IProps {
   toggle?: () => void;
 }
 
+enum BurgerButtonState {
+  Open = "open",
+  Closed = "closed",
+}
+
 export const BurgerButton = ({ isOpen, toggle }: IProps) => {
   const transition = { x: { duration: 2 }, type: "spring", stiffness: 100 };
-  const variant = isOpen ? "opened" : "closed";
+  const variant = isOpen ? BurgerButtonState.Open : BurgerButtonState.Closed;
   const variants = {
     top: {
       closed: {

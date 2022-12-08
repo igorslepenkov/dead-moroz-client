@@ -35,9 +35,12 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
   const deleteChildPresentOnClick: MouseEventHandler<HTMLButtonElement> = (
     event
   ) => {
-    const { currentTarget } = event;
-    if (currentTarget.dataset && currentTarget.dataset.present_id) {
-      const { present_id } = currentTarget.dataset;
+    const {
+      currentTarget: {
+        dataset: { present_id },
+      },
+    } = event;
+    if (present_id) {
       if (user && user.role === USER_ROLES.Child) {
         dispatch(deleteChildPresent(Number(present_id)));
       }
@@ -75,7 +78,7 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
         {presents ? (
           presents.map(({ id, name, image, createdUserId }, idx) => {
             return (
-              <Fragment key={name}>
+              <Fragment key={id}>
                 <tr>
                   <TableData scope="row">{idx + 1}</TableData>
                   <TableData>{name}</TableData>

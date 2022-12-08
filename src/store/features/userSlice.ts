@@ -146,14 +146,14 @@ const createChildProfile = createAsyncThunk<
 
 const addAvatarToChildProfile = createAsyncThunk<
   Omit<IUser, "token">,
-  File,
+  string,
   {
     state: RootState;
     rejectValue: IDeadMorozApiUpdateChildProfileFailedResponse | string;
   }
 >(
   "user/addAvatarToChildProfile",
-  async (avatarFile: File, { getState, rejectWithValue }) => {
+  async (avatarFile: string, { getState, rejectWithValue }) => {
     try {
       const {
         user: { user },
@@ -181,7 +181,7 @@ const addAvatarToChildProfile = createAsyncThunk<
 
 const addChildPresentToWishlist = createAsyncThunk<
   IPresent[],
-  { name: string; image?: File },
+  { name: string; image?: string },
   {
     state: RootState;
     rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;

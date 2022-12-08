@@ -22,9 +22,15 @@ export const AddAvatarForm = ({ toggleForm }: IProps) => {
   const onSubmit = async (data: { avatar: FileList }) => {
     const avatar = data.avatar.item(0);
     if (avatar) {
-      dispatch(addAvatarToChildProfile(avatar));
-      reset();
-      toggleForm();
+      const reader = new FileReader();
+      reader.readAsDataURL(avatar);
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          dispatch(addAvatarToChildProfile(reader.result));
+          reset();
+          toggleForm();
+        }
+      };
     }
   };
 
