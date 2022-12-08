@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -7,8 +7,6 @@ import { Avatar } from "@mui/material";
 import { ChildPresentsTable, ChildReviewList, Page } from "../../components";
 
 import { generateRandomIdenticonAvatar } from "../../utils";
-
-import { Entries, IFullChild } from "../../types";
 
 import {
   AvatarDetailWrapper,
@@ -27,6 +25,8 @@ import {
   useAppSelector,
   fetchChildInfo,
 } from "../../store";
+import ReactSelect, { SingleValue } from "react-select";
+import { useChildProfileApiTranslation } from "../../hooks";
 
 type ChildDetailsParams = {
   id: string;
@@ -46,14 +46,42 @@ export enum ChildDetailsKey {
   Avatar = "avatar",
 }
 
-type ChildFullInfoShow = Omit<IFullChild, "createdAt" | "updatedAt" | "role">;
+export enum Language {
+  En = "en",
+  Fi = "fi",
+}
+
+interface ISelectOption {
+  label: keyof typeof Language;
+  value: Language;
+}
 
 export const ChildDetailedInfoPage = () => {
+  const selectOptions: ISelectOption[] = [
+    { label: "En", value: Language.En },
+    { label: "Fi", value: Language.Fi },
+  ];
+
+  const [profileLanguageOption, setProfileLanguageOption] =
+    useState<ISelectOption>(selectOptions[0]);
+
+  const currentLanguage = profileLanguageOption.value;
+
+  const selectProfileLanguage = (option: SingleValue<ISelectOption>) => {
+    if (option) {
+      setProfileLanguageOption(option);
+    }
+  };
+
   const { id } = useParams<keyof ChildDetailsParams>() as ChildDetailsParams;
 
   const dispatch = useAppDispatch();
 
   const childInfo = useAppSelector(getChildInfo);
+
+  const profileTranslation = useChildProfileApiTranslation(
+    Number(childInfo?.child.profileId)
+  );
 
   useEffect(() => {
     if (id) {
@@ -65,32 +93,37 @@ export const ChildDetailedInfoPage = () => {
     }
   }, [id, dispatch]);
 
-  if (childInfo) {
+  if (childInfo && profileTranslation) {
     const { child, presents, reviews } = childInfo;
+    const {
+      country: countryFi,
+      city: cityFi,
+      hobbies: hobbiesFi,
+      pastYearDescription: descriptionFi,
+      goodDeeds: deedsFi,
+    } = profileTranslation;
 
-    const getHumanFriendlyTitle = (title: keyof typeof child): string => {
-      switch (title) {
-        case ChildDetailsKey.Birthdate:
-          return "Birth Date";
-        case ChildDetailsKey.PastYearDescription:
-          return "Past Year Description";
-        case ChildDetailsKey.GoodDeeds:
-          return "Good Deeds";
-        case ChildDetailsKey.ProfileId:
-          return "Profile Id";
-        default:
-          return title;
-      }
-    };
-
-    const getBody = (
-      key: keyof ChildFullInfoShow,
-      value: string | { url: string | null }
-    ) => {
-      switch (key) {
-        case ChildDetailsKey.Avatar:
-          return (
-            <AvatarDetailWrapper key={key} gridArea={ChildDetailsKey.Avatar}>
+    return (
+      <Page>
+        <ChildDetailedInfo>
+          <ChildProfileDetails>
+            <ProfileTitle>Profile</ProfileTitle>
+            <ReactSelect
+              styles={{
+                container: (baseStyles) => ({
+                  ...baseStyles,
+                  gridArea: "translate",
+                  maxWidth: "80px",
+                }),
+              }}
+              value={profileLanguageOption}
+              onChange={selectProfileLanguage}
+              options={selectOptions}
+            />
+            <AvatarDetailWrapper
+              key={ChildDetailsKey.Avatar}
+              gridArea={ChildDetailsKey.Avatar}
+            >
               <Avatar
                 alt={child.name}
                 src={
@@ -98,42 +131,128 @@ export const ChildDetailedInfoPage = () => {
                 }
               />
             </AvatarDetailWrapper>
-          );
-        case ChildDetailsKey.Birthdate:
-          return (
-            <ChildProfileDetail key={key} gridArea={key}>
-              <DetailKey>{getHumanFriendlyTitle(key)}</DetailKey>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.Id}
+              gridArea={ChildDetailsKey.Id}
+            >
+              <DetailKey>ID</DetailKey>
+              <DetailValue>{child.id}</DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.ProfileId}
+              gridArea={ChildDetailsKey.ProfileId}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Profiili ID" : "Profile ID"}
+              </DetailKey>
+              <DetailValue>{child.profileId}</DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.Name}
+              gridArea={ChildDetailsKey.Name}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Nimi" : "Name"}
+              </DetailKey>
+              <DetailValue>{child.name}</DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.Email}
+              gridArea={ChildDetailsKey.Email}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Sähköposti" : "Email"}
+              </DetailKey>
+              <DetailValue>{child.email}</DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.Country}
+              gridArea={ChildDetailsKey.Country}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Maa" : "Country"}
+              </DetailKey>
               <DetailValue>
-                {(typeof value === "string" || typeof value === "number") &&
-                  new Date(value).toDateString()}
+                {currentLanguage === Language.Fi ? countryFi : child.country}
               </DetailValue>
             </ChildProfileDetail>
-          );
-        default:
-          return (
-            <ChildProfileDetail key={key} gridArea={key}>
-              <DetailKey>{getHumanFriendlyTitle(key)}</DetailKey>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.City}
+              gridArea={ChildDetailsKey.City}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Kaupunki" : "City"}
+              </DetailKey>
               <DetailValue>
-                {(typeof value === "string" || typeof value === "number") &&
-                  value}
+                {currentLanguage === Language.Fi ? cityFi : child.city}
               </DetailValue>
             </ChildProfileDetail>
-          );
-      }
-    };
 
-    const childProfileEntries = Object.entries(child).filter(
-      ([key]) => key !== "createdAt" && key !== "updatedAt" && key !== "role"
-    ) as Entries<ChildFullInfoShow>;
+            <ChildProfileDetail
+              key={ChildDetailsKey.Birthdate}
+              gridArea={ChildDetailsKey.Birthdate}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Syntymäpäivä" : "Birthdate"}
+              </DetailKey>
+              <DetailValue>
+                {currentLanguage === Language.Fi
+                  ? new Date(child.birthdate).toLocaleDateString("fi-FI", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : new Date(child.birthdate).toDateString()}
+              </DetailValue>
+            </ChildProfileDetail>
 
-    return (
-      <Page>
-        <ChildDetailedInfo>
-          <ChildProfileDetails>
-            <ProfileTitle>Profile</ProfileTitle>
-            {childProfileEntries.map(([key, value]) => {
-              return getBody(key, value.toString());
-            })}
+            <ChildProfileDetail
+              key={ChildDetailsKey.Hobbies}
+              gridArea={ChildDetailsKey.Hobbies}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi ? "Harrastukset" : "Hobbies"}
+              </DetailKey>
+              <DetailValue>
+                {currentLanguage === Language.Fi ? hobbiesFi : child.hobbies}
+              </DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.PastYearDescription}
+              gridArea={ChildDetailsKey.PastYearDescription}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi
+                  ? "Kuluneen vuoden kuvaus"
+                  : "Past Year Description"}
+              </DetailKey>
+              <DetailValue>
+                {currentLanguage === Language.Fi
+                  ? descriptionFi
+                  : child.pastYearDescription}
+              </DetailValue>
+            </ChildProfileDetail>
+
+            <ChildProfileDetail
+              key={ChildDetailsKey.GoodDeeds}
+              gridArea={ChildDetailsKey.GoodDeeds}
+            >
+              <DetailKey>
+                {currentLanguage === Language.Fi
+                  ? "Hyviä tekoja"
+                  : "Good Deeds"}
+              </DetailKey>
+              <DetailValue>
+                {currentLanguage === Language.Fi ? deedsFi : child.goodDeeds}
+              </DetailValue>
+            </ChildProfileDetail>
           </ChildProfileDetails>
           <PresentsTableWrapper>
             <Title>Wishlist</Title>

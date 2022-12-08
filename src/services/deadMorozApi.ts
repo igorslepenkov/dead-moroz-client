@@ -18,6 +18,7 @@ import {
   IPresentApi,
   CreateChildReview,
   IChildReviewApi,
+  IDeadMorozApiTranslateProfileResponse,
 } from "../types";
 
 import {
@@ -37,6 +38,7 @@ enum Endpoint {
   DeleteChildPresent = "child_profiles/:child_profile_id/child_presents/:id",
   CreateChildReview = "child_profiles/:child_profile_id/child_reviews",
   DeleteChildReview = "child_profiles/:child_profile_id/child_reviews/:id",
+  TranslateChildProfile = "child_profiles/:child_profile_id/translation",
 }
 
 class DeadMorozApi {
@@ -271,6 +273,27 @@ class DeadMorozApi {
         'Authorization': `Bearer ${userToken}`,
       },
     });
+
+    return data;
+  };
+
+  translateChildProfileFields = async (
+    userToken: string,
+    childProfileId: number
+  ) => {
+    const url = createDinamicUrlString(Endpoint.TranslateChildProfile, {
+      child_profile_id: childProfileId,
+    });
+
+    const { data } = await this.API.get<IDeadMorozApiTranslateProfileResponse>(
+      url,
+      {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      }
+    );
 
     return data;
   };

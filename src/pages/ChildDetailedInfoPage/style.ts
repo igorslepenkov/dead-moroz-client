@@ -3,7 +3,7 @@ import { IFullChild } from "../../types";
 import { Color, fonts, Media, shadows } from "../../ui";
 
 interface IChildDetailProps {
-  gridArea: keyof IFullChild;
+  gridArea: keyof IFullChild | "translate";
 }
 
 export const ChildDetailedInfo = styled.div`
@@ -22,24 +22,25 @@ export const ChildDetailedInfo = styled.div`
 export const ChildProfileDetails = styled.section`
   display: grid;
   grid-template-areas:
-    "title avatar"
-    "id id"
-    "profileId profileId"
-    "name name"
-    "email email"
-    "country country"
-    "city city"
-    "birthdate birthdate"
-    "hobbies hobbies"
-    "goodDeeds goodDeeds"
-    "pastYearDescription pastYearDescription";
+    "translate title avatar"
+    "id id id"
+    "profileId profileId profileId"
+    "name name name"
+    "email email email"
+    "country country country"
+    "city city city"
+    "birthdate birthdate birthdate"
+    "hobbies hobbies hobbies"
+    "goodDeeds goodDeeds goodDeeds"
+    "pastYearDescription pastYearDescription pastYearDescription";
   padding: 20px;
+  row-gap: 7px;
   ${shadows.shadow8()}
 `;
 
 export const ProfileTitle = styled.h2`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   ${fonts.h3}
   color: ${Color.InfoMain};
 `;

@@ -251,3 +251,11 @@ export interface IDeadMorozApiDeleteReviewResponse {
   message: string;
   errors: string[];
 }
+
+export interface IDeadMorozApiTranslateProfileResponse {
+  country: string;
+  city: string;
+  hobbies: string;
+  past_year_description: string;
+  good_deeds: string;
+}
