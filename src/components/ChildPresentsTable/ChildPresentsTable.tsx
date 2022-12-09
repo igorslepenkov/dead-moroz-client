@@ -1,19 +1,15 @@
-import { MouseEvent } from "react";
+import { Fragment, MouseEventHandler } from "react";
 import { useToggle } from "../../hooks";
 import {
+  deleteChildAlternativePresent,
   deleteChildPresent,
-  getUserError,
-  getUserIsLoading,
-  getUserServerMessage,
+  getChildInfo,
+  getUser,
   useAppDispatch,
   useAppSelector,
 } from "../../store";
-import { IPresent } from "../../types";
+import { IPresent, USER_ROLES } from "../../types";
 import { AddChildPresentForm } from "../AddChildPresentForm";
-import {
-  NotificationModal,
-  NotificationModalStatus,
-} from "../NotificationModal";
 import {
   AddPresentButton,
   PresentImage,
@@ -21,6 +17,7 @@ import {
   TableData,
   TableHeading,
   DeletePresentIcon,
+  DeletePresentButton,
 } from "./style";
 
 interface IProps {
@@ -28,25 +25,38 @@ interface IProps {
 }
 
 export const ChildPresentsTable = ({ presents }: IProps) => {
-  const [isAddPresentFormOpen, toggleAddPresentForm] = useToggle();
+  const user = useAppSelector(getUser);
+  const childInfo = useAppSelector(getChildInfo);
 
-  const [isModalOpen, toggleModal] = useToggle();
-  const userDeletePresentIsLoading = useAppSelector(getUserIsLoading);
-  const userDeletePresentError = useAppSelector(getUserError);
-  const userDeletePresentMessage = useAppSelector(getUserServerMessage);
+  const [isAddPresentFormOpen, toggleAddPresentForm] = useToggle();
 
   const dispatch = useAppDispatch();
 
-  const deleteChildPresentOnClick = (event: MouseEvent) => {
-    const { target } = event;
-    if (
-      target instanceof SVGSVGElement &&
-      target.dataset &&
-      target.dataset.present_id
-    ) {
-      const { present_id } = target.dataset;
-      dispatch(deleteChildPresent(present_id));
-      toggleModal();
+  const deleteChildPresentOnClick: MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    const {
+      currentTarget: {
+        dataset: { present_id },
+      },
+    } = event;
+    if (present_id) {
+      if (user && user.role === USER_ROLES.Child) {
+        dispatch(deleteChildPresent(Number(present_id)));
+      }
+
+      if (
+        user &&
+        (user.role === USER_ROLES.Elf || user.role === USER_ROLES.DeadMoroz) &&
+        childInfo
+      ) {
+        dispatch(
+          deleteChildAlternativePresent({
+            presentId: Number(present_id),
+            childProfileId: childInfo?.child.profileId,
+          })
+        );
+      }
     }
   };
 
@@ -66,33 +76,33 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
       </thead>
       <tbody>
         {presents ? (
-          presents.map(({ id, name, image }, idx) => {
+          presents.map(({ id, name, image, createdUserId }, idx) => {
             return (
-              <>
-                <tr key={name}>
+              <Fragment key={id}>
+                <tr>
                   <TableData scope="row">{idx + 1}</TableData>
                   <TableData>{name}</TableData>
                   <TableData>
                     {image.url ? <PresentImage src={image.url} /> : "No image"}
                   </TableData>
                   <TableData>
-                    <DeletePresentIcon
-                      data-present_id={id}
-                      onClick={deleteChildPresentOnClick}
-                    />
+                    {user?.id === createdUserId ? (
+                      <DeletePresentButton
+                        data-present_id={id}
+                        onClick={deleteChildPresentOnClick}
+                      >
+                        <DeletePresentIcon />
+                      </DeletePresentButton>
+                    ) : null}
                   </TableData>
                 </tr>
-              </>
+              </Fragment>
             );
           })
         ) : (
           <tr>
-            <TableData colSpan={3}>
+            <TableData colSpan={4}>
               You still don't have any selected presents
-              <br />
-              <AddPresentButton onClick={toggleAddPresentForm}>
-                Add present
-              </AddPresentButton>
             </TableData>
           </tr>
         )}
@@ -106,22 +116,6 @@ export const ChildPresentsTable = ({ presents }: IProps) => {
           </TableData>
         </tr>
       </tfoot>
-      {!userDeletePresentIsLoading && (
-        <NotificationModal
-          isOpen={isModalOpen}
-          status={
-            userDeletePresentError
-              ? NotificationModalStatus.Error
-              : NotificationModalStatus.Success
-          }
-          message={
-            userDeletePresentError
-              ? userDeletePresentError
-              : userDeletePresentMessage || "Oooooooooooooops"
-          }
-          handler={toggleModal}
-        />
-      )}
     </StyledChildPresentsTable>
   );
 };

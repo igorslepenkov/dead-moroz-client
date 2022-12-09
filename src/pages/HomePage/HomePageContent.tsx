@@ -25,6 +25,10 @@ export const HomePageContent = () => {
     navigate(ROUTES_URL.CHILD_WISHLIST);
   };
 
+  const navigateToElfDashboard = () => {
+    navigate(ROUTES_URL.ElfDashboard);
+  };
+
   if (user && user.role === USER_ROLES.Child) {
     return (
       <>
@@ -39,6 +43,18 @@ export const HomePageContent = () => {
         <SignInButton onClick={navigateToWishList}>
           Fill in WishList
         </SignInButton>
+      </>
+    );
+  }
+
+  if (user && user.role === USER_ROLES.Elf) {
+    return (
+      <>
+        <HomepageTitle>Welcome, {user.name}</HomepageTitle>
+        <HomepageBodyText>
+          Go to your dashboard and get to work!
+        </HomepageBodyText>
+        <SignInButton onClick={navigateToElfDashboard}>Dashboard</SignInButton>
       </>
     );
   }

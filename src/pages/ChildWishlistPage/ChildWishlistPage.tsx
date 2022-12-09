@@ -7,7 +7,9 @@ export const ChildWishlistPage = () => {
   return (
     <Page>
       <PageContent>
-        {user && <ChildPresentsTable presents={user.childPresents} />}
+        {user && user.childProfile && (
+          <ChildPresentsTable presents={user.childProfile.childPresents} />
+        )}
       </PageContent>
     </Page>
   );

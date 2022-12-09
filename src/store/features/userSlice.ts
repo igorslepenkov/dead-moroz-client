@@ -9,7 +9,6 @@ import {
 import { AxiosError } from "axios";
 
 import {
-  CreateChildPresent,
   IChildProfile,
   IDeadMorozApiAddChildPresentFailedResponse,
   IDeadMorozApiCreateChildProfileFailedResponse,
@@ -21,9 +20,11 @@ import {
   IUser,
   SignInFields,
   SignUpFields,
+  USER_ROLES,
 } from "../../types";
 import { deadMorozApi } from "../../services";
 import { RootState } from "../../store";
+import { childPresentMapper } from "../../services/mappers";
 
 interface IUserInitialState {
   user: IUser | null;
@@ -68,7 +69,15 @@ const signInUser = createAsyncThunk<
   try {
     return await deadMorozApi.signInUser(signInData);
   } catch (err: any) {
-    if (err instanceof AxiosError && err.response) {
+    if (
+      err instanceof AxiosError &&
+      err.response &&
+      err.response.data.message
+    ) {
+      return rejectWithValue(err.response.data.message);
+    }
+
+    if (err instanceof AxiosError && err.response && err.response.data.error) {
       return rejectWithValue(err.response.data.error);
     }
 
@@ -137,14 +146,14 @@ const createChildProfile = createAsyncThunk<
 
 const addAvatarToChildProfile = createAsyncThunk<
   Omit<IUser, "token">,
-  File,
+  string,
   {
     state: RootState;
     rejectValue: IDeadMorozApiUpdateChildProfileFailedResponse | string;
   }
 >(
   "user/addAvatarToChildProfile",
-  async (avatarFile: File, { getState, rejectWithValue }) => {
+  async (avatarFile: string, { getState, rejectWithValue }) => {
     try {
       const {
         user: { user },
@@ -172,7 +181,7 @@ const addAvatarToChildProfile = createAsyncThunk<
 
 const addChildPresentToWishlist = createAsyncThunk<
   IPresent[],
-  CreateChildPresent,
+  { name: string; image?: string },
   {
     state: RootState;
     rejectValue: IDeadMorozApiAddChildPresentFailedResponse | string;
@@ -185,8 +194,12 @@ const addChildPresentToWishlist = createAsyncThunk<
         user: { user },
       } = getState();
 
-      if (user) {
-        return deadMorozApi.addPresentToWishlist(user.token, user.id, present);
+      if (user && user.childProfile && user.role === USER_ROLES.Child) {
+        const response = await deadMorozApi.addPresentToWishlist(user.token, {
+          present,
+          childProfileId: user.childProfile.id,
+        });
+        return response.map((present) => childPresentMapper(present));
       }
 
       return rejectWithValue("User is not logged in");
@@ -202,7 +215,7 @@ const addChildPresentToWishlist = createAsyncThunk<
 
 const deleteChildPresent = createAsyncThunk<
   IDeadMorozApiDeleteChildPresentResponse,
-  string,
+  number,
   {
     state: RootState;
     rejectValue: IDeadMorozApiDeleteChildFailedResponse | string;
@@ -215,10 +228,10 @@ const deleteChildPresent = createAsyncThunk<
         user: { user },
       } = getState();
 
-      if (user) {
+      if (user && user.childProfile) {
         const data = await deadMorozApi.deleteChildPresent(
           user.token,
-          user.id,
+          user.childProfile.id,
           presentId
         );
         return data;
@@ -255,18 +268,7 @@ const userSlice = createSlice({
       signInUser.fulfilled,
       (
         state,
-        {
-          payload: {
-            id,
-            name,
-            email,
-            token,
-            role,
-            childProfile,
-            childPresents,
-            message,
-          },
-        }
+        { payload: { id, name, email, token, role, childProfile, message } }
       ) => {
         state.isLoggedIn = true;
         state.user = {
@@ -276,7 +278,6 @@ const userSlice = createSlice({
           token,
           role,
           childProfile,
-          childPresents,
         };
         state.message = message;
       }
@@ -335,8 +336,8 @@ const userSlice = createSlice({
     builder.addCase(
       addChildPresentToWishlist.fulfilled,
       (state, { payload }) => {
-        if (state.user) {
-          state.user.childPresents = payload;
+        if (state.user && state.user.childProfile) {
+          state.user.childProfile.childPresents = payload;
         }
       }
     );
@@ -356,8 +357,8 @@ const userSlice = createSlice({
 
     builder.addCase(deleteChildPresent.fulfilled, (state, { payload }) => {
       state.message = payload.message;
-      if (state.user) {
-        state.user.childPresents = payload.child_presents;
+      if (state.user && state.user.childProfile) {
+        state.user.childProfile.childPresents = payload.child_presents;
       }
     });
 

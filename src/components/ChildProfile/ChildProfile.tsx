@@ -16,8 +16,13 @@ import {
 } from "./style";
 
 interface IProps {
-  childProfile: IChildProfile;
+  childProfile: Omit<IChildProfile, "childReviews">;
 }
+
+type ChildProfileShow = Omit<
+  IChildProfile,
+  "id" | "userId" | "createdAt" | "updatedAt" | "childReviews" | "childPresents"
+>;
 
 export enum ChildProfileKey {
   Country = "country",
@@ -30,15 +35,24 @@ export enum ChildProfileKey {
 }
 
 type ChildProfileValues = {
-  [K in keyof IChildProfile]: IChildProfile[K];
-}[keyof IChildProfile];
+  [K in keyof ChildProfileShow]: ChildProfileShow[K];
+}[keyof ChildProfileShow];
+
+const FILTER_KEYS = [
+  "id",
+  "userId",
+  "createdAt",
+  "updatedAt",
+  "childReviews",
+  "childPresents",
+];
 
 export const ChildProfile = ({ childProfile }: IProps) => {
   const [isAddAvatarFormOpen, toggleAddAvatarForm] = useToggle();
 
   const user = useAppSelector(getUser);
 
-  const getHumanFriendlyTitle = (title: keyof IChildProfile): string => {
+  const getHumanFriendlyTitle = (title: keyof ChildProfileShow): string => {
     switch (title) {
       case ChildProfileKey.Birthdate:
         return "Birth Date";
@@ -52,7 +66,7 @@ export const ChildProfile = ({ childProfile }: IProps) => {
   };
 
   const getBody = (
-    title: keyof IChildProfile,
+    title: keyof ChildProfileShow,
     body: ChildProfileValues
   ): ReactNode => {
     switch (title) {
@@ -96,9 +110,10 @@ export const ChildProfile = ({ childProfile }: IProps) => {
     }
   };
 
-  const childProfileEntries = Object.entries(
-    childProfile
-  ) as Entries<IChildProfile>;
+  const childProfileEntries = Object.entries(childProfile).filter(
+    ([key]) => !FILTER_KEYS.includes(key)
+  ) as Entries<ChildProfileShow>;
+
   return (
     <StyledChildProfile>
       <ProfileTitle>Profile details :</ProfileTitle>

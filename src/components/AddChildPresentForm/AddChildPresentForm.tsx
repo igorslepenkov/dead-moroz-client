@@ -1,5 +1,11 @@
 import { useForm } from "react-hook-form";
-import { addChildPresentToWishlist, useAppDispatch } from "../../store";
+import {
+  addChildAlternativePresent,
+  addChildPresentToWishlist,
+  getChildInfo,
+  useAppDispatch,
+  useAppSelector,
+} from "../../store";
 import { FormInput } from "../FormInput";
 import { FormInputGroup } from "../FormInputGroup";
 import { FormInputLabel } from "../FormInputLabel";
@@ -17,6 +23,8 @@ interface IChildPresentFields {
 }
 
 export const AddChildPresentForm = ({ toggleForm }: IProps) => {
+  const childDetailedInfo = useAppSelector(getChildInfo);
+
   const {
     register,
     handleSubmit,
@@ -29,9 +37,32 @@ export const AddChildPresentForm = ({ toggleForm }: IProps) => {
   const onSubmit = ({ name, image }: IChildPresentFields) => {
     const imageFile = image.item(0);
     if (imageFile && name) {
-      dispatch(addChildPresentToWishlist({ name, image: imageFile }));
+      const reader = new FileReader();
+      reader.readAsDataURL(imageFile);
+
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          childDetailedInfo && childDetailedInfo.child.profileId
+            ? dispatch(
+                addChildAlternativePresent({
+                  present: { name, image: reader.result },
+                  childProfileId: childDetailedInfo.child.profileId,
+                })
+              )
+            : dispatch(
+                addChildPresentToWishlist({ name, image: reader.result })
+              );
+        }
+      };
     } else if (!imageFile && name) {
-      dispatch(addChildPresentToWishlist({ name }));
+      childDetailedInfo && childDetailedInfo.child.profileId
+        ? dispatch(
+            addChildAlternativePresent({
+              present: { name },
+              childProfileId: childDetailedInfo.child.profileId,
+            })
+          )
+        : dispatch(addChildPresentToWishlist({ name }));
     }
 
     reset();

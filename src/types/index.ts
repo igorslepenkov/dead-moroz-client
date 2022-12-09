@@ -15,21 +15,71 @@ export enum USER_ROLES {
   Child = "child",
 }
 
+export interface IPresentApi {
+  id: number;
+  name: string;
+  image: {
+    url: string | null;
+  };
+  created_at: string;
+  updated_at: string;
+  child_profile_id: number;
+  user_id: number;
+}
+
+export interface IPresent {
+  id: number;
+  name: string;
+  image: {
+    url: string | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+  childProfileId: number | null;
+  createdUserId: number;
+}
+
+export interface IChildReviewApi {
+  id: number;
+  score: number;
+  comment: string;
+  created_at: string;
+  updated_at: string;
+  child_profile_id: number;
+  user_id: number;
+}
+
+export interface IChildReview {
+  id: number;
+  score: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  childProfileId: number;
+  createdBy: number;
+}
+
 export interface IChildProfile {
+  id: number;
+  userId: number;
   country: string;
   city: string;
-  hobbies: string;
   birthdate: string;
+  hobbies: string;
   pastYearDescription: string;
   goodDeeds: string;
   avatar: {
     url: string | null;
   };
+  createdAt: string;
+  updatedAt: string;
+  childPresents: IPresent[];
+  childReviews: IChildReview[];
 }
 
-interface IChildProfileApi {
-  id: string;
-  user_id: string;
+export interface IChildProfileApi {
+  id: number;
+  user_id: number;
   country: string;
   city: string;
   birthdate: string;
@@ -41,44 +91,39 @@ interface IChildProfileApi {
   };
   created_at: string;
   updated_at: string;
-}
-
-export interface IPresent {
-  id: string;
-  name: string;
-  image: {
-    url: string | null;
-  };
+  child_presents: IPresentApi[];
+  child_reviews: IChildReviewApi[];
 }
 
 export type CreateChildPresent = {
-  name: string;
-  image?: File;
+  present: {
+    name: string;
+    image?: string;
+  };
+  childProfileId: number;
 };
 
 export type UpdateChildProfile = Partial<
-  Omit<IChildProfile, "avatar"> & { avatar: File }
+  Omit<IChildProfile, "avatar"> & { avatar: string }
 >;
 
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
   token: string;
   role: USER_ROLES;
-  childProfile: IChildProfile | null;
-  childPresents: IPresent[] | null;
+  childProfile: Omit<IChildProfile, "childReviews"> | null;
 }
 
 export interface IUserApi {
-  id: string;
+  id: number;
   name: string;
   email: string;
   created_at: string;
   updated_at: string;
   role: USER_ROLES;
-  child_profile: IChildProfileApi | null;
-  child_presents: IPresent[] | null;
+  child_profile: Omit<IChildProfileApi, "child_reviews"> | null;
 }
 
 export interface IDeadMorozApiSignUpResponse {
@@ -124,4 +169,85 @@ export interface IDeadMorozApiDeleteChildPresentResponse {
 
 export interface IDeadMorozApiDeleteChildFailedResponse {
   message: string;
+}
+
+export type GetChildrenOptions = {
+  page: number;
+  sort_type: "name" | "score" | null;
+  filter_type: "scored" | "not_scored" | null;
+  sort_order: "ASC" | "DESC" | null;
+  limit: number | null;
+};
+
+export type CreatePresentOptions = {
+  user_id: number;
+};
+
+export type IApiChild = Pick<
+  IUserApi,
+  "id" | "name" | "email" | "created_at" | "updated_at"
+>;
+
+export interface IDeadMorozApiGetChildProfilesReponse {
+  children: IApiChild[];
+  page: number;
+  total_pages: number;
+  total_records: number;
+  limit: number;
+}
+
+export interface IDeadMorozApiGetFullChildInfoFailedResponse {
+  message: string;
+  errors: string[];
+}
+
+export interface IFullChildInfoApi {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+  role: USER_ROLES;
+  child_profile: IChildProfileApi;
+}
+
+export interface IFullChild {
+  id: number;
+  profileId: number;
+  email: string;
+  name: string;
+  country: string;
+  city: string;
+  birthdate: string;
+  hobbies: string;
+  goodDeeds: string;
+  pastYearDescription: string;
+  avatar: {
+    url: string | null;
+  };
+  createdAt: string;
+  updatedAt: string;
+  role: USER_ROLES;
+}
+
+export interface IFullChildInfo {
+  child: IFullChild;
+  presents: IPresent[];
+  reviews: IChildReview[];
+}
+
+export type CreateChildReview = {
+  score: number;
+  comment: string;
+  user_id: number;
+};
+
+export interface IDeadMorozApiCreateReviewResponse {
+  message: string;
+  errors: string[];
+}
+
+export interface IDeadMorozApiDeleteReviewResponse {
+  message: string;
+  errors: string[];
 }

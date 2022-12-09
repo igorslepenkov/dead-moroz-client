@@ -69,6 +69,12 @@ export const Header = () => {
             <Navlink to={ROUTES_URL.CHILD_WISHLIST}>Wishlist</Navlink>
           </>
         )}
+
+        {user && user.role === USER_ROLES.Elf && (
+          <>
+            <Navlink to={ROUTES_URL.ElfDashboard}>Dashboard</Navlink>
+          </>
+        )}
         {isUserLoggedIn ? (
           <SignOutLink onClick={signOutOnClick}>Sign Out</SignOutLink>
         ) : (

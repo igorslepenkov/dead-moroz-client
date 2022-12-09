@@ -59,7 +59,7 @@ export const ChildProfilePage = () => {
   }
 
   return (
-    <Page backgroundimage={backgroundImageWinter}>
+    <Page backgroundImagePath={backgroundImageWinter}>
       <ChildProfilePageBody>
         {currentSurveyStatus === SurveyStatus.InProcess ? (
           <>

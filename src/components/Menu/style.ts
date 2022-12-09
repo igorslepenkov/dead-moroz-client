@@ -65,6 +65,7 @@ export const SignOutMenuLink = styled.a`
   ${fonts.h2}
   text-decoration: none;
   color: ${Color.PrimaryMain};
+  cursor: pointer;
 
   &:hover {
     color: ${Color.PrimaryHover};
