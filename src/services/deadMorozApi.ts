@@ -149,9 +149,6 @@ class DeadMorozApi {
           headers: {
             // prettier-ignore
             "Authorization": `Bearer ${userToken}`,
-            "Content-Type": updateData.avatar
-              ? "multipart/form-data"
-              : "application/json",
           },
         }
       );
@@ -174,7 +171,7 @@ class DeadMorozApi {
             user_id: opts.userId,
           })
         : url,
-      { child_present: [present] },
+      { child_present: present },
       {
         headers: {
           // prettier-ignore

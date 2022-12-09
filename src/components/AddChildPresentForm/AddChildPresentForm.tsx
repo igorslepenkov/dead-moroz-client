@@ -37,14 +37,23 @@ export const AddChildPresentForm = ({ toggleForm }: IProps) => {
   const onSubmit = ({ name, image }: IChildPresentFields) => {
     const imageFile = image.item(0);
     if (imageFile && name) {
-      childDetailedInfo && childDetailedInfo.child.profileId
-        ? dispatch(
-            addChildAlternativePresent({
-              present: { name, image: imageFile },
-              childProfileId: childDetailedInfo.child.profileId,
-            })
-          )
-        : dispatch(addChildPresentToWishlist({ name, image: imageFile }));
+      const reader = new FileReader();
+      reader.readAsDataURL(imageFile);
+
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          childDetailedInfo && childDetailedInfo.child.profileId
+            ? dispatch(
+                addChildAlternativePresent({
+                  present: { name, image: reader.result },
+                  childProfileId: childDetailedInfo.child.profileId,
+                })
+              )
+            : dispatch(
+                addChildPresentToWishlist({ name, image: reader.result })
+              );
+        }
+      };
     } else if (!imageFile && name) {
       childDetailedInfo && childDetailedInfo.child.profileId
         ? dispatch(

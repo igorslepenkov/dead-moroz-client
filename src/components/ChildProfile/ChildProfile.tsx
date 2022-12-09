@@ -38,6 +38,15 @@ type ChildProfileValues = {
   [K in keyof ChildProfileShow]: ChildProfileShow[K];
 }[keyof ChildProfileShow];
 
+const FILTER_KEYS = [
+  "id",
+  "userId",
+  "createdAt",
+  "updatedAt",
+  "childReviews",
+  "childPresents",
+];
+
 export const ChildProfile = ({ childProfile }: IProps) => {
   const [isAddAvatarFormOpen, toggleAddAvatarForm] = useToggle();
 
@@ -102,13 +111,7 @@ export const ChildProfile = ({ childProfile }: IProps) => {
   };
 
   const childProfileEntries = Object.entries(childProfile).filter(
-    ([key]) =>
-      key !== "id" &&
-      key !== "userId" &&
-      key !== "createdAt" &&
-      key !== "updatedAt" &&
-      key !== "childReviews" &&
-      key !== "childPresents"
+    ([key]) => !FILTER_KEYS.includes(key)
   ) as Entries<ChildProfileShow>;
 
   return (

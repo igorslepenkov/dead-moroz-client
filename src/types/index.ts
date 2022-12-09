@@ -98,13 +98,13 @@ export interface IChildProfileApi {
 export type CreateChildPresent = {
   present: {
     name: string;
-    image?: File;
+    image?: string;
   };
   childProfileId: number;
 };
 
 export type UpdateChildProfile = Partial<
-  Omit<IChildProfile, "avatar"> & { avatar: File }
+  Omit<IChildProfile, "avatar"> & { avatar: string }
 >;
 
 export interface IUser {
