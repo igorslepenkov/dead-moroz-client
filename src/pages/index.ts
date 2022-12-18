@@ -4,6 +4,7 @@ import { ChildProfilePage } from "./ChildProfilePage";
 import { ChildWishlistPage } from "./ChildWishlistPage";
 import { ElfDashboardPage } from "./ElfDashboardPage";
 import { ChildDetailedInfoPage } from "./ChildDetailedInfoPage";
+import { DeadMorozPage } from "./DeadMorozPage";
 
 export {
   HomePage,
@@ -12,4 +13,5 @@ export {
   ChildWishlistPage,
   ElfDashboardPage,
   ChildDetailedInfoPage,
+  DeadMorozPage,
 };

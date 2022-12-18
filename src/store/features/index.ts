@@ -16,6 +16,10 @@ import childInfoSlice, {
   deleteChildReview,
 } from "./childInfoSlice";
 
+import morozInfoGeneralSlice, {
+  fetchMorozInfoGeneral,
+} from "./morozInfoGeneralSlice";
+
 export {
   signInUser,
   signOutUser,
@@ -31,4 +35,6 @@ export {
   deleteChildAlternativePresent,
   createChildReview,
   deleteChildReview,
+  morozInfoGeneralSlice,
+  fetchMorozInfoGeneral,
 };

@@ -13,6 +13,12 @@ import {
   getChildInfoServerMessage,
 } from "./childInfoSelectors";
 
+import {
+  getMorozInfoGeneral,
+  getMorozInfoGeneralLoading,
+  getMorozInfoGeneralError,
+} from "./morozInfoGeneralSelectors";
+
 export {
   getUser,
   getUserError,
@@ -23,4 +29,7 @@ export {
   getChildInfoIsLoading,
   getChildInfoError,
   getChildInfoServerMessage,
+  getMorozInfoGeneral,
+  getMorozInfoGeneralLoading,
+  getMorozInfoGeneralError,
 };

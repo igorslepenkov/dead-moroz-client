@@ -29,6 +29,10 @@ export const HomePageContent = () => {
     navigate(ROUTES_URL.ElfDashboard);
   };
 
+  const navigateToMorozBoard = () => {
+    navigate(ROUTES_URL.MorozBoard);
+  };
+
   if (user && user.role === USER_ROLES.Child) {
     return (
       <>
@@ -55,6 +59,23 @@ export const HomePageContent = () => {
           Go to your dashboard and get to work!
         </HomepageBodyText>
         <SignInButton onClick={navigateToElfDashboard}>Dashboard</SignInButton>
+      </>
+    );
+  }
+
+  if (user && user.role === USER_ROLES.DeadMoroz) {
+    return (
+      <>
+        <HomepageTitle>
+          We are greeting you mighty and superior DEAD MOROZ!
+        </HomepageTitle>
+        <HomepageBodyText>
+          You can rule your kingdom as you please
+        </HomepageBodyText>
+        <SignInButton onClick={navigateToElfDashboard}>
+          Elves Dashboard
+        </SignInButton>
+        <SignInButton onClick={navigateToMorozBoard}>MorozBoard</SignInButton>
       </>
     );
   }

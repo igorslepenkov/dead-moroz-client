@@ -7,12 +7,24 @@ import { ROUTES_URL } from "../../router";
 import { USER_ROLES } from "../../types";
 
 interface IProps {
-  roleToAccess: USER_ROLES;
+  roleToAccess: USER_ROLES | USER_ROLES[];
 }
 
 export const ProtectedRoute = ({ roleToAccess }: IProps) => {
   const user = useAppSelector(getUser);
-  if (user && user.role === roleToAccess) {
+  const isAccessPermitted = (): boolean => {
+    if (user) {
+      if (typeof roleToAccess === "string") {
+        return user && user.role === roleToAccess;
+      }
+
+      return user && roleToAccess.includes(user.role);
+    }
+
+    return false;
+  };
+
+  if (isAccessPermitted()) {
     return <Outlet />;
   }
 

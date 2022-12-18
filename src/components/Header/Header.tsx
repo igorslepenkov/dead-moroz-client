@@ -70,9 +70,16 @@ export const Header = () => {
           </>
         )}
 
-        {user && user.role === USER_ROLES.Elf && (
+        {user &&
+          (user.role === USER_ROLES.Elf ||
+            user.role === USER_ROLES.DeadMoroz) && (
+            <>
+              <Navlink to={ROUTES_URL.ElfDashboard}>Dashboard</Navlink>
+            </>
+          )}
+        {user && user.role === USER_ROLES.DeadMoroz && (
           <>
-            <Navlink to={ROUTES_URL.ElfDashboard}>Dashboard</Navlink>
+            <Navlink to={ROUTES_URL.MorozBoard}>MorozBoard</Navlink>
           </>
         )}
         {isUserLoggedIn ? (

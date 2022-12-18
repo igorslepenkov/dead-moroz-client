@@ -21,6 +21,7 @@ import { ChildrenListingTable } from "./ChildrenListingTable";
 import { ElfDashboard } from "./ElfDashboard";
 import { AddChildReviewForm } from "./AddChildReviewForm";
 import { ChildReviewList } from "./ChildReviewsList";
+import { MorozBoard, ElvesInfo, ChildrenInfo, MorozInfo } from "./MorozBoard";
 
 export {
   Header,
@@ -44,4 +45,8 @@ export {
   ElfDashboard,
   AddChildReviewForm,
   ChildReviewList,
+  MorozBoard,
+  ElvesInfo,
+  ChildrenInfo,
+  MorozInfo,
 };

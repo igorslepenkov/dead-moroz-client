@@ -15,6 +15,7 @@ import {
   deleteChildAlternativePresent,
   createChildReview,
   deleteChildReview,
+  fetchMorozInfoGeneral,
 } from "./features";
 
 import {
@@ -27,6 +28,9 @@ import {
   getChildInfoIsLoading,
   getChildInfoError,
   getChildInfoServerMessage,
+  getMorozInfoGeneral,
+  getMorozInfoGeneralLoading,
+  getMorozInfoGeneralError,
 } from "./selectors";
 
 export {
@@ -54,5 +58,9 @@ export {
   deleteChildAlternativePresent,
   createChildReview,
   deleteChildReview,
+  fetchMorozInfoGeneral,
+  getMorozInfoGeneral,
+  getMorozInfoGeneralLoading,
+  getMorozInfoGeneralError,
 };
 export type { RootState, AppDispatch };

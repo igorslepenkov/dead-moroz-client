@@ -5,4 +5,7 @@ export enum ROUTES_URL {
   CHILD_WISHLIST = "wishlist",
   ElfDashboard = "elf_dashboard",
   ChildDetailedInfo = "child/:id/details",
+  MorozBoard = "morozboard",
+  ElvesInfo = "elves",
+  ChildrenInfo = "children",
 }

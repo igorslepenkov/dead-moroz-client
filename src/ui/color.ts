@@ -35,5 +35,6 @@ export enum Color {
   SteelGray = "#9E9E9E",
   IceGray = "#C2C2C2",
   LightGray = "#E0E0E0",
+  WhiteGray = "#FAFAFB",
   White = "#FFFFFF",
 }

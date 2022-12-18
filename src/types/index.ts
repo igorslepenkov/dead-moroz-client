@@ -259,3 +259,31 @@ export interface IDeadMorozApiTranslateProfileResponse {
   past_year_description: string;
   good_deeds: string;
 }
+
+export interface IMorozInfoGeneralApi {
+  elves: {
+    count: number;
+    invited: number;
+    accepted_invitation: number;
+    not_accepted_invitation: number;
+  };
+  children: {
+    count: number;
+    with_review_count: number;
+    without_review_count: number;
+  };
+}
+
+export interface IMorozInfoGeneral {
+  elves: {
+    count: number;
+    invited: number;
+    acceptedInvitation: number;
+    notAcceptedInvitation: number;
+  };
+  children: {
+    count: number;
+    withReviewCount: number;
+    withoutReviewCount: number;
+  };
+}

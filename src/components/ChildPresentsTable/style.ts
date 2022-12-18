@@ -47,6 +47,8 @@ export const TableData = styled.td`
 export const PresentImage = styled.img`
   width: 100%;
   height: 100%;
+  max-width: 200px;
+  max-height: 200px;
 `;
 
 export const AddPresentButton = styled.button`

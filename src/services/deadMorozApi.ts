@@ -19,6 +19,8 @@ import {
   CreateChildReview,
   IChildReviewApi,
   IDeadMorozApiTranslateProfileResponse,
+  IMorozInfoGeneralApi,
+  IMorozInfoGeneral,
 } from "../types";
 
 import {
@@ -26,7 +28,11 @@ import {
   createDinamicUrlString,
   getTokenFromHeaders,
 } from "../utils";
-import { childProfileMapper, userApiMapper } from "./mappers";
+import {
+  childProfileMapper,
+  morozInfoGeneralMapper,
+  userApiMapper,
+} from "./mappers";
 
 enum Endpoint {
   SignUp = "users",
@@ -39,6 +45,7 @@ enum Endpoint {
   CreateChildReview = "child_profiles/:child_profile_id/child_reviews",
   DeleteChildReview = "child_profiles/:child_profile_id/child_reviews/:id",
   TranslateChildProfile = "child_profiles/:child_profile_id/translation",
+  GetMorozBoardInfoGeneral = "moroz_board/info",
 }
 
 class DeadMorozApi {
@@ -293,6 +300,22 @@ class DeadMorozApi {
     );
 
     return data;
+  };
+
+  fetchMorozInfoGeneral = async (
+    userToken: string
+  ): Promise<IMorozInfoGeneral | null> => {
+    const { data } = await this.API.get<IMorozInfoGeneralApi>(
+      Endpoint.GetMorozBoardInfoGeneral,
+      {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      }
+    );
+
+    return morozInfoGeneralMapper(data);
   };
 }
 

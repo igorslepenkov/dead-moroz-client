@@ -12,10 +12,16 @@ import {
   ChildDetailedInfoPage,
   ChildProfilePage,
   ChildWishlistPage,
+  DeadMorozPage,
   ElfDashboardPage,
   HomePage,
 } from "../pages";
-import { ProtectedRoute } from "../components";
+import {
+  ChildrenInfo,
+  ElvesInfo,
+  MorozInfo,
+  ProtectedRoute,
+} from "../components";
 import { USER_ROLES } from "../types";
 
 export const router = createBrowserRouter(
@@ -26,6 +32,7 @@ export const router = createBrowserRouter(
         path={ROUTES_URL.AUTHENTICATION}
         element={<AuthenticationPage />}
       />
+
       <Route element={<ProtectedRoute roleToAccess={USER_ROLES.Child} />}>
         <Route path={ROUTES_URL.CHILD_PROFILE} element={<ChildProfilePage />} />
         <Route
@@ -33,12 +40,27 @@ export const router = createBrowserRouter(
           element={<ChildWishlistPage />}
         />
       </Route>
-      <Route element={<ProtectedRoute roleToAccess={USER_ROLES.Elf} />}>
+
+      <Route
+        element={
+          <ProtectedRoute
+            roleToAccess={[USER_ROLES.Elf, USER_ROLES.DeadMoroz]}
+          />
+        }
+      >
         <Route path={ROUTES_URL.ElfDashboard} element={<ElfDashboardPage />} />
         <Route
           path={ROUTES_URL.ChildDetailedInfo}
           element={<ChildDetailedInfoPage />}
         />
+      </Route>
+
+      <Route element={<ProtectedRoute roleToAccess={USER_ROLES.DeadMoroz} />}>
+        <Route path={ROUTES_URL.MorozBoard} element={<DeadMorozPage />}>
+          <Route index element={<MorozInfo />} />
+          <Route path={ROUTES_URL.ElvesInfo} element={<ElvesInfo />} />
+          <Route path={ROUTES_URL.ChildrenInfo} element={<ChildrenInfo />} />
+        </Route>
       </Route>
     </Route>
   )
