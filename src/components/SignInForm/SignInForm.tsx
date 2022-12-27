@@ -6,23 +6,9 @@ import { FormInputGroup } from "../FormInputGroup";
 import { FormInputLabel } from "../FormInputLabel";
 import { FormNotification, FormNotificationType } from "../FormNotification";
 import { FormSubmitButton } from "../FormSubmitButton";
-import {
-  NotificationModalStatus,
-  NotificationModal,
-} from "../NotificationModal";
-
-import { useToggle } from "../../hooks";
-
 import { emailRegex } from "../../regexp";
 
-import {
-  getUserError,
-  getUserIsLoading,
-  getUserServerMessage,
-  signInUser,
-  useAppDispatch,
-  useAppSelector,
-} from "../../store";
+import { signInUser, useAppDispatch } from "../../store";
 
 interface ISignInFormFields {
   email: string;
@@ -36,18 +22,10 @@ export const SignInForm = () => {
     formState: { errors },
     reset,
   } = useForm<ISignInFormFields>();
-
-  const [isModalOpen, toggleModal] = useToggle(false);
-
-  const userSignInError = useAppSelector(getUserError);
-  const userServerMessage = useAppSelector(getUserServerMessage);
-  const userIsLoading = useAppSelector(getUserIsLoading);
-
   const dispatch = useAppDispatch();
 
   const onSubmit = ({ password, email }: ISignInFormFields) => {
     dispatch(signInUser({ email, password }));
-    toggleModal();
     reset();
   };
 
@@ -96,22 +74,6 @@ export const SignInForm = () => {
         )}
       </FormInputGroup>
       <FormSubmitButton>Sign Up</FormSubmitButton>
-      {!userIsLoading && (
-        <NotificationModal
-          isOpen={isModalOpen}
-          status={
-            userSignInError
-              ? NotificationModalStatus.Error
-              : NotificationModalStatus.Success
-          }
-          message={
-            userSignInError
-              ? userSignInError
-              : userServerMessage || "Oooooooooooooops"
-          }
-          handler={toggleModal}
-        />
-      )}
     </Form>
   );
 };

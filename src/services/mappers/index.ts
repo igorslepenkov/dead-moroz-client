@@ -3,6 +3,7 @@ import { childPresentMapper } from "./childPresentMapper";
 import { childProfileMapper } from "./childProfileMapper";
 import { childReviewMapper } from "./childReviewMapper";
 import { morozInfoGeneralMapper } from "./morozInfoGeneralMapper";
+import { morozInfoElvesMapper } from "./morozInfoElvesMapper";
 
 export {
   userApiMapper,
@@ -10,4 +11,5 @@ export {
   childProfileMapper,
   childReviewMapper,
   morozInfoGeneralMapper,
+  morozInfoElvesMapper,
 };

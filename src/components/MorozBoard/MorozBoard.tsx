@@ -39,21 +39,21 @@ export const MorozBoard = () => {
         <BoardMenuSwitchersList>
           <Switcher
             to={resolvePath(ROUTES_URL.MorozBoard)}
-            isActive={activeLink === "info"}
+            $isActive={activeLink === "info"}
             onClick={() => switchActiveLink(MorozBoardLink.Info)}
           >
             <i className="fa-solid fa-circle-info"></i> Info
           </Switcher>
           <Switcher
             to={ROUTES_URL.ElvesInfo}
-            isActive={activeLink === "elves"}
+            $isActive={activeLink === "elves"}
             onClick={() => switchActiveLink(MorozBoardLink.Elves)}
           >
             <i className="fa-solid fa-user-nurse"></i> Elves
           </Switcher>
           <Switcher
             to={ROUTES_URL.ChildrenInfo}
-            isActive={activeLink === "children"}
+            $isActive={activeLink === "children"}
             onClick={() => switchActiveLink(MorozBoardLink.Children)}
           >
             <i className="fa-solid fa-child"></i> Children

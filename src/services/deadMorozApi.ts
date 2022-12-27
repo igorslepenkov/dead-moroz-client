@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { IElvesRequestData } from "../store";
 
 import {
   CreateChildPresent,
@@ -21,6 +22,9 @@ import {
   IDeadMorozApiTranslateProfileResponse,
   IMorozInfoGeneralApi,
   IMorozInfoGeneral,
+  IDeadMorozApiGetElvesResponse,
+  USER_ROLES,
+  IDeadMorozApiInviteElfResponse,
 } from "../types";
 
 import {
@@ -46,6 +50,8 @@ enum Endpoint {
   DeleteChildReview = "child_profiles/:child_profile_id/child_reviews/:id",
   TranslateChildProfile = "child_profiles/:child_profile_id/translation",
   GetMorozBoardInfoGeneral = "moroz_board/info",
+  GetMorozBoardInfoElves = "moroz_board/elves",
+  InviteElves = "users/invitation",
 }
 
 class DeadMorozApi {
@@ -316,6 +322,65 @@ class DeadMorozApi {
     );
 
     return morozInfoGeneralMapper(data);
+  };
+
+  fetchMorozInfoElves = async (
+    userToken: string,
+    options: IElvesRequestData
+  ): Promise<IDeadMorozApiGetElvesResponse> => {
+    const url = addOptionalQueryParametersToUrl(
+      Endpoint.GetMorozBoardInfoElves,
+      options
+    );
+    const { data } = await this.API.get<IDeadMorozApiGetElvesResponse>(url, {
+      headers: {
+        // prettier-ignore
+        'Authorization': `Bearer ${userToken}`,
+      },
+    });
+
+    return data;
+  };
+
+  inviteNewElf = async (
+    userToken: string,
+    { email, name }: { email: string; name: string }
+  ) => {
+    const { data } = await this.API.post<IDeadMorozApiInviteElfResponse>(
+      Endpoint.InviteElves,
+      {
+        user: {
+          name,
+          email,
+          role: USER_ROLES.Elf,
+        },
+      },
+      {
+        headers: {
+          // prettier-ignore
+          'Authorization': `Bearer ${userToken}`,
+        },
+      }
+    );
+
+    return data;
+  };
+
+  acceptNewElfInvitation = async ({
+    password,
+    token,
+  }: {
+    password: string;
+    token: string;
+  }) => {
+    const { data } = await this.API.put(Endpoint.InviteElves, {
+      user: {
+        password,
+        invitation_token: token,
+      },
+    });
+
+    return data;
   };
 }
 

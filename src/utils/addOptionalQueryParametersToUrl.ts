@@ -1,8 +1,9 @@
+import { IElvesRequestData } from "../store";
 import { CreatePresentOptions, GetChildrenOptions } from "../types";
 
 export const addOptionalQueryParametersToUrl = (
   urlString: string,
-  options: GetChildrenOptions | CreatePresentOptions
+  options: GetChildrenOptions | CreatePresentOptions | IElvesRequestData
 ) => {
   const newUrlString = urlString;
   const optionsEntries = Object.entries(options).filter(

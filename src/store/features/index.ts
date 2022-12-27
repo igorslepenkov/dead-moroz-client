@@ -20,6 +20,19 @@ import morozInfoGeneralSlice, {
   fetchMorozInfoGeneral,
 } from "./morozInfoGeneralSlice";
 
+import morozInfoElvesSlice, {
+  fetchMorozInfoElves,
+  IElvesRequestData,
+  setMorozInfoElvesRequestParams,
+  inviteNewElf,
+  acceptNewElfInvitation,
+  ElvesFilterType,
+  ElvesSortType,
+  SortOrder,
+} from "./morozInfoElvesSlice";
+
+import modalSlice, { toggleModal } from "./modalSlice";
+
 export {
   signInUser,
   signOutUser,
@@ -37,4 +50,16 @@ export {
   deleteChildReview,
   morozInfoGeneralSlice,
   fetchMorozInfoGeneral,
+  morozInfoElvesSlice,
+  fetchMorozInfoElves,
+  setMorozInfoElvesRequestParams,
+  inviteNewElf,
+  acceptNewElfInvitation,
+  toggleModal,
+  modalSlice,
+  ElvesFilterType,
+  ElvesSortType,
+  SortOrder,
 };
+
+export type { IElvesRequestData };

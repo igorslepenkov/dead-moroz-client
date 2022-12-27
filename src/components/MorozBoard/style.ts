@@ -7,7 +7,8 @@ interface IMenuOpenProps {
 }
 
 interface ISwitcherProps {
-  isActive: boolean;
+  // '$' sign in variable is for Styled Components not to render this prop to the DOM: https://styled-components.com/docs/api#transient-props
+  $isActive: boolean;
 }
 
 export const StyledMorozBoard = styled.section<IMenuOpenProps>`
@@ -59,8 +60,8 @@ export const Switcher = styled(Link)<ISwitcherProps>`
   text-decoration: none;
   ${fonts.h3}
 
-  ${({ isActive }) =>
-    isActive
+  ${({ $isActive }) =>
+    $isActive
       ? css`
           background-color: ${Color.InfoHover};
           color: ${Color.White};

@@ -5,6 +5,7 @@ import { ChildWishlistPage } from "./ChildWishlistPage";
 import { ElfDashboardPage } from "./ElfDashboardPage";
 import { ChildDetailedInfoPage } from "./ChildDetailedInfoPage";
 import { DeadMorozPage } from "./DeadMorozPage";
+import { AcceptElfInviitationPage } from "./AcceptElfInvitationPage";
 
 export {
   HomePage,
@@ -14,4 +15,5 @@ export {
   ElfDashboardPage,
   ChildDetailedInfoPage,
   DeadMorozPage,
+  AcceptElfInviitationPage,
 };

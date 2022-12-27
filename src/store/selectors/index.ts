@@ -19,6 +19,18 @@ import {
   getMorozInfoGeneralError,
 } from "./morozInfoGeneralSelectors";
 
+import {
+  getMorozInfoElves,
+  getMorozInfoElvesLoading,
+  getMorozInfoElvesError,
+  getMorozInfoElvesRequestParams,
+  getMorozInfoElvesTotalPages,
+  getMorozInfoElvesTotalRecords,
+  getMorozInfoElvesMessage,
+} from "./morozInfoElvesSelectors";
+
+import { getModalIsOpen } from "./modalSelectors";
+
 export {
   getUser,
   getUserError,
@@ -32,4 +44,12 @@ export {
   getMorozInfoGeneral,
   getMorozInfoGeneralLoading,
   getMorozInfoGeneralError,
+  getMorozInfoElves,
+  getMorozInfoElvesLoading,
+  getMorozInfoElvesError,
+  getMorozInfoElvesRequestParams,
+  getMorozInfoElvesTotalPages,
+  getMorozInfoElvesTotalRecords,
+  getMorozInfoElvesMessage,
+  getModalIsOpen,
 };

@@ -50,6 +50,12 @@ const morozInfoGeneralSlice = createSlice({
       state.info = payload;
     });
 
+    builder.addCase(fetchMorozInfoGeneral.rejected, (state, { payload }) => {
+      if (payload) {
+        state.error = payload;
+      }
+    });
+
     builder.addMatcher(isPending(), (state) => {
       state.error = null;
       state.isLoading = true;
@@ -59,7 +65,7 @@ const morozInfoGeneralSlice = createSlice({
       state.isLoading = false;
     });
 
-    builder.addMatcher(isRejected(), (state) => {
+    builder.addMatcher(isRejected(), (state, { payload }) => {
       state.isLoading = false;
     });
   },

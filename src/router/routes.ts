@@ -8,4 +8,5 @@ export enum ROUTES_URL {
   MorozBoard = "morozboard",
   ElvesInfo = "elves",
   ChildrenInfo = "children",
+  AcceptElfInvitation = "accept_elf_invitation",
 }

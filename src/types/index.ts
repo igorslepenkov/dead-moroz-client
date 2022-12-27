@@ -126,6 +126,26 @@ export interface IUserApi {
   child_profile: Omit<IChildProfileApi, "child_reviews"> | null;
 }
 
+export interface IElfApi {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+  invitation_sent_at: string;
+  reviews_count: number;
+}
+
+export interface IElf {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  invitationSentAt: string;
+  reviewsCount: number;
+}
+
 export interface IDeadMorozApiSignUpResponse {
   message: string;
 }
@@ -287,3 +307,24 @@ export interface IMorozInfoGeneral {
     withoutReviewCount: number;
   };
 }
+
+export interface IDeadMorozApiGetElvesResponse {
+  elves: IElfApi[];
+  page: number;
+  total_pages: number;
+  total_records: number;
+  limit: number;
+}
+
+export interface IDeadMorozApiInviteElfResponse {
+  message: string;
+}
+
+export type IDeadMorozApiInviteElfFailedResponse =
+  | {
+      message: string;
+    }
+  | {
+      message: string;
+      errors: string[];
+    };

@@ -8,6 +8,7 @@ import { ROUTES_URL } from "./routes";
 
 import { App } from "../App";
 import {
+  AcceptElfInviitationPage,
   AuthenticationPage,
   ChildDetailedInfoPage,
   ChildProfilePage,
@@ -62,6 +63,11 @@ export const router = createBrowserRouter(
           <Route path={ROUTES_URL.ChildrenInfo} element={<ChildrenInfo />} />
         </Route>
       </Route>
+
+      <Route
+        path={ROUTES_URL.AcceptElfInvitation}
+        element={<AcceptElfInviitationPage />}
+      />
     </Route>
   )
 );
