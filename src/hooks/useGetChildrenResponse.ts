@@ -15,7 +15,7 @@ export const useGetChildrenResponse = () => {
       sort_type: null,
       filter_type: null,
       sort_order: null,
-      limit: null,
+      limit: 5,
     });
   const [response, setResponse] =
     useState<IDeadMorozApiGetChildProfilesReponse | null>(null);

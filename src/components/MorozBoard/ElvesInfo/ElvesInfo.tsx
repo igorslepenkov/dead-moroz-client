@@ -26,7 +26,6 @@ import {
   useAppDispatch,
   useAppSelector,
   getMorozInfoElvesTotalPages,
-  getMorozInfoElvesTotalRecords,
   ElvesFilterType,
   ElvesSortType,
 } from "../../../store";
@@ -48,7 +47,6 @@ export const ElvesInfo = () => {
 
   const elves = useAppSelector(getMorozInfoElves);
   const elvesTotalPages = useAppSelector(getMorozInfoElvesTotalPages);
-  const elvesTotalRecords = useAppSelector(getMorozInfoElvesTotalRecords);
   const requestParams = useAppSelector(getMorozInfoElvesRequestParams);
   const { page, limit } = requestParams;
 

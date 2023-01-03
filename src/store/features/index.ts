@@ -28,10 +28,14 @@ import morozInfoElvesSlice, {
   acceptNewElfInvitation,
   ElvesFilterType,
   ElvesSortType,
-  SortOrder,
 } from "./morozInfoElvesSlice";
 
 import modalSlice, { toggleModal } from "./modalSlice";
+
+import childrenInfoSlice, {
+  setChildrenRequestData,
+  fetchChildrenInfo,
+} from "./childrenInfoSlice";
 
 export {
   signInUser,
@@ -59,7 +63,9 @@ export {
   modalSlice,
   ElvesFilterType,
   ElvesSortType,
-  SortOrder,
+  childrenInfoSlice,
+  setChildrenRequestData,
+  fetchChildrenInfo,
 };
 
 export type { IElvesRequestData };

@@ -1,32 +1,31 @@
 import { useEffect, useState } from "react";
 import {
-  fetchMorozInfoElves,
-  getMorozInfoElvesRequestParams,
-  setMorozInfoElvesRequestParams,
+  fetchChildrenInfo,
+  getChildrenInfoRequestData,
+  setChildrenRequestData,
   useAppDispatch,
   useAppSelector,
-  ElvesSortType,
-  ElvesFilterType,
 } from "../store";
-
-import { SortOrder } from "../types";
+import { ChildrenFilterType, ChildrenSortType, SortOrder } from "../types";
 
 enum SortOrderHook {
   ASC = "asc",
   DESC = "desc",
 }
 
-export const useMorozInfoElvesRequestData = () => {
-  const requestData = useAppSelector(getMorozInfoElvesRequestParams);
+export const useChildrenInfoResponse = () => {
+  const requestData = useAppSelector(getChildrenInfoRequestData);
 
-  const [currentSorting, setCurrentSorting] = useState<ElvesSortType>();
+  const [currentSorting, setCurrentSorting] = useState<ChildrenSortType | null>(
+    null
+  );
   const [nameSortOrder, setNameSortOrder] = useState<SortOrderHook>(
     SortOrderHook.ASC
   );
-  const [reviewsSortOrder, setReviewsSortOrder] = useState<SortOrderHook>(
+  const [scoreSortOrder, setScoreSortOrder] = useState<SortOrderHook>(
     SortOrderHook.ASC
   );
-  const [filter, setFilter] = useState<ElvesFilterType | null>(null);
+  const [filter, setFilter] = useState<ChildrenFilterType | null>(null);
 
   const handleSortNameClick = () => {
     const order =
@@ -35,20 +34,20 @@ export const useMorozInfoElvesRequestData = () => {
         : SortOrderHook.ASC;
 
     setNameSortOrder(order);
-    setCurrentSorting(ElvesSortType.Name);
+    setCurrentSorting(ChildrenSortType.Name);
   };
 
-  const handleSortReviewsClick = () => {
+  const handleSortScoreClick = () => {
     const order =
-      reviewsSortOrder === SortOrderHook.ASC
+      scoreSortOrder === SortOrderHook.ASC
         ? SortOrderHook.DESC
         : SortOrderHook.ASC;
 
-    setReviewsSortOrder(order);
-    setCurrentSorting(ElvesSortType.ReviewsCount);
+    setScoreSortOrder(order);
+    setCurrentSorting(ChildrenSortType.Score);
   };
 
-  const handleFilterCheck = (type: ElvesFilterType | "none") => {
+  const handleFilterCheck = (type: ChildrenFilterType | "none") => {
     if (type === "none") {
       setFilter(null);
       return;
@@ -60,10 +59,10 @@ export const useMorozInfoElvesRequestData = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (currentSorting === ElvesSortType.Name) {
+    if (currentSorting === ChildrenSortType.Name) {
       dispatch(
-        setMorozInfoElvesRequestParams({
-          sort_type: ElvesSortType.Name,
+        setChildrenRequestData({
+          sort_type: ChildrenSortType.Name,
           sort_order:
             nameSortOrder === SortOrderHook.ASC
               ? SortOrder.Asc
@@ -74,12 +73,12 @@ export const useMorozInfoElvesRequestData = () => {
       return;
     }
 
-    if (currentSorting === ElvesSortType.ReviewsCount) {
+    if (currentSorting === ChildrenSortType.Score) {
       dispatch(
-        setMorozInfoElvesRequestParams({
-          sort_type: ElvesSortType.ReviewsCount,
+        setChildrenRequestData({
+          sort_type: ChildrenSortType.Score,
           sort_order:
-            reviewsSortOrder === SortOrderHook.ASC
+            scoreSortOrder === SortOrderHook.ASC
               ? SortOrder.Asc
               : SortOrder.Desc,
           filter_type: filter ? filter : null,
@@ -88,12 +87,12 @@ export const useMorozInfoElvesRequestData = () => {
       return;
     }
 
-    dispatch(setMorozInfoElvesRequestParams({ filter_type: filter }));
-  }, [currentSorting, nameSortOrder, reviewsSortOrder, filter, dispatch]);
+    dispatch(setChildrenRequestData({ filter_type: filter }));
+  }, [currentSorting, nameSortOrder, scoreSortOrder, filter, dispatch]);
 
   useEffect(() => {
     const refetch = async () => {
-      dispatch(fetchMorozInfoElves());
+      dispatch(fetchChildrenInfo());
     };
 
     refetch();
@@ -103,9 +102,9 @@ export const useMorozInfoElvesRequestData = () => {
     sorting: currentSorting,
     filter,
     nameSortOrder,
-    reviewsSortOrder,
+    scoreSortOrder,
     handleNameClick: handleSortNameClick,
-    handleReviewsClick: handleSortReviewsClick,
+    handleScoreClick: handleSortScoreClick,
     setFilter: handleFilterCheck,
   };
 };

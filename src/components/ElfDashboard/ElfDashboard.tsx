@@ -1,7 +1,12 @@
 import { Pagination, Slider } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useGetChildrenResponse } from "../../hooks";
-import { GetChildrenOptions } from "../../types";
+import {
+  ChildrenFilterType,
+  ChildrenSortType,
+  GetChildrenOptions,
+  SortOrder,
+} from "../../types";
 import { ChildrenListingTable } from "../ChildrenListingTable";
 import {
   ElfDashboardHeader,
@@ -19,11 +24,11 @@ export const ElfDashboard = () => {
   const { children, total_pages, setPage, queryParams, setQueryParams } =
     useGetChildrenResponse();
 
-  const [sortByName, setSortByName] = useState<"ASC" | "DESC">("ASC");
-  const [sortByScore, setSortByScore] = useState<"ASC" | "DESC" | null>(null);
-  const [filterByScore, setFilterByScore] = useState<
-    "scored" | "not_scored" | null
-  >(null);
+  const [sortByName, setSortByName] = useState<SortOrder>(SortOrder.Asc);
+  const [sortByScore, setSortByScore] = useState<SortOrder | null>(null);
+  const [filterByScore, setFilterByScore] = useState<ChildrenFilterType | null>(
+    null
+  );
 
   const [limitValue, setLimitValue] = useState<number>(5);
 
@@ -34,39 +39,39 @@ export const ElfDashboard = () => {
   };
 
   const toggleSortByNameOnClick = () => {
-    if (sortByName === "ASC") {
-      setSortByName("DESC");
+    if (sortByName === SortOrder.Asc) {
+      setSortByName(SortOrder.Desc);
     }
 
-    if (sortByName === "DESC") {
-      setSortByName("ASC");
+    if (sortByName === SortOrder.Desc) {
+      setSortByName(SortOrder.Asc);
     }
   };
 
   const toggleSortByScoreOnClick = () => {
     if (!sortByScore) {
-      setSortByScore("ASC");
+      setSortByScore(SortOrder.Asc);
     }
 
-    if (sortByScore === "ASC") {
-      setSortByScore("DESC");
+    if (sortByScore === SortOrder.Asc) {
+      setSortByScore(SortOrder.Desc);
     }
 
-    if (sortByScore === "DESC") {
+    if (sortByScore === SortOrder.Desc) {
       setSortByScore(null);
     }
   };
 
   const toggleFilterOnClick = () => {
     if (!filterByScore) {
-      setFilterByScore("scored");
+      setFilterByScore(ChildrenFilterType.Scored);
     }
 
-    if (filterByScore === "scored") {
-      setFilterByScore("not_scored");
+    if (filterByScore === ChildrenFilterType.Scored) {
+      setFilterByScore(ChildrenFilterType.NotScored);
     }
 
-    if (filterByScore === "not_scored") {
+    if (filterByScore === ChildrenFilterType.NotScored) {
       setFilterByScore(null);
     }
   };
@@ -81,12 +86,12 @@ export const ElfDashboard = () => {
         };
 
         if (sortByName) {
-          options.sort_type = "name";
+          options.sort_type = ChildrenSortType.Name;
           options.sort_order = sortByName;
         }
 
         if (sortByScore) {
-          options.sort_type = "score";
+          options.sort_type = ChildrenSortType.Score;
           options.sort_order = sortByScore;
         }
 

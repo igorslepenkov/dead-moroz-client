@@ -34,7 +34,9 @@ export const useChildProfileApiTranslation = (childProifleId: number) => {
       }
     };
 
-    fetchProfielTranslation();
+    if (childProifleId) {
+      fetchProfielTranslation();
+    }
   }, [childProifleId, user]);
 
   return profileTranslation;

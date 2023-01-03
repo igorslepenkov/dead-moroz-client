@@ -5,6 +5,7 @@ import {
   morozInfoGeneralSlice,
   morozInfoElvesSlice,
   modalSlice,
+  childrenInfoSlice,
 } from "./features";
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   morozInfoGeneral: morozInfoGeneralSlice,
   morozInfoElves: morozInfoElvesSlice,
   modal: modalSlice,
+  childrenInfo: childrenInfoSlice,
 });
 
 export const store = configureStore({

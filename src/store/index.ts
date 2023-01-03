@@ -24,7 +24,8 @@ import {
   toggleModal,
   ElvesFilterType,
   ElvesSortType,
-  SortOrder,
+  setChildrenRequestData,
+  fetchChildrenInfo,
 } from "./features";
 
 import {
@@ -48,6 +49,12 @@ import {
   getMorozInfoElvesTotalRecords,
   getMorozInfoElvesMessage,
   getModalIsOpen,
+  getChildrenInfo,
+  getChildrenInfoIsLoading,
+  getChildrenInfoError,
+  getChildrenInfoTotalPages,
+  getChildrenInfoTotalRecords,
+  getChildrenInfoRequestData,
 } from "./selectors";
 
 export {
@@ -94,6 +101,13 @@ export {
   getModalIsOpen,
   ElvesFilterType,
   ElvesSortType,
-  SortOrder,
+  setChildrenRequestData,
+  fetchChildrenInfo,
+  getChildrenInfo,
+  getChildrenInfoIsLoading,
+  getChildrenInfoError,
+  getChildrenInfoTotalPages,
+  getChildrenInfoTotalRecords,
+  getChildrenInfoRequestData,
 };
 export type { RootState, AppDispatch, IElvesRequestData };

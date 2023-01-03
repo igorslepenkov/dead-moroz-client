@@ -31,6 +31,15 @@ import {
 
 import { getModalIsOpen } from "./modalSelectors";
 
+import {
+  getChildrenInfo,
+  getChildrenInfoIsLoading,
+  getChildrenInfoError,
+  getChildrenInfoTotalPages,
+  getChildrenInfoTotalRecords,
+  getChildrenInfoRequestData,
+} from "./childrenInfoSelectors";
+
 export {
   getUser,
   getUserError,
@@ -52,4 +61,10 @@ export {
   getMorozInfoElvesTotalRecords,
   getMorozInfoElvesMessage,
   getModalIsOpen,
+  getChildrenInfo,
+  getChildrenInfoIsLoading,
+  getChildrenInfoError,
+  getChildrenInfoTotalPages,
+  getChildrenInfoTotalRecords,
+  getChildrenInfoRequestData,
 };

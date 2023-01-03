@@ -13,6 +13,7 @@ import {
   IDeadMorozApiInviteElfFailedResponse,
   IDeadMorozApiInviteElfResponse,
   IElf,
+  SortOrder,
 } from "../../types";
 import { RootState } from "../store";
 
@@ -24,11 +25,6 @@ export enum ElvesSortType {
 export enum ElvesFilterType {
   AcceptedInvitation = "accept",
   NotAcceptedInvitation = "not_accept",
-}
-
-export enum SortOrder {
-  Asc = "ASC",
-  Desc = "DESC",
 }
 
 export interface IElvesRequestData {
@@ -108,7 +104,7 @@ const inviteNewElf = createAsyncThunk<
       return rejectWithValue("User is not logged in");
     } catch (err: any) {
       if (err.response) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       }
 
       return rejectWithValue(err.message);
@@ -133,7 +129,7 @@ const acceptNewElfInvitation = createAsyncThunk<
       });
     } catch (err: any) {
       if (err.response) {
-        return rejectWithValue(err.response.data.message);
+        return rejectWithValue(err.response.data);
       }
 
       return rejectWithValue(err.message);
@@ -180,12 +176,18 @@ const morozInfoElvesSlice = createSlice({
     });
 
     builder.addCase(acceptNewElfInvitation.rejected, (state, { payload }) => {
+      console.log(payload);
       if (typeof payload === "string") {
         state.message = payload;
       }
 
-      if (typeof payload === "object" && "message" in payload) {
+      if (
+        typeof payload === "object" &&
+        "message" in payload &&
+        "errors" in payload
+      ) {
         state.message = payload.message;
+        state.error = payload.errors[0];
       }
     });
 
@@ -194,8 +196,13 @@ const morozInfoElvesSlice = createSlice({
         state.message = payload;
       }
 
-      if (typeof payload === "object" && "message" in payload) {
+      if (
+        typeof payload === "object" &&
+        "message" in payload &&
+        "errors" in payload
+      ) {
         state.message = payload.message;
+        state.error = payload.errors[0];
       }
     });
 

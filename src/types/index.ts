@@ -191,12 +191,27 @@ export interface IDeadMorozApiDeleteChildFailedResponse {
   message: string;
 }
 
+export enum ChildrenSortType {
+  Name = "name",
+  Score = "score",
+}
+
+export enum ChildrenFilterType {
+  Scored = "scored",
+  NotScored = "not_scored",
+}
+
+export enum SortOrder {
+  Asc = "ASC",
+  Desc = "DESC",
+}
+
 export type GetChildrenOptions = {
   page: number;
-  sort_type: "name" | "score" | null;
-  filter_type: "scored" | "not_scored" | null;
-  sort_order: "ASC" | "DESC" | null;
-  limit: number | null;
+  sort_type: ChildrenSortType | null;
+  filter_type: ChildrenFilterType | null;
+  sort_order: SortOrder | null;
+  limit: number;
 };
 
 export type CreatePresentOptions = {
